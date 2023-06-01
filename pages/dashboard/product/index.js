@@ -99,7 +99,7 @@ const index = ({ categories }) => {
             label="INSTOCK"
             severity="success"
             size="small"
-            raised
+            text
             disabled
           />
         ) : (
@@ -107,7 +107,7 @@ const index = ({ categories }) => {
             label="OUTOFSTOK"
             severity="warning"
             size="small"
-            raised
+            text
             disabled
           />
         )}
@@ -118,7 +118,7 @@ const index = ({ categories }) => {
   const actionBodyTemplate = (rowData) => {
     return (
       <>
-        <EditProduct rowData={rowData} refetch={refetch} />
+        <EditProduct categories={categories} rowData={rowData} refetch={refetch} />
         <DeleteProduct rowData={rowData} refetch={refetch} />
       </>
     );
