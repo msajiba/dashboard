@@ -6,40 +6,34 @@ import { Toast } from "primereact/toast";
 import { classNames } from "primereact/utils";
 import React, { useRef, useState } from "react";
 
-const NewCategory = ({refetch}) => {
-  const [sbCtgDialog, setSbCtgDialog] = useState(false);
+const NewCategory = ({ refetch }) => {
+  const [ctgDialog, setCtgDialog] = useState(false);
   const [name, setName] = useState("");
-  const [image, setImage] = useState("");
+  // const [image, setImage] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const toast = useRef(null);
 
-  const openNew = () => {
-    setSbCtgDialog(true);
-  };
-
-  const saveSubCtg = async () => {
+  const saveCtg = async () => {
     setSubmitted(true);
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/api/admin/category",
+        "http://localhost:3000/api/admin/category/store",
         {
           name,
-          image,
+          // image,
         }
       );
 
-      console.log(data);
 
       if (data.status === true) {
         toast.current.show({
           severity: "success",
-          summary: "Successful",
           detail: `${data.message}`,
           life: 3000,
         });
-        setSbCtgDialog(false);
+        setCtgDialog(false);
         setName("");
-        setImage("");
+        // setImage("");
       } else {
         toast.current.show({
           severity: "error",
@@ -49,9 +43,9 @@ const NewCategory = ({refetch}) => {
         });
       }
     } catch (error) {
-      console.log(error);
+      console.log("error ============>", error);
     }
-    refetch()
+    refetch();
   };
 
   const subCtgDialogFooter = (
@@ -60,9 +54,9 @@ const NewCategory = ({refetch}) => {
         label="Cancel"
         icon="pi pi-times"
         text
-        onClick={() => setSbCtgDialog(false)}
+        onClick={() => setCtgDialog(false)}
       />
-      <Button label="Save" icon="pi pi-check" text onClick={saveSubCtg} />
+      <Button label="Save" icon="pi pi-check" text onClick={saveCtg} />
     </>
   );
 
@@ -75,19 +69,19 @@ const NewCategory = ({refetch}) => {
         icon="pi pi-plus"
         severity="sucess"
         className="mr-2"
-        onClick={openNew}
+        onClick={() => setCtgDialog(true)}
       />
 
       <Dialog
-        visible={sbCtgDialog}
+        visible={ctgDialog}
         style={{ width: "500px" }}
         header="Add New Category"
         modal
         className="p-fluid"
         footer={subCtgDialogFooter}
-        onHide={() => setSbCtgDialog(false)}
+        onHide={() => setCtgDialog(false)}
       >
-        <div className="field">
+        {/* <div className="field">
           <label htmlFor="name">Image</label>
           <InputText
             id="image"
@@ -107,7 +101,7 @@ const NewCategory = ({refetch}) => {
               Image is required.
             </small>
           )}
-        </div>
+        </div> */}
 
         <div className="field">
           <label htmlFor="name">Name</label>
@@ -116,7 +110,6 @@ const NewCategory = ({refetch}) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-
             className={classNames({
               "p-invalid": submitted && !name,
             })}

@@ -4,8 +4,6 @@ import { InputText } from "primereact/inputtext";
 import { Toolbar } from "primereact/toolbar";
 import React, { useEffect, useRef, useState } from "react";
 import DashboardContainer from "../../../layout/DashboardContainer";
-import db from "../../../config/db";
-import Category from "../../../server/models/Category";
 import { Avatar } from "primereact/avatar";
 import { useQuery } from "react-query";
 import axios from "axios";
@@ -24,13 +22,13 @@ const Categories = ({ ctg }) => {
   const { isLoading, error, data, refetch } = useQuery(
     "category",
     async () =>
-      await axios.get("http://localhost:3000/api/admin/category?populate='*'")
+      await axios.get("http://localhost:3000/api/admin/category/getAll")
   );
 
   useEffect(() => {
-    setCategories(data?.data);
+    setCategories(data?.data?.categories);
     refetch();
-  }, [data?.data]);
+  }, [data?.data?.categories]);
 
   isLoading && <Loader />;
   error && console.log(error);
@@ -48,15 +46,20 @@ const Categories = ({ ctg }) => {
     return (
       <>
         <span className="p-column-title">Name</span>
-        {rowData.name}
+        {rowData?.name.toUpperCase()}
       </>
     );
   };
+
   const imageBodyTemplate = (rowData) => {
     return (
       <>
         <span className="p-column-title">Image</span>
-        <Avatar image={`${rowData.image}`} size="xlarge" shape="circle" />
+        <Avatar
+          image={"http://localhost:3001/demo/images/product/gaming-set.jpg"}
+          size="xlarge"
+          shape="circle"
+        />
       </>
     );
   };
@@ -152,13 +155,3 @@ const Categories = ({ ctg }) => {
 };
 
 export default Categories;
-
-export async function getServerSideProps() {
-  db.connectDb();
-  let ctg = await Category.find({}).sort({ createdAt: -1 }).lean();
-  return {
-    props: {
-      ctg: JSON.parse(JSON.stringify(ctg)),
-    },
-  };
-}
