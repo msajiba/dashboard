@@ -9,8 +9,10 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { Toast } from "primereact/toast";
 import { classNames } from "primereact/utils";
 import React, { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
 const EditProduct = ({ rowData, refetch, categories }) => {
+  const jwt = useSelector((state) => state.user.jwt);
   const [productDialog, setProductDialog] = useState(false);
   const [image, setImage] = useState("");
   const [title, setTitle] = useState("");
@@ -74,7 +76,13 @@ const EditProduct = ({ rowData, refetch, categories }) => {
     try {
       const { data } = await axios.post(
         "http://localhost:3000/api/admin/product/update",
-        updateProduct
+        updateProduct, {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            token: `Bearer ${jwt}`,
+          },
+        }
       );
 
       if (data.status === true) {
@@ -106,7 +114,7 @@ const EditProduct = ({ rowData, refetch, categories }) => {
     } catch (error) {
       console.log(error);
     }
-
+ 
     refetch();
   };
 

@@ -6,8 +6,10 @@ import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
 import { classNames } from "primereact/utils";
 import React, { useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
 const NewSubCategory = ({ categories, refetch }) => {
+  const jwt = useSelector((state) => state.user.jwt);
   const [sbCtgDialog, setSbCtgDialog] = useState(false);
   const [name, setName] = useState("");
   const [selectCategory, setSelectCategory] = useState("");
@@ -22,6 +24,13 @@ const NewSubCategory = ({ categories, refetch }) => {
         {
           name,
           parent: selectCategory._id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            token: `Bearer ${jwt}`,
+          },
         }
       );
 

@@ -3,8 +3,10 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 import React, { useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
 const DeleteProduct = ({ rowData, refetch }) => {
+  const jwt = useSelector((state) => state.user.jwt);
   const [deleteProductDialog, setDeleteProductDialog] = useState(false);
   const [selectProduct, setSelectProduct] = useState(null);
   const toast = useRef(null);
@@ -13,10 +15,17 @@ const DeleteProduct = ({ rowData, refetch }) => {
     try {
       const { data } = await axios.post(
         `http://localhost:3000/api/admin/product/delete`,
-        { id: selectProduct._id }
+        { id: selectProduct._id },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            token: `Bearer ${jwt}`,
+          },
+        }
       );
 
-      if (data.status ==true) {
+      if (data.status == true) {
         toast.current.show({
           severity: "success",
           detail: `${data.message}`,

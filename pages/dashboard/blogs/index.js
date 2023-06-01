@@ -17,8 +17,18 @@ import DashboardContainer from "../../../layout/DashboardContainer";
 import db from "../../../config/db";
 import Blog from "../../../server/models/Blog";
 import { Avatar } from "primereact/avatar";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 const index = ({ blogs }) => {
+  
+  const user = useSelector((state) => state.user.currentUser);
+  const router = useRouter();
+  if (!user) {
+    router.push("/auth/login");
+    return null;
+  }
+
   let emptyProduct = {
     id: null,
     name: "",
@@ -141,7 +151,6 @@ const index = ({ blogs }) => {
     return id;
   };
 
- 
   const confirmDeleteSelected = () => {
     setDeleteProductsDialog(true);
   };
@@ -223,7 +232,6 @@ const index = ({ blogs }) => {
     );
   };
 
-
   const actionBodyTemplate = (rowData) => {
     return (
       <>
@@ -243,7 +251,6 @@ const index = ({ blogs }) => {
       </>
     );
   };
-
 
   const header = (
     <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
@@ -299,10 +306,7 @@ const index = ({ blogs }) => {
         <div className="col-12">
           <div className="card">
             <Toast ref={toast} />
-            <Toolbar
-              className="mb-4"
-              right={rightToolbarTemplate}
-            ></Toolbar>
+            <Toolbar className="mb-4" right={rightToolbarTemplate}></Toolbar>
 
             <DataTable
               ref={dt}

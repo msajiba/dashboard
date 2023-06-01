@@ -7,26 +7,60 @@ import { Password } from "primereact/password";
 import { InputText } from "primereact/inputtext";
 import Link from "next/link";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { loginSuccess } from "../../../store/userSlice";
+import { jwtSuccess } from "../../../store/userSlice";
+import { providerSuccess } from "../../../store/userSlice";
+import { loginFailure } from "../../../store/userSlice";
 
 const LoginPage = () => {
+
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
   const [checked, setChecked] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  isLoading && console.log("......................");
+
+  const dispatch = useDispatch();
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-    const user = { emailId, password };
 
     try {
+      setIsLoading(true);
       const { data } = await axios.post(
         "http://localhost:3000/api/auth/signin",
-        user
+        { emailId, password }
       );
-      console.log(data);
+      dispatch(loginSuccess(data.user));
+      dispatch(jwtSuccess(data.token));
+      dispatch(providerSuccess("email-password"));
+
+      await axios.post(
+        "http://localhost:3000/api/profile/store",
+        {
+          email: data.user.email,
+          user_id_no: data.user._id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            token: `Bearer ${data.token}`,
+          },
+        }
+      );
+
+      const redirectPath = router.query.redirect || "/dashboard";
+      router.push(redirectPath);
+      setIsLoading(false);
+
     } catch (error) {
-        console.log(error);
+      dispatch(loginFailure());
+      setIsLoading(false);
+      console.log(error);
     }
   };
 

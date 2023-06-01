@@ -9,8 +9,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { InputSwitch } from "primereact/inputswitch";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Dropdown } from "primereact/dropdown";
+import { useSelector } from "react-redux";
 
 const NewProduct = ({ refetch, categories }) => {
+  const jwt = useSelector((state) => state.user.jwt);
   const [productDialog, setProductDialog] = useState(false);
   const [image, setImage] = useState("");
   const [title, setTitle] = useState("");
@@ -58,7 +60,14 @@ const NewProduct = ({ refetch, categories }) => {
     try {
       const { data } = await axios.post(
         "http://localhost:3000/api/admin/product/store",
-        createProduct
+        createProduct, 
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            token: `Bearer ${jwt}`,
+          },
+        }
       );
 
       if (data.status === true) {

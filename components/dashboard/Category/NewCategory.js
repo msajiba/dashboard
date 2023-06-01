@@ -5,8 +5,11 @@ import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
 import { classNames } from "primereact/utils";
 import React, { useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
 const NewCategory = ({ refetch }) => {
+  
+  const jwt = useSelector((state) => state.user.jwt);
   const [ctgDialog, setCtgDialog] = useState(false);
   const [name, setName] = useState("");
   // const [image, setImage] = useState("");
@@ -21,9 +24,15 @@ const NewCategory = ({ refetch }) => {
         {
           name,
           // image,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            token: `Bearer ${jwt}`,
+          },
         }
       );
-
 
       if (data.status === true) {
         toast.current.show({

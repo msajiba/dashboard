@@ -1,8 +1,8 @@
+/* eslint-disable */
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { Dialog } from "primereact/dialog";
-import { FileUpload } from "primereact/fileupload";
 import { InputNumber } from "primereact/inputnumber";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
@@ -14,6 +14,8 @@ import { classNames } from "primereact/utils";
 import React, { useEffect, useRef, useState } from "react";
 import { ProductService } from "../../../demo/service/ProductService";
 import DashboardContainer from "../../../layout/DashboardContainer";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 const Categories = () => {
   let emptyProduct = {
@@ -38,6 +40,14 @@ const Categories = () => {
   const [globalFilter, setGlobalFilter] = useState(null);
   const toast = useRef(null);
   const dt = useRef(null);
+
+  const user = useSelector((state) => state.user.currentUser);
+  const router = useRouter();
+
+  if (!user) {
+    router.push("/auth/login");
+    return null;
+  }
 
   useEffect(() => {
     ProductService.getProducts().then((data) => setProducts(data));

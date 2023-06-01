@@ -1,3 +1,4 @@
+/*eslint-disable */
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { InputText } from "primereact/inputtext";
@@ -12,13 +13,23 @@ import DeleteCategory from "../../../components/dashboard/Category/DeleteCategor
 import { Badge } from "primereact/badge";
 import NewCategory from "../../../components/dashboard/Category/NewCategory";
 import Loader from "../../../components/Shared/Loader";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 const Categories = ({ ctg }) => {
   const [categories, setCategories] = useState(null);
   const [selectedCtg, setSelectedCtg] = useState(null);
   const [globalFilter, setGlobalFilter] = useState(null);
-
   const dt = useRef(null);
+
+  const user = useSelector((state) => state.user.currentUser);
+  const router = useRouter();
+  
+  if (!user) {
+    router.push("/auth/login");
+    return null;
+  }
+
   const { isLoading, error, data, refetch } = useQuery(
     "category",
     async () =>

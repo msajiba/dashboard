@@ -1,6 +1,5 @@
 import nc from "next-connect";
 import cloudinary from "cloudinary";
-import bodyParser from "body-parser";
 import fs from "fs";
 import fileUpload from "express-fileupload";
 import { imgMiddleware } from "../../../middleware/imgMiddleware";

@@ -6,8 +6,10 @@ import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
 import { classNames } from "primereact/utils";
 import React, { useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
 const EditSbCategory = ({ categories, rowData, refetch }) => {
+  const jwt = useSelector((state) => state.user.jwt);
   const [upSbCtgDialog, setUpSbCtgDialog] = useState(false);
   const [selectedID, setSelectedID] = useState(null);
   const [name, setName] = useState("");
@@ -16,6 +18,7 @@ const EditSbCategory = ({ categories, rowData, refetch }) => {
   const toast = useRef(null);
 
   const confirmDeleteSbCtg = (sbCtg) => {
+
     setName(sbCtg.name);
     setUpSbCtgDialog(true);
     setSelectedID(sbCtg?._id);
@@ -32,6 +35,13 @@ const EditSbCategory = ({ categories, rowData, refetch }) => {
           name,
           id: selectedID,
           parent: selectCategory._id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            token: `Bearer ${jwt}`,
+          },
         }
       );
       if (data.status === true) {

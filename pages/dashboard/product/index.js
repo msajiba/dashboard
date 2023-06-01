@@ -15,6 +15,8 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import Loader from "../../../components/Shared/Loader";
 import { Avatar } from "primereact/avatar";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 const index = ({ categories }) => {
   const [products, setProducts] = useState(null);
@@ -22,6 +24,15 @@ const index = ({ categories }) => {
   const [globalFilter, setGlobalFilter] = useState(null);
   const toast = useRef(null);
   const dt = useRef(null);
+
+  const user = useSelector((state) => state.user.currentUser);
+  const router = useRouter();
+  
+  if (!user) {
+    router.push("/auth/login");
+    return null;
+  }
+
 
   const { isLoading, error, data, refetch } = useQuery(
     "products",

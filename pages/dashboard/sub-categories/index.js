@@ -12,13 +12,22 @@ import NewSubCategory from "../../../components/dashboard/SubCategory/NewSubCate
 import { useQuery } from "react-query";
 import Loader from "../../../components/Shared/Loader";
 import { Badge } from "primereact/badge";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 const SubCategories = ({ categories }) => {
   const [subCategories, setSubCategories] = useState(null);
   const [selectedSbCtg, setSelectedSbCtg] = useState(null);
   const [globalFilter, setGlobalFilter] = useState(null);
-
   const dt = useRef(null);
+  const user = useSelector((state) => state.user.currentUser);
+  const router = useRouter();
+  
+  if (!user) {
+    router.push("/auth/login");
+    return null;
+  }
+
 
   const { isLoading, error, data, refetch } = useQuery(
     "sbCtg",

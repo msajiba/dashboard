@@ -3,8 +3,10 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 import React, { useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
 const DeleteSbCategory = ({ rowData, refetch }) => {
+  const jwt = useSelector((state) => state.user.jwt);
   const [deleteSbCtgDialog, setDeleteSbCtgDialog] = useState(false);
   const [selectSbCtg, setSelectSbCtg] = useState(null);
   const toast = useRef(null);
@@ -15,6 +17,13 @@ const DeleteSbCategory = ({ rowData, refetch }) => {
         "http://localhost:3000/api/admin/sub-category/delete",
         {
           id: selectSbCtg._id,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            token: `Bearer ${jwt}`,
+          },
         }
       );
 

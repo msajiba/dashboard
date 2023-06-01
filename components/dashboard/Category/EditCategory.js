@@ -5,8 +5,10 @@ import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
 import { classNames } from "primereact/utils";
 import React, { useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
 const EditCategory = ({ rowData, refetch }) => {
+  const jwt = useSelector((state) => state.user.jwt);
   const [ctgDialog, setCtgDialog] = useState(false);
   const [name, setName] = useState("");
   // const [image, setImage] = useState("");
@@ -30,6 +32,14 @@ const EditCategory = ({ rowData, refetch }) => {
         {
           name,
           id: selectedId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            token: `Bearer ${jwt}`,
+          },
+          
         }
       );
       if (data.status === true) {
