@@ -11,17 +11,14 @@ const DeleteProduct = ({ rowData, refetch }) => {
 
   const deleteHandleProduct = async () => {
     try {
-      const { data } = await axios.delete(
-        `http://localhost:3000/api/admin/product`,
-        {
-          data: { id: selectProduct._id },
-        }
+      const { data } = await axios.post(
+        `http://localhost:3000/api/admin/product/delete`,
+        { id: selectProduct._id }
       );
 
-      if (data.status) {
+      if (data.status ==true) {
         toast.current.show({
           severity: "success",
-          summary: "Successful",
           detail: `${data.message}`,
           life: 2000,
         });
@@ -43,7 +40,7 @@ const DeleteProduct = ({ rowData, refetch }) => {
         onClick={() => setDeleteProductDialog(false)}
       />
       <Button
-        label="Save"
+        label="Delete"
         icon="pi pi-check"
         text
         onClick={deleteHandleProduct}

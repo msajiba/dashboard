@@ -28,10 +28,16 @@ const NewProduct = ({ refetch, categories }) => {
   const toast = useRef(null);
 
   useEffect(() => {
-    setSelectedSub(category.subCategories);
-  }, [category]);
+    setSelectedSub(category?.subCategories);
 
-  console.log(category);
+    const getSubCategory = async () => {
+      const URL = `http://localhost:3000/api/admin/category/getSubCategories?categoryId=${category._id}`;
+      const { data } = await axios.get(URL);
+      setSelectedSub(data?.subcategories);
+    };
+
+    getSubCategory();
+  }, [category]);
 
   const createProduct = {
     image,
@@ -44,26 +50,27 @@ const NewProduct = ({ refetch, categories }) => {
     description,
     bestDeal,
     discountedSale,
+    shortDescription
   };
 
   const saveProduct = async () => {
     setSubmitted(true);
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/api/admin/product",
+        "http://localhost:3000/api/admin/product/store",
         createProduct
       );
 
       if (data.status === true) {
         toast.current.show({
           severity: "success",
-          summary: "Successful",
           detail: `${data.message}`,
           life: 3000,
         });
         setProductDialog(false);
         setTitle("");
         setImage("");
+        setShortDescription('');
         setPrice(0);
         setOriginal_Price(0);
         setQuantity(0);
@@ -94,7 +101,7 @@ const NewProduct = ({ refetch, categories }) => {
         text
         onClick={() => setProductDialog(false)}
       />
-      {title === ""? (
+      {title === "" ? (
         <Button label="Save" icon="pi pi-check" text disabled />
       ) : (
         <Button label="Save" icon="pi pi-check" text onClick={saveProduct} />
