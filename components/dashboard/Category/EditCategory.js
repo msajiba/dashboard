@@ -9,7 +9,7 @@ import React, { useRef, useState } from "react";
 const EditCategory = ({ rowData, refetch }) => {
   const [ctgDialog, setCtgDialog] = useState(false);
   const [name, setName] = useState("");
-  const [image, setImage] = useState("");
+  // const [image, setImage] = useState("");
   const [selectedId, setSelectedID] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const toast = useRef(null);
@@ -17,7 +17,7 @@ const EditCategory = ({ rowData, refetch }) => {
   const confirmDeleteCtg = (ctg) => {
     setCtgDialog(true);
     setName(ctg.name);
-    setImage(ctg.image);
+    // setImage(ctg.image);
     setSelectedID(ctg?._id);
   };
 
@@ -25,18 +25,16 @@ const EditCategory = ({ rowData, refetch }) => {
     setSubmitted(true);
 
     try {
-      const { data } = await axios.patch(
-        "http://localhost:3000/api/admin/category",
+      const { data } = await axios.post(
+        "http://localhost:3000/api/admin/category/update",
         {
           name,
-          image,
           id: selectedId,
         }
       );
       if (data.status === true) {
         toast.current.show({
           severity: "success",
-          summary: "Successful",
           detail: `${data.message}`,
           life: 3000,
         });
@@ -44,7 +42,6 @@ const EditCategory = ({ rowData, refetch }) => {
       } else {
         toast.current.show({
           severity: "error",
-          summary: "Error",
           detail: `${data.message}`,
           life: 3000,
         });
@@ -90,7 +87,7 @@ const EditCategory = ({ rowData, refetch }) => {
         footer={subCtgDialogFooter}
         onHide={() => setCtgDialog(false)}
       >
-        <div className="field">
+        {/* <div className="field">
           <label htmlFor="name">Image</label>
           <InputText
             id="image"
@@ -110,7 +107,7 @@ const EditCategory = ({ rowData, refetch }) => {
               Image is required.
             </small>
           )}
-        </div>
+        </div> */}
 
         <div className="field">
           <label htmlFor="name">Name</label>

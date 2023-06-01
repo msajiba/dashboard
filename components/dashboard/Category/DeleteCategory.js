@@ -11,21 +11,19 @@ const DeleteCategory = ({ rowData, refetch }) => {
 
   const deleteHandleCtg = async () => {
     try {
-      const { data } = await axios.delete(
-        `http://localhost:3000/api/admin/category`,
+      const { data } = await axios.post(
+        "http://localhost:3000/api/admin/category/delete",
         {
-          data: { id: selectCtg._id },
+          id: selectCtg._id,
         }
       );
 
       if (data.status) {
         toast.current.show({
           severity: "success",
-          summary: "Successful",
           detail: `${data.message}`,
-          life: 2000,
+          life: 3000,
         });
-
         setDeleteCtgDialog(false);
         setDeleteCtgDialog(false);
         refetch();
@@ -43,7 +41,12 @@ const DeleteCategory = ({ rowData, refetch }) => {
         text
         onClick={() => setDeleteCtgDialog(false)}
       />
-      <Button label="Save" icon="pi pi-check" text onClick={deleteHandleCtg} />
+      <Button
+        label="Delete"
+        icon="pi pi-check"
+        text
+        onClick={deleteHandleCtg}
+      />
     </>
   );
 
