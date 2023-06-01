@@ -5,18 +5,15 @@ import { InputText } from "primereact/inputtext";
 import { Toolbar } from "primereact/toolbar";
 import React, { useEffect, useRef, useState } from "react";
 import DashboardContainer from "../../../layout/DashboardContainer";
-import db from "../../../config/db";
 import axios from "axios";
 import DeleteSbCategory from "../../../components/dashboard/SubCategory/DeleteSbCategory";
 import EditSbCategory from "../../../components/dashboard/SubCategory/EditSbCategory";
 import NewSubCategory from "../../../components/dashboard/SubCategory/NewSubCategory";
-import Category from "../../../server/models/Category";
 import { useQuery } from "react-query";
 import Loader from "../../../components/Shared/Loader";
 import { Badge } from "primereact/badge";
 
 const SubCategories = ({ categories }) => {
-
   const [subCategories, setSubCategories] = useState(null);
   const [selectedSbCtg, setSelectedSbCtg] = useState(null);
   const [globalFilter, setGlobalFilter] = useState(null);
@@ -26,18 +23,16 @@ const SubCategories = ({ categories }) => {
   const { isLoading, error, data, refetch } = useQuery(
     "sbCtg",
     async () =>
-      await axios.get(
-        "http://localhost:3000/api/admin/subCategory?populate='*'"
-      )
+      await axios.get("http://localhost:3000/api/admin/sub-category/getAll")
   );
 
   isLoading && <Loader />;
   error && console.log(error);
 
   useEffect(() => {
-    setSubCategories(data?.data);
+    setSubCategories(data?.data?.subcategories);
     refetch();
-  }, [data?.data]);
+  }, [data?.data?.subcategories]);
 
   const codeBodyTemplate = (rowData) => {
     return (
@@ -61,7 +56,7 @@ const SubCategories = ({ categories }) => {
     return (
       <>
         <span className="p-column-title">Category</span>
-        {rowData?.category?.name}
+        {rowData?.parent?.name}
       </>
     );
   };
@@ -69,7 +64,11 @@ const SubCategories = ({ categories }) => {
   const actionBodyTemplate = (rowData) => {
     return (
       <>
-        <EditSbCategory rowData={rowData} refetch={refetch} categories={categories} />
+        <EditSbCategory
+          rowData={rowData}
+          refetch={refetch}
+          categories={categories}
+        />
         {/* ===========================================DELETE_SUB_CATEGORY_HANDLER ==================================== */}
         <DeleteSbCategory rowData={rowData} refetch={refetch} />
       </>
@@ -106,7 +105,9 @@ const SubCategories = ({ categories }) => {
             {/* ADD NEW SUB CATEGORY  */}
             <Toolbar
               className="mb-4"
-              right={<NewSubCategory categories={categories} refetch={refetch} />}
+              right={
+                <NewSubCategory categories={categories} refetch={refetch} />
+              }
             />
             <DataTable
               ref={dt}
@@ -166,8 +167,10 @@ const SubCategories = ({ categories }) => {
 export default SubCategories;
 
 export async function getServerSideProps() {
-  db.connectDb();
-  const ctg = await Category.find().sort({ createdAt: -1 }).lean();
+  const res = await axios.get(
+    "http://localhost:3000/api/admin/category/getAll"
+  );
+  const ctg = res?.data?.categories;
   return {
     props: {
       categories: JSON.parse(JSON.stringify(ctg)),

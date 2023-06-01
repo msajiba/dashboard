@@ -19,24 +19,24 @@ const EditSbCategory = ({ categories, rowData, refetch }) => {
     setName(sbCtg.name);
     setUpSbCtgDialog(true);
     setSelectedID(sbCtg?._id);
-    setSelectCategory(sbCtg?.category);
+    setSelectCategory(sbCtg?.parent);
   };
 
   const updateSubCtg = async () => {
     setSubmitted(true);
 
     try {
-      const { data } = await axios.patch(
-        "http://localhost:3000/api/admin/subCategory",
+      const { data } = await axios.post(
+        "http://localhost:3000/api/admin/sub-category/update",
         {
           name,
           id: selectedID,
+          parent: selectCategory._id,
         }
       );
       if (data.status === true) {
         toast.current.show({
           severity: "success",
-          summary: "Successful",
           detail: `${data.message}`,
           life: 3000,
         });
@@ -65,7 +65,7 @@ const EditSbCategory = ({ categories, rowData, refetch }) => {
         text
         onClick={() => setUpSbCtgDialog(false)}
       />
-      <Button label="Save" icon="pi pi-check" text onClick={updateSubCtg} />
+      <Button label="update" icon="pi pi-check" text onClick={updateSubCtg} />
     </>
   );
 
@@ -118,7 +118,6 @@ const EditSbCategory = ({ categories, rowData, refetch }) => {
             <div className="fixed">
               <Dropdown
                 value={selectCategory}
-                disabled
                 onChange={(e) => setSelectCategory(e.target.value)}
                 options={categories}
                 optionLabel="name"

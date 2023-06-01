@@ -14,18 +14,14 @@ const NewSubCategory = ({ categories, refetch }) => {
   const [submitted, setSubmitted] = useState(false);
   const toast = useRef(null);
 
-  const openNew = () => {
-    setSbCtgDialog(true);
-  };
-
   const saveSubCtg = async () => {
     setSubmitted(true);
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/api/admin/subCategory",
+        "http://localhost:3000/api/admin/sub-category/store",
         {
           name,
-          category: selectCategory._id,
+          parent: selectCategory._id,
         }
       );
 
@@ -36,6 +32,8 @@ const NewSubCategory = ({ categories, refetch }) => {
           detail: `${data.message}`,
           life: 3000,
         });
+        setName("");
+        setSelectCategory("");
         setSbCtgDialog(false);
       } else {
         toast.current.show({
@@ -59,7 +57,11 @@ const NewSubCategory = ({ categories, refetch }) => {
         text
         onClick={() => setSbCtgDialog(false)}
       />
-      <Button label="Save" icon="pi pi-check" text onClick={saveSubCtg} />
+      {name === "" ? (
+        <Button label="Save" icon="pi pi-check" text disabled />
+      ) : (
+        <Button label="Save" icon="pi pi-check" text onClick={saveSubCtg} />
+      )}
     </>
   );
 
@@ -72,7 +74,7 @@ const NewSubCategory = ({ categories, refetch }) => {
         icon="pi pi-plus"
         severity="sucess"
         className="mr-2"
-        onClick={openNew}
+        onClick={() => setSbCtgDialog(true)}
       />
 
       <Dialog
@@ -116,6 +118,7 @@ const NewSubCategory = ({ categories, refetch }) => {
                 options={categories}
                 optionLabel="name"
                 placeholder="Select a Category"
+                required
                 style={{ position: "fixed" }}
                 className={classNames({
                   "p-invalid": submitted && !name,

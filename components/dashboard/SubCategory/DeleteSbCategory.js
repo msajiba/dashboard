@@ -11,24 +11,25 @@ const DeleteSbCategory = ({ rowData, refetch }) => {
 
   const deleteHandleSubCtg = async () => {
     try {
-      const { data } = await axios.delete(
-        `http://localhost:3000/api/admin/subCategory`,
+      const { data } = await axios.post(
+        "http://localhost:3000/api/admin/sub-category/delete",
         {
-          data: { id: selectSbCtg._id },
+          id: selectSbCtg._id,
         }
       );
 
-      if (data.status) {
+      if (data.status === true) {
         refetch();
+
+        await toast.current.show({
+          severity: "success",
+          detail: `${data?.message}`,
+          life: 3000,
+        });
+
         setDeleteSbCtgDialog(false);
         setDeleteSbCtgDialog(false);
       }
-      await toast.current.show({
-        severity: "success",
-        summary: "Successful",
-        detail: `${data.message}`,
-        life: 2000,
-      });
     } catch (error) {
       console.log(error);
     }
@@ -44,7 +45,7 @@ const DeleteSbCategory = ({ rowData, refetch }) => {
         onClick={() => setDeleteSbCtgDialog(false)}
       />
       <Button
-        label="Save"
+        label="Delete"
         icon="pi pi-check"
         text
         onClick={deleteHandleSubCtg}
