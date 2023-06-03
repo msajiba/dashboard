@@ -31,6 +31,11 @@ const AppMenu = () => {
           to: "/dashboard/blogs",
         },
         {
+          label: "Sub Blogs ",
+          icon: "pi pi-fw pi-briefcase",
+          to: "/dashboard/sub-blogs",
+        },
+        {
           label: "Orders",
           icon: "pi pi-fw pi-briefcase",
           to: "/dashboard/orders",

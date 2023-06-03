@@ -1,29 +1,26 @@
-/*eslint-disable */
+/* eslint-disable */
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { InputText } from "primereact/inputtext";
 import { Toolbar } from "primereact/toolbar";
 import React, { useEffect, useRef, useState } from "react";
 import DashboardContainer from "../../../layout/DashboardContainer";
-import { Avatar } from "primereact/avatar";
-import { useQuery } from "react-query";
 import axios from "axios";
-import EditCategory from "../../../components/dashboard/Category/EditCategory";
-import DeleteCategory from "../../../components/dashboard/Category/DeleteCategory";
-import { Badge } from "primereact/badge";
+import { useQuery } from "react-query";
 import Loader from "../../../components/Shared/Loader";
+import { Badge } from "primereact/badge";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import NewBlog from "../../../components/dashboard/Blogs/NewBlog";
-import DeleteBlog from "../../../components/dashboard/Blogs/DeleteBlog";
-import EditBlog from "../../../components/dashboard/Blogs/EditBlog";
+import EditSubBlog from "../../../components/dashboard/SubBlogs/EditSubBlog";
+import NewSubBlog from "../../../components/dashboard/SubBlogs/NewSubBlog";
+import DeleteSubBlog from "../../../components/dashboard/SubBlogs/DeleteSubBlog";
 
-const Blogs = ({ ctg }) => {
-  const [blogs, setBlogs] = useState(null);
-  const [selectedCtg, setSelectedCtg] = useState(null);
+const SubBlogs = ({ blogs }) => {
+
+  const [subBlogs, setSubBlogs] = useState(null);
+  const [selectedSubBlog, setSelectedSubBlog] = useState(null);
   const [globalFilter, setGlobalFilter] = useState(null);
   const dt = useRef(null);
-
   const user = useSelector((state) => state.user.currentUser);
   const router = useRouter();
 
@@ -33,56 +30,49 @@ const Blogs = ({ ctg }) => {
   }
 
   const { isLoading, error, data, refetch } = useQuery(
-    "category",
-    async () => await axios.get("http://localhost:3000/api/admin/blog/getAll")
+    "sbCtg",
+    async () =>
+      await axios.get("http://localhost:3000/api/admin/sub-blog/getAll")
   );
-
-  useEffect(() => {
-    setBlogs(data?.data?.blogs);
-    refetch();
-  }, [data?.data?.blogs]);
 
   isLoading && <Loader />;
   error && console.log(error);
 
+  useEffect(() => {
+    setSubBlogs(data?.data?.subBlogs);
+    refetch();
+  }, [data?.data?.subBlogs]);
 
-  const nameBodyTemplate = (rowData) => {
+  const codeBodyTemplate = (rowData) => {
+    return (
+      <>
+        <span className="p-column-title">Code</span>
+        {rowData._id}
+      </>
+    );
+  };
+
+  const titleBodyTemplate = (rowData) => {
     return (
       <>
         <span className="p-column-title">Title</span>
-        {rowData?.title.toUpperCase()}
+        {rowData.title}
       </>
     );
   };
 
-  const subBlogBodyTemplate = (rowData) => {
-    return (
-      <>
-        <span className="p-column-title">Sub Blog</span>
-        {rowData.subBlog.title}
-      </>
-    );
-  };
 
-  const imageBodyTemplate = (rowData) => {
-    return (
-      <>
-        <span className="p-column-title">Image</span>
-        <Avatar
-          image={"http://localhost:3001/demo/images/product/gaming-set.jpg"}
-          size="xlarge"
-          shape="circle"
-        />
-      </>
-    );
-  };
 
   const actionBodyTemplate = (rowData) => {
     return (
       <>
-        <EditBlog rowData={rowData} refetch={refetch} />
-
-        <DeleteBlog rowData={rowData} refetch={refetch} />
+        <EditSubBlog
+          rowData={rowData}
+          refetch={refetch}
+          blogs={blogs}
+        />
+        {/* ===========================================DELETE_SUB_CATEGORY_HANDLER ==================================== */}
+        <DeleteSubBlog rowData={rowData} refetch={refetch} />
       </>
     );
   };
@@ -90,10 +80,10 @@ const Blogs = ({ ctg }) => {
   const header = (
     <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
       <h5 className="m-0">
-        BLOG
+        SUB BLOG -
         <Badge
           className="ml-2"
-          value={blogs?.length}
+          value={subBlogs?.length}
           size="large"
           severity="success"
         />
@@ -114,14 +104,19 @@ const Blogs = ({ ctg }) => {
       <div className="grid crud-demo">
         <div className="col-12">
           <div className="card">
-            <Toolbar className="mb-4" right={<NewBlog refetch={refetch} />} />
-
+            {/* ADD NEW SUB CATEGORY  */}
+            <Toolbar
+              className="mb-4"
+              right={
+                <NewSubBlog blogs={blogs} refetch={refetch} />
+              }
+            />
             <DataTable
               ref={dt}
-              value={blogs}
-              selection={selectedCtg}
-              onSelectionChange={(e) => setSelectedCtg(e.value)}
-              dataKey="id"
+              value={subBlogs}
+              selection={selectedSubBlog}
+              onSelectionChange={(e) => setSelectedSubBlog(e.value)}
+              dataKey="_id"
               paginator
               rows={10}
               rowsPerPageOptions={[5, 10, 25]}
@@ -129,31 +124,28 @@ const Blogs = ({ ctg }) => {
               paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
               currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
               globalFilter={globalFilter}
-              emptyMessage="No Category found."
+              emptyMessage="No Sub Category found."
               header={header}
               responsiveLayout="scroll"
             >
-          
-
-              <Column header="Image" body={imageBodyTemplate} />
-
               <Column
-                field="title"
-                header="title"
+                field="code"
+                header="ID"
                 sortable
-                body={nameBodyTemplate}
-                headerStyle={{ minWidth: "30rem" }}
+                body={codeBodyTemplate}
+                headerStyle={{ minWidth: "5rem" }}
               />
 
               <Column
                 field="title"
-                header="Sub Blog"
+                header="Title"
                 sortable
-                body={subBlogBodyTemplate}
-                headerStyle={{ minWidth: "10rem" }}
+                body={titleBodyTemplate}
+                headerStyle={{ minWidth: "15rem" }}
               />
 
               <Column
+                field="Action"
                 header="Action"
                 body={actionBodyTemplate}
                 headerStyle={{ minWidth: "10rem" }}
@@ -166,4 +158,16 @@ const Blogs = ({ ctg }) => {
   );
 };
 
-export default Blogs;
+export default SubBlogs;
+
+// export async function getServerSideProps() {
+//   const res = await axios.get(
+//     "http://localhost:3000/api/admin/sub-category/getAll"
+//   );
+//   const blogs = res?.data?.blogs;
+//   return {
+//     props: {
+//       blogs: JSON.parse(JSON.stringify(blogs)),
+//     },
+//   };
+// }

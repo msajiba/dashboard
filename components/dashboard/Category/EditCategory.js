@@ -90,7 +90,7 @@ const EditCategory = ({ rowData, refetch }) => {
 
       <Dialog
         visible={ctgDialog}
-        style={{ width: "500px" }}
+        style={{ width: "800px" }}
         header="Add New Product"
         modal
         className="p-fluid"

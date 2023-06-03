@@ -132,7 +132,7 @@ const NewProduct = ({ refetch, categories }) => {
 
       <Dialog
         visible={productDialog}
-        style={{ width: "500px" }}
+        style={{ width: "800px" }}
         header="Add New Product"
         modal
         className="p-fluid"
