@@ -43,6 +43,7 @@ const EditProduct = ({ rowData, refetch, categories }) => {
     setBestDeal(ctg.bestDeal);
     setDiscountedSale(ctg.discountedSale);
     setCategory(ctg.category);
+    setSubCategory(ctg.subCategory);
   };
 
   useEffect(() => {
@@ -76,7 +77,8 @@ const EditProduct = ({ rowData, refetch, categories }) => {
     try {
       const { data } = await axios.post(
         "http://localhost:3000/api/admin/product/update",
-        updateProduct, {
+        updateProduct,
+        {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
@@ -114,7 +116,7 @@ const EditProduct = ({ rowData, refetch, categories }) => {
     } catch (error) {
       console.log(error);
     }
- 
+
     refetch();
   };
 
@@ -202,7 +204,7 @@ const EditProduct = ({ rowData, refetch, categories }) => {
 
             <Dropdown
               value={category}
-              onChange={(e) => setCategory(e.value)}
+              onChange={(e) => setCategory(e.target.value)}
               options={categories}
               optionLabel="name"
               placeholder="Select a Category"
