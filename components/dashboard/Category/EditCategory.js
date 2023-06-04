@@ -81,7 +81,7 @@ const EditCategory = ({ rowData, refetch }) => {
       <Toast ref={toast} />
 
       <Button
-        icon="pi pi-pencil"
+        icon="pi pi-eye"
         severity="success"
         rounded
         className="mr-2"

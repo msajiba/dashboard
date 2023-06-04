@@ -4,25 +4,26 @@ import { DataTable } from "primereact/datatable";
 import { InputText } from "primereact/inputtext";
 import { Toolbar } from "primereact/toolbar";
 import React, { useEffect, useRef, useState } from "react";
-import DashboardContainer from "../../../layout/DashboardContainer";
-import { Avatar } from "primereact/avatar";
+import DashboardContainer from "../../../layout/DashboardContainer";;
 import { useQuery } from "react-query";
 import axios from "axios";
-import EditCategory from "../../../components/dashboard/Category/EditCategory";
-import DeleteCategory from "../../../components/dashboard/Category/DeleteCategory";
 import { Badge } from "primereact/badge";
-import NewCategory from "../../../components/dashboard/Category/NewCategory";
 import Loader from "../../../components/Shared/Loader";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import DeleteOrder from "../../../components/dashboard/Order/DeleteOrder";
+import ViewOrder from "../../../components/dashboard/Order/ViewOrder";
 
-const Order = ({ ctg }) => {
+const Order = () => {
+  const jwt = useSelector((state) => state.user.jwt);
+  const user = useSelector((state) => state.user.currentUser);
   const [globalFilter, setGlobalFilter] = useState(null);
   const [orders, setOrders] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const dt = useRef(null);
 
-  const user = useSelector((state) => state.user.currentUser);
   const router = useRouter();
+
 
   if (!user) {
     router.push("/auth/login");
@@ -38,15 +39,13 @@ const Order = ({ ctg }) => {
           Accept: "application/json",
           token: `Bearer ${jwt}`,
         },
-      }),
+      })
   );
 
   useEffect(() => {
     setOrders(data?.data?.order);
     refetch();
   }, [data?.data?.order]);
-
-  console.log("orders", orders);
 
   isLoading && <Loader />;
   error && console.log(error);
@@ -63,21 +62,17 @@ const Order = ({ ctg }) => {
   const nameBodyTemplate = (rowData) => {
     return (
       <>
-        <span className="p-column-title">Name</span>
-        {rowData?.name.toUpperCase()}
+        <span className="p-column-title">Email</span>
+        {rowData.name}
       </>
     );
   };
 
-  const imageBodyTemplate = (rowData) => {
+  const emailBodyTemplate = (rowData) => {
     return (
       <>
-        <span className="p-column-title">Image</span>
-        <Avatar
-          image={"http://localhost:3001/demo/images/product/gaming-set.jpg"}
-          size="xlarge"
-          shape="circle"
-        />
+        <span className="p-column-title">Email</span>
+        {rowData.email}
       </>
     );
   };
@@ -85,9 +80,8 @@ const Order = ({ ctg }) => {
   const actionBodyTemplate = (rowData) => {
     return (
       <>
-        <EditCategory rowData={rowData} refetch={refetch} />
-
-        <DeleteCategory rowData={rowData} refetch={refetch} />
+        <ViewOrder rowData={rowData} refetch={refetch} />
+        <DeleteOrder rowData={rowData} refetch={refetch} />
       </>
     );
   };
@@ -95,11 +89,11 @@ const Order = ({ ctg }) => {
   const header = (
     <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
       <h5 className="m-0">
-        CATEGORY
+        ORDERS -
         <Badge
           className="ml-2"
-          value={categories?.length}
-          size="large"
+          value={orders?.length}
+          size="small"
           severity="success"
         />
       </h5>
@@ -119,16 +113,11 @@ const Order = ({ ctg }) => {
       <div className="grid crud-demo">
         <div className="col-12">
           <div className="card">
-            <Toolbar
-              className="mb-4"
-              right={<NewCategory refetch={refetch} />}
-            />
-
             <DataTable
               ref={dt}
-              value={categories}
-              selection={selectedCtg}
-              onSelectionChange={(e) => setSelectedCtg(e.value)}
+              value={orders}
+              selection={selectedOrder}
+              onSelectionChange={(e) => setSelectedOrder(e.value)}
               dataKey="id"
               paginator
               rows={10}
@@ -149,13 +138,19 @@ const Order = ({ ctg }) => {
                 headerStyle={{ minWidth: "5rem" }}
               />
 
-              <Column header="Image" body={imageBodyTemplate} />
-
               <Column
                 field="name"
                 header="Name"
                 sortable
                 body={nameBodyTemplate}
+                headerStyle={{ minWidth: "15rem" }}
+              />
+
+              <Column
+                field="email"
+                header="Email"
+                sortable
+                body={emailBodyTemplate}
                 headerStyle={{ minWidth: "15rem" }}
               />
 
