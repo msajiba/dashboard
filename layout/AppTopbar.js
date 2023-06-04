@@ -8,12 +8,13 @@ import React, {
   useRef,
 } from "react";
 import { LayoutContext } from "./context/layoutcontext";
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../store/userSlice";
+import { useSelector } from "react-redux";
+
+import TopUserShow from "../components/TopUserShow";
 
 const AppTopbar = forwardRef((props, ref) => {
   const user = useSelector((state) => state.user.currentUser);
-  const dispatch = useDispatch();
+ 
 
   const { layoutConfig, layoutState, onMenuToggle, showProfileSidebar } =
     useContext(LayoutContext);
@@ -66,17 +67,7 @@ const AppTopbar = forwardRef((props, ref) => {
           "layout-topbar-menu-mobile-active": layoutState.profileSidebarVisible,
         })}
       >
-        {user && (
-          <button
-            type="button"
-            onClick={() => {
-              dispatch(logout());
-            }}
-          >
-            <i className="pi-sign-out"></i>
-            <span>Logout</span>
-          </button>
-        ) }
+        {user && <TopUserShow />}
       </div>
     </div>
   );
