@@ -22,12 +22,11 @@ const SubCategories = ({ categories }) => {
   const dt = useRef(null);
   const user = useSelector((state) => state.user.currentUser);
   const router = useRouter();
-  
+
   if (!user) {
     router.push("/auth/login");
     return null;
   }
-
 
   const { isLoading, error, data, refetch } = useQuery(
     "sbCtg",

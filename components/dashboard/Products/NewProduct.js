@@ -366,6 +366,7 @@ const NewProduct = ({ refetch, categories }) => {
             />
           </div>
         </div>
+        
       </Dialog>
     </>
   );
