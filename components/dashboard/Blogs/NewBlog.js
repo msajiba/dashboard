@@ -14,6 +14,7 @@ const NewBlog = ({ refetch }) => {
   const jwt = useSelector((state) => state.user.jwt);
   const [blogDialog, setBlogDialog] = useState(false);
   const [title, setTitle] = useState("");
+  const [slug, setSlug] = useState("");
   const [author, setAuthor] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState("");
@@ -42,6 +43,7 @@ const NewBlog = ({ refetch }) => {
         "http://localhost:3000/api/admin/blog/store",
         {
           title,
+          slug,
           author,
           content,
           image,
@@ -64,6 +66,7 @@ const NewBlog = ({ refetch }) => {
         });
         setBlogDialog(false);
         setTitle("");
+        setSlug('');
         setImage("");
         setContent("");
         setAuthor("");
@@ -125,25 +128,47 @@ const NewBlog = ({ refetch }) => {
         footer={blogDialogFooter}
         onHide={() => setBlogDialog(false)}
       >
+        <div className="field col">
+          <label htmlFor="title">Title</label>
+          <InputText
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            autoFocus
+            className={classNames({
+              "p-invalid": submitted && !title,
+            })}
+          />
+          {submitted && !title && (
+            <small
+              style={{ fontSize: "1rem", color: "red" }}
+              className="p-invalid"
+            >
+              Title is required.
+            </small>
+          )}
+        </div>
+
         <div className="formgrid grid">
           <div className="field col">
-            <label htmlFor="title">Title</label>
+            <label htmlFor="slug">Slug</label>
             <InputText
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              id="slug"
+              value={slug}
+              onChange={(e) => setSlug(e.target.value)}
               required
               autoFocus
               className={classNames({
-                "p-invalid": submitted && !title,
+                "p-invalid": submitted && !slug,
               })}
             />
-            {submitted && !title && (
+            {submitted && !slug && (
               <small
                 style={{ fontSize: "1rem", color: "red" }}
                 className="p-invalid"
               >
-                Title is required.
+                Slug is required.
               </small>
             )}
           </div>

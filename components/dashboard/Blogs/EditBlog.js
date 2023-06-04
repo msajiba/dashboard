@@ -21,12 +21,14 @@ const EditBlog = ({ rowData, refetch }) => {
   const [selectSubBlog, setSelectedSubBlog] = useState("");
   const [subBlogs, setSubBlogs] = useState("");
   const [selectedId, setSelectedID] = useState("");
+  const [slug, setSlug] = useState("");
 
   const toast = useRef(null);
 
   const confirmDeleteCtg = (blog) => {
     setBlogDialog(true);
     setTitle(blog.title);
+    setSlug(blog.slug);
     setAuthor(blog.author);
     setContent(blog.content);
     setImage(blog.image);
@@ -54,6 +56,7 @@ const EditBlog = ({ rowData, refetch }) => {
         {
           id: selectedId,
           title,
+          slug,
           author,
           content,
           image,
@@ -122,25 +125,45 @@ const EditBlog = ({ rowData, refetch }) => {
         footer={blogDialogFooter}
         onHide={() => setBlogDialog(false)}
       >
+        <div className="field col">
+          <label htmlFor="title">Title</label>
+          <InputText
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            autoFocus
+            className={classNames({
+              "p-invalid": submitted && !title,
+            })}
+          />
+          {submitted && !title && (
+            <small
+              style={{ fontSize: "1rem", color: "red" }}
+              className="p-invalid"
+            >
+              Title is required.
+            </small>
+          )}
+        </div>
         <div className="formgrid grid">
           <div className="field col">
-            <label htmlFor="title">Title</label>
+            <label htmlFor="slug">Slug</label>
             <InputText
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              id="slug"
+              value={slug}
+              onChange={(e) => setSlug(e.target.value)}
               required
-              autoFocus
               className={classNames({
-                "p-invalid": submitted && !title,
+                "p-invalid": submitted && !slug,
               })}
             />
-            {submitted && !title && (
+            {submitted && !slug && (
               <small
                 style={{ fontSize: "1rem", color: "red" }}
                 className="p-invalid"
               >
-                Title is required.
+                Slug is required.
               </small>
             )}
           </div>
