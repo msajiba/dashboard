@@ -52,6 +52,21 @@ const AppMenu = () => {
         },
       ],
     },
+    {
+      label: "Extra",
+      items: [
+        {
+          label: "SiteInfo",
+          icon: "pi pi-fw pi-briefcase",
+          to: "/dashboard/siteinfo",
+        },
+        {
+          label: "Banner",
+          icon: "pi pi-fw pi-briefcase",
+          to: "/dashboard/banner",
+        },
+      ],
+    },
 
     //====================> NEED_LEFT_MENU_END <=======================//
   ];
