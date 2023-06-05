@@ -8,12 +8,13 @@ const ProductView = ({ item }) => {
       {item.products && (
         <Accordion activeIndex={0}>
           {item.products.map((pd, i) => {
+            console.log(pd);
             return (
               <AccordionTab key={i} header={pd.title}>
                 <div className=" flex justify-content-center">
                   <Image
-                    src={`https://primefaces.org/cdn/primereact/images/product/${item.image}`}
-                    zoomSrc={`https://primefaces.org/cdn/primereact/images/product/${item.image}`}
+                    src={`${item.image}`}
+                    zoomSrc={`${item.image}`}
                     alt="Image"
                     width="100"
                     height="60"

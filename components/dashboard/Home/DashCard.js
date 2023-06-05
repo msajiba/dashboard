@@ -134,7 +134,7 @@ const DashCard = () => {
               <span className="block text-500 font-medium mb-3">Products</span>
               <div className="text-900 font-medium text-xl">
                 {" "}
-                {products.length}{" "}
+                {products?.length}{" "}
               </div>
             </div>
             <div

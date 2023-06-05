@@ -16,7 +16,7 @@ const NewBlog = ({ refetch }) => {
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [author, setAuthor] = useState("");
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [selectSubBlog, setSelectedSubBlog] = useState("");
   const [subBlogs, setSubBlogs] = useState("");
@@ -78,7 +78,7 @@ const NewBlog = ({ refetch }) => {
         setTitle("");
         setSlug("");
         setImage("");
-        setContent("");
+        setContent(null);
         setAuthor("");
         setSubBlogs("");
       } else {
@@ -261,7 +261,7 @@ const NewBlog = ({ refetch }) => {
             id="author"
             value={content}
             onTextChange={(e) => setContent(e.htmlValue)}
-            style={{ height: "320px" }}
+            style={{ maxHeight: "100%" }}
             required
             className={classNames({
               "p-invalid": submitted && !author,

@@ -14,6 +14,7 @@ import Loader from "../../../components/Shared/Loader";
 import { Badge } from "primereact/badge";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { Avatar } from "primereact/avatar";
 
 const SubCategories = ({ categories }) => {
   const [subCategories, setSubCategories] = useState(null);
@@ -33,6 +34,7 @@ const SubCategories = ({ categories }) => {
     async () =>
       await axios.get("http://localhost:3000/api/admin/sub-category/getAll")
   );
+  console.log("sub==>", data)
 
   isLoading && <Loader />;
   error && console.log(error);
@@ -51,6 +53,16 @@ const SubCategories = ({ categories }) => {
     );
   };
 
+  const imageBodyTemplate = (rowData) => {
+
+    return (
+      <>
+        <span className="p-column-title">Image</span>
+        <Avatar image={`${rowData?.image}`} size="xlarge" shape="circle" />
+      </>
+    );
+  };
+
   const nameBodyTemplate = (rowData) => {
     return (
       <>
@@ -64,7 +76,7 @@ const SubCategories = ({ categories }) => {
     return (
       <>
         <span className="p-column-title">Category</span>
-        {rowData?.parent?.name}
+        {rowData?.category?.name}
       </>
     );
   };
@@ -140,6 +152,13 @@ const SubCategories = ({ categories }) => {
                 sortable
                 body={codeBodyTemplate}
                 headerStyle={{ minWidth: "5rem" }}
+              />
+              <Column
+                field="image"
+                header="IMAGE"
+                sortable
+                body={imageBodyTemplate}
+                headerStyle={{ minWidth: "10rem" }}
               />
 
               <Column

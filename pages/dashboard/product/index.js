@@ -91,11 +91,12 @@ const index = ({ categories }) => {
     );
   };
 
-  const ratingBodyTemplate = (rowData) => {
+  const stockBodyTemplate = (rowData) => {
+
     return (
       <>
-        <span className="p-column-title">Quantity</span>
-        {rowData.quantity}
+        <span className="p-column-title">Stock</span>
+        {rowData.stock}
       </>
     );
   };
@@ -104,7 +105,7 @@ const index = ({ categories }) => {
     return (
       <>
         <span className="p-column-title">Status</span>
-        {rowData.quantity > 0 ? (
+        {rowData.stock > 0 ? (
           <Button
             label="INSTOCK"
             severity="success"
@@ -212,9 +213,9 @@ const index = ({ categories }) => {
               />
 
               <Column
-                field="quantity"
-                header="Quantity"
-                body={ratingBodyTemplate}
+                field="stock"
+                header="Stock"
+                body={stockBodyTemplate}
                 sortable
                 headerStyle={{ minWidth: "10rem" }}
               />
