@@ -14,12 +14,13 @@ const NewBlog = ({ refetch }) => {
   const jwt = useSelector((state) => state.user.jwt);
   const [blogDialog, setBlogDialog] = useState(false);
   const [title, setTitle] = useState("");
+  const [slug, setSlug] = useState("");
   const [author, setAuthor] = useState("");
-  const [content, setContent] = useState("");
-  const [image, setImage] = useState("");
+  const [content, setContent] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [selectSubBlog, setSelectedSubBlog] = useState("");
   const [subBlogs, setSubBlogs] = useState("");
+  const [file, setFile] = useState("");
 
   const toast = useRef(null);
 
@@ -37,11 +38,22 @@ const NewBlog = ({ refetch }) => {
   const saveBlog = async () => {
     setSubmitted(true);
 
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "ytpmzows");
+
     try {
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dymnymsph/image/upload",
+        formData
+      );
+      const image = response.data.url;
+
       const { data } = await axios.post(
         "http://localhost:3000/api/admin/blog/store",
         {
           title,
+          slug,
           author,
           content,
           image,
@@ -64,8 +76,9 @@ const NewBlog = ({ refetch }) => {
         });
         setBlogDialog(false);
         setTitle("");
+        setSlug("");
         setImage("");
-        setContent("");
+        setContent(null);
         setAuthor("");
         setSubBlogs("");
       } else {
@@ -125,25 +138,69 @@ const NewBlog = ({ refetch }) => {
         footer={blogDialogFooter}
         onHide={() => setBlogDialog(false)}
       >
-        <div className="formgrid grid">
-          <div className="field col">
-            <label htmlFor="title">Title</label>
-            <InputText
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-              autoFocus
+        <div className="flex align-items-center justify-content-center mb-5">
+          <div className="field ">
+            <input
+              type="file"
+              accept="image/*"
+              maxFileSize={1000000}
+              onChange={(e) => setFile(e.target.files[0])}
               className={classNames({
-                "p-invalid": submitted && !title,
+                "p-invalid": submitted && !file,
               })}
             />
-            {submitted && !title && (
+            {submitted && !file && (
               <small
                 style={{ fontSize: "1rem", color: "red" }}
                 className="p-invalid"
               >
-                Title is required.
+                File is required.
+              </small>
+            )}
+          </div>
+        </div>
+
+        <div className="field col">
+          <label htmlFor="title">Title</label>
+          <InputText
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+            autoFocus
+            className={classNames({
+              "p-invalid": submitted && !title,
+            })}
+          />
+          {submitted && !title && (
+            <small
+              style={{ fontSize: "1rem", color: "red" }}
+              className="p-invalid"
+            >
+              Title is required.
+            </small>
+          )}
+        </div>
+
+        <div className="formgrid grid">
+          <div className="field col">
+            <label htmlFor="slug">Slug</label>
+            <InputText
+              id="slug"
+              value={slug}
+              onChange={(e) => setSlug(e.target.value)}
+              required
+              autoFocus
+              className={classNames({
+                "p-invalid": submitted && !slug,
+              })}
+            />
+            {submitted && !slug && (
+              <small
+                style={{ fontSize: "1rem", color: "red" }}
+                className="p-invalid"
+              >
+                Slug is required.
               </small>
             )}
           </div>
@@ -167,32 +224,8 @@ const NewBlog = ({ refetch }) => {
               </small>
             )}
           </div>
-        </div>
 
-        <div className="formgrid grid">
           <div className="field col">
-            <label htmlFor="name">Image</label>
-            <InputText
-              id="image"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-              className={classNames({
-                "p-invalid": submitted && !image,
-              })}
-            />
-            {submitted && !image && (
-              <small
-                style={{ fontSize: "1rem", color: "red" }}
-                className="p-invalid"
-              >
-                Image is required.
-              </small>
-            )}
-          </div>
-          <div
-            className="field col"
-            style={{ marginBottom: "50px", position: "sticky" }}
-          >
             <label className="mb-10">Category</label>
             <div className="formgrid grid">
               <div>
@@ -228,7 +261,7 @@ const NewBlog = ({ refetch }) => {
             id="author"
             value={content}
             onTextChange={(e) => setContent(e.htmlValue)}
-            style={{ height: "320px" }}
+            style={{ maxHeight: "100%" }}
             required
             className={classNames({
               "p-invalid": submitted && !author,
@@ -243,6 +276,7 @@ const NewBlog = ({ refetch }) => {
             </small>
           )}
         </div>
+        
       </Dialog>
     </>
   );

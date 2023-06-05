@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Avatar } from "primereact/avatar";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
@@ -79,6 +80,9 @@ const DeleteSbCategory = ({ rowData, refetch }) => {
         footer={subCtgDialogFooter}
         onHide={() => setDeleteSbCtgDialog(false)}
       >
+        <div className="flex align-items-center justify-content-center">
+          <Avatar image={selectSbCtg?.image} size="xlarge" shape="circle" />
+        </div>
         <div className="flex align-items-center justify-content-center">
           <i
             className="pi pi-exclamation-triangle mr-3"

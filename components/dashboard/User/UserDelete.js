@@ -1,22 +1,23 @@
 import axios from "axios";
-import { Avatar } from "primereact/avatar";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
-const DeleteProduct = ({ rowData, refetch }) => {
+const DeleteUser = ({ rowData, refetch }) => {
   const jwt = useSelector((state) => state.user.jwt);
-  const [deleteProductDialog, setDeleteProductDialog] = useState(false);
-  const [selectProduct, setSelectProduct] = useState(null);
+  const [deleteUser, setDeleteUser] = useState(false);
+  const [selectUser, setSelectUser] = useState(null);
   const toast = useRef(null);
 
-  const deleteHandleProduct = async () => {
+  const deleteHandleUser = async () => {
     try {
       const { data } = await axios.post(
-        `http://localhost:3000/api/admin/product/delete`,
-        { id: selectProduct._id },
+        "http://localhost:3000/api/admin/user/delete",
+        {
+          id: selectUser._id,
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -26,14 +27,13 @@ const DeleteProduct = ({ rowData, refetch }) => {
         }
       );
 
-      if (data.status == true) {
+      if (data.status) {
         toast.current.show({
           severity: "success",
           detail: `${data.message}`,
-          life: 2000,
+          life: 3000,
         });
-        setDeleteProductDialog(false);
-        setDeleteProductDialog(false);
+        setDeleteUser(false);
         refetch();
       }
     } catch (error) {
@@ -41,26 +41,26 @@ const DeleteProduct = ({ rowData, refetch }) => {
     }
   };
 
-  const ctgDialogFooter = (
+  const userDialogFooter = (
     <>
       <Button
         label="Cancel"
         icon="pi pi-times"
         text
-        onClick={() => setDeleteProductDialog(false)}
+        onClick={() => setDeleteUser(false)}
       />
       <Button
         label="Delete"
         icon="pi pi-check"
         text
-        onClick={deleteHandleProduct}
+        onClick={deleteHandleUser}
       />
     </>
   );
 
-  const confirmDeleteCtg = (sbCtg) => {
-    setSelectProduct(sbCtg);
-    setDeleteProductDialog(true);
+  const confirmDeleteCtg = (user) => {
+    setSelectUser(user);
+    setDeleteUser(true);
   };
 
   return (
@@ -68,24 +68,21 @@ const DeleteProduct = ({ rowData, refetch }) => {
       <Toast ref={toast} />
 
       <Dialog
-        visible={deleteProductDialog}
+        visible={deleteUser}
         style={{ width: "450px" }}
         header="Confirm"
         modal
-        footer={ctgDialogFooter}
-        onHide={() => setDeleteProductDialog(false)}
+        footer={userDialogFooter}
+        onHide={() => setDeleteUser(false)}
       >
-        <div className="flex align-items-center justify-content-center">
-          <Avatar image={selectProduct?.image} size="xlarge" shape="circle" />
-        </div>
         <div className="flex align-items-center justify-content-center">
           <i
             className="pi pi-exclamation-triangle mr-3"
             style={{ fontSize: "2rem" }}
           />
-          {selectProduct && (
+          {selectUser && (
             <span>
-              Are you sure you want to delete <b>{selectProduct?.title}</b>?
+              Are you sure you want to delete <b>{selectUser?.email}</b>?
             </span>
           )}
         </div>
@@ -101,4 +98,4 @@ const DeleteProduct = ({ rowData, refetch }) => {
   );
 };
 
-export default DeleteProduct;
+export default DeleteUser;

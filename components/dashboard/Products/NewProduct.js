@@ -14,19 +14,19 @@ import { useSelector } from "react-redux";
 const NewProduct = ({ refetch, categories }) => {
   const jwt = useSelector((state) => state.user.jwt);
   const [productDialog, setProductDialog] = useState(false);
-  const [image, setImage] = useState("");
   const [title, setTitle] = useState("");
-  const [price, setPrice] = useState(0);
-  const [original_price, setOriginal_Price] = useState(0);
+  const [price, setPrice] = useState(null);
+  const [original_price, setOriginal_Price] = useState(null);
   const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
-  const [quantity, setQuantity] = useState(0);
+  const [stock, setStock] = useState(null);
   const [description, setDescription] = useState("");
   const [shortDescription, setShortDescription] = useState("");
   const [bestDeal, setBestDeal] = useState(false);
   const [discountedSale, setDiscountedSale] = useState(false);
   const [selectedSub, setSelectedSub] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const [file, setFile] = useState(null);
   const toast = useRef(null);
 
   useEffect(() => {
@@ -42,25 +42,35 @@ const NewProduct = ({ refetch, categories }) => {
   }, [category]);
 
   const createProduct = {
-    image,
     title,
     price,
     originalPrice: original_price,
     category: category._id,
     subCategory: subCategory._id,
-    quantity,
     description,
     bestDeal,
     discountedSale,
-    shortDescription
+    shortDescription,
+    stock,
   };
 
+
   const saveProduct = async () => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "ytpmzows");
+
     setSubmitted(true);
     try {
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dymnymsph/image/upload",
+        formData
+      );
+      const image = response.data.url;
+
       const { data } = await axios.post(
         "http://localhost:3000/api/admin/product/store",
-        createProduct, 
+        { ...createProduct, image },
         {
           headers: {
             "Content-Type": "application/json",
@@ -78,11 +88,10 @@ const NewProduct = ({ refetch, categories }) => {
         });
         setProductDialog(false);
         setTitle("");
-        setImage("");
-        setShortDescription('');
+        setShortDescription("");
         setPrice(0);
-        setOriginal_Price(0);
-        setQuantity(0);
+        setOriginal_Price(null);
+        setStock(null);
         setCategory("");
         setSubCategory("");
         setDescription("");
@@ -139,28 +148,28 @@ const NewProduct = ({ refetch, categories }) => {
         footer={subCtgDialogFooter}
         onHide={() => setProductDialog(false)}
       >
+        <div className="field flex justify-content-center">
+          <input
+            type="file"
+            accept="image/*"
+            required
+            maxFileSize={1000000}
+            onChange={(e) => setFile(e.target.files[0])}
+            className={classNames({
+              "p-invalid": submitted && !file,
+            })}
+          />
+          {submitted && !file && (
+            <small
+              style={{ fontSize: "1rem", color: "red" }}
+              className="p-invalid"
+            >
+              File is required.
+            </small>
+          )}
+        </div>
+
         <div className="formgrid grid">
-          <div className="field col">
-            <label htmlFor="image">Image</label>
-            <InputText
-              id="image"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-              required
-              autoFocus
-              className={classNames({
-                "p-invalid": submitted && !image,
-              })}
-            />
-            {submitted && !image && (
-              <small
-                style={{ fontSize: "1rem", color: "red" }}
-                className="p-invalid"
-              >
-                Image is required.
-              </small>
-            )}
-          </div>
           <div className="field col">
             <label htmlFor="name">Name</label>
             <InputText
@@ -279,17 +288,17 @@ const NewProduct = ({ refetch, categories }) => {
           </div>
 
           <div className="field col">
-            <label htmlFor="quantify">Quantity</label>
+            <label htmlFor="stock">Stock</label>
             <InputNumber
-              id="quantify"
-              value={quantity}
-              onChange={(e) => setQuantity(e.value)}
+              id="stock"
+              value={stock}
+              onChange={(e) => setStock(e.value)}
               required
               className={classNames({
-                "p-invalid": submitted && !quantity,
+                "p-invalid": submitted && !stock,
               })}
             />
-            {submitted && !quantity && (
+            {submitted && !stock && (
               <small
                 style={{ fontSize: "1rem", color: "red" }}
                 className="p-invalid"
@@ -366,7 +375,6 @@ const NewProduct = ({ refetch, categories }) => {
             />
           </div>
         </div>
-        
       </Dialog>
     </>
   );

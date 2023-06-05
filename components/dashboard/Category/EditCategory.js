@@ -6,12 +6,13 @@ import { Toast } from "primereact/toast";
 import { classNames } from "primereact/utils";
 import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { Avatar } from "primereact/avatar";
 
 const EditCategory = ({ rowData, refetch }) => {
   const jwt = useSelector((state) => state.user.jwt);
   const [ctgDialog, setCtgDialog] = useState(false);
   const [name, setName] = useState("");
-  // const [image, setImage] = useState("");
+  const [file, setFile] = useState(null);
   const [selectedId, setSelectedID] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const toast = useRef(null);
@@ -19,18 +20,27 @@ const EditCategory = ({ rowData, refetch }) => {
   const confirmDeleteCtg = (ctg) => {
     setCtgDialog(true);
     setName(ctg.name);
-    // setImage(ctg.image);
+    setFile(ctg.image);
     setSelectedID(ctg?._id);
   };
 
   const updateCtg = async () => {
     setSubmitted(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "ytpmzows");
 
     try {
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dymnymsph/image/upload",
+        formData
+      );
+      const image = response.data.url;
       const { data } = await axios.post(
         "http://localhost:3000/api/admin/category/update",
         {
           name,
+          image,
           id: selectedId,
         },
         {
@@ -39,7 +49,6 @@ const EditCategory = ({ rowData, refetch }) => {
             Accept: "application/json",
             token: `Bearer ${jwt}`,
           },
-          
         }
       );
       if (data.status === true) {
@@ -91,33 +100,36 @@ const EditCategory = ({ rowData, refetch }) => {
       <Dialog
         visible={ctgDialog}
         style={{ width: "800px" }}
-        header="Add New Product"
+        header="Update Category"
         modal
         className="p-fluid"
         footer={subCtgDialogFooter}
         onHide={() => setCtgDialog(false)}
       >
-        {/* <div className="field">
-          <label htmlFor="name">Image</label>
-          <InputText
-            id="image"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
+        <div className="flex align-items-center justify-content-center mb-5">
+          <Avatar image={file} size="xlarge" shape="circle" />
+        </div>
+
+        <div className="field">
+          <input
+            type="file"
+            accept="image/*"
             required
-            autoFocus
+            maxFileSize={1000000}
+            onChange={(e) => setFile(e.target.files[0])}
             className={classNames({
-              "p-invalid": submitted && !image,
+              "p-invalid": submitted && !file,
             })}
           />
-          {submitted && !image && (
+          {submitted && !file && (
             <small
               style={{ fontSize: "1rem", color: "red" }}
               className="p-invalid"
             >
-              Image is required.
+              File is required.
             </small>
           )}
-        </div> */}
+        </div>
 
         <div className="field">
           <label htmlFor="name">Name</label>

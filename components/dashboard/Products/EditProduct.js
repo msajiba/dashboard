@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Avatar } from "primereact/avatar";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { Dropdown } from "primereact/dropdown";
@@ -14,13 +15,12 @@ import { useSelector } from "react-redux";
 const EditProduct = ({ rowData, refetch, categories }) => {
   const jwt = useSelector((state) => state.user.jwt);
   const [productDialog, setProductDialog] = useState(false);
-  const [image, setImage] = useState("");
   const [title, setTitle] = useState("");
-  const [price, setPrice] = useState(0);
-  const [original_price, setOriginal_Price] = useState(0);
+  const [price, setPrice] = useState(null);
+  const [original_price, setOriginal_Price] = useState(null);
   const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
-  const [quantity, setQuantity] = useState(0);
+  const [stock, setStock] = useState(null);
   const [description, setDescription] = useState("");
   const [shortDescription, setShortDescription] = useState("");
   const [bestDeal, setBestDeal] = useState(false);
@@ -28,16 +28,17 @@ const EditProduct = ({ rowData, refetch, categories }) => {
   const [selectedSub, setSelectedSub] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [selectedId, setSelectedId] = useState("");
+  const [file, setFile] = useState(null);
   const toast = useRef(null);
 
-  const confirmDeleteCtg = (ctg) => {
+  const confirmEditProduct = (ctg) => {
     setProductDialog(true);
     setTitle(ctg.title);
-    setImage(ctg.image);
+    setFile(ctg.image);
     setSelectedId(ctg._id);
     setPrice(ctg.price);
     setOriginal_Price(ctg.originalPrice);
-    setQuantity(ctg.quantity);
+    setStock(ctg.stock);
     setShortDescription(ctg.shortDescription);
     setDescription(ctg.description);
     setBestDeal(ctg.bestDeal);
@@ -58,13 +59,12 @@ const EditProduct = ({ rowData, refetch, categories }) => {
 
   const updateProduct = {
     id: selectedId,
-    image,
     title,
     price,
     originalPrice: original_price,
     category: category._id,
     subCategory: subCategory._id,
-    quantity,
+    stock,
     description,
     bestDeal,
     discountedSale,
@@ -74,10 +74,20 @@ const EditProduct = ({ rowData, refetch, categories }) => {
   const updatePdHandler = async () => {
     setSubmitted(true);
 
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "ytpmzows");
+
     try {
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dymnymsph/image/upload",
+        formData
+      );
+      const image = response?.data?.url;
+
       const { data } = await axios.post(
         "http://localhost:3000/api/admin/product/update",
-        updateProduct,
+        { ...updateProduct, image },
         {
           headers: {
             "Content-Type": "application/json",
@@ -95,11 +105,10 @@ const EditProduct = ({ rowData, refetch, categories }) => {
         });
         setProductDialog(false);
         setTitle("");
-        setImage("");
         setShortDescription("");
-        setPrice(0);
-        setOriginal_Price(0);
-        setQuantity(0);
+        setPrice(null);
+        setOriginal_Price(null);
+        setStock(null);
         setCategory("");
         setSubCategory("");
         setDescription("");
@@ -141,40 +150,44 @@ const EditProduct = ({ rowData, refetch, categories }) => {
         severity="success"
         rounded
         className="mr-2"
-        onClick={() => confirmDeleteCtg(rowData)}
+        onClick={() => confirmEditProduct(rowData)}
       />
 
       <Dialog
         visible={productDialog}
         style={{ width: "800px" }}
-        header="Add New Product"
+        header="Update Product"
         modal
         className="p-fluid"
         footer={subCtgDialogFooter}
         onHide={() => setProductDialog(false)}
       >
+        <div className="flex align-items-center justify-content-center mb-5">
+          <Avatar image={file} size="xlarge" shape="circle" />
+        </div>
+
+        <div className="field flex justify-content-center">
+          <input
+            type="file"
+            accept="image/*"
+            required
+            maxFileSize={1000000}
+            onChange={(e) => setFile(e.target.files[0])}
+            className={classNames({
+              "p-invalid": submitted && !file,
+            })}
+          />
+          {submitted && !file && (
+            <small
+              style={{ fontSize: "1rem", color: "red" }}
+              className="p-invalid"
+            >
+              File is required.
+            </small>
+          )}
+        </div>
+
         <div className="formgrid grid">
-          <div className="field col">
-            <label htmlFor="image">Image</label>
-            <InputText
-              id="image"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-              required
-              autoFocus
-              className={classNames({
-                "p-invalid": submitted && !image,
-              })}
-            />
-            {submitted && !image && (
-              <small
-                style={{ fontSize: "1rem", color: "red" }}
-                className="p-invalid"
-              >
-                Image is required.
-              </small>
-            )}
-          </div>
           <div className="field col">
             <label htmlFor="name">Name</label>
             <InputText
@@ -204,7 +217,7 @@ const EditProduct = ({ rowData, refetch, categories }) => {
 
             <Dropdown
               value={category}
-              onChange={(e) => setCategory(e.target.value)}
+              onChange={(e) => setCategory(e.value)}
               options={categories}
               optionLabel="name"
               placeholder="Select a Category"
@@ -293,17 +306,17 @@ const EditProduct = ({ rowData, refetch, categories }) => {
           </div>
 
           <div className="field col">
-            <label htmlFor="quantify">Quantity</label>
+            <label htmlFor="stock">Stock</label>
             <InputNumber
-              id="quantify"
-              value={quantity}
-              onChange={(e) => setQuantity(e.value)}
+              id="stock"
+              value={stock}
+              onChange={(e) => setStock(e.value)}
               required
               className={classNames({
-                "p-invalid": submitted && !quantity,
+                "p-invalid": submitted && !stock,
               })}
             />
-            {submitted && !quantity && (
+            {submitted && !stock && (
               <small
                 style={{ fontSize: "1rem", color: "red" }}
                 className="p-invalid"

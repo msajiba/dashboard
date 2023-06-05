@@ -24,7 +24,7 @@ const Categories = ({ ctg }) => {
 
   const user = useSelector((state) => state.user.currentUser);
   const router = useRouter();
-  
+
   if (!user) {
     router.push("/auth/login");
     return null;
@@ -66,11 +66,7 @@ const Categories = ({ ctg }) => {
     return (
       <>
         <span className="p-column-title">Image</span>
-        <Avatar
-          image={"http://localhost:3001/demo/images/product/gaming-set.jpg"}
-          size="xlarge"
-          shape="circle"
-        />
+        <Avatar image={`${rowData.image}`} size="xlarge" shape="circle" />
       </>
     );
   };

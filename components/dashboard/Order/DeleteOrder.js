@@ -1,22 +1,23 @@
 import axios from "axios";
-import { Avatar } from "primereact/avatar";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
-const DeleteProduct = ({ rowData, refetch }) => {
-  const jwt = useSelector((state) => state.user.jwt);
-  const [deleteProductDialog, setDeleteProductDialog] = useState(false);
-  const [selectProduct, setSelectProduct] = useState(null);
+const DeleteOrder = ({ rowData, refetch }) => {
+  const [deleteOrderDialog, setDeleteOrderDialog] = useState(false);
+  const [selectOrder, setSelectOrder] = useState(null);
   const toast = useRef(null);
+  const jwt = useSelector((state) => state.user.jwt);
 
-  const deleteHandleProduct = async () => {
+  const deleteHandleOrder = async () => {
     try {
       const { data } = await axios.post(
-        `http://localhost:3000/api/admin/product/delete`,
-        { id: selectProduct._id },
+        "http://localhost:3000/api/admin/order/delete",
+        {
+          id: selectOrder._id,
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -26,14 +27,14 @@ const DeleteProduct = ({ rowData, refetch }) => {
         }
       );
 
-      if (data.status == true) {
+      if (data.status === true) {
         toast.current.show({
           severity: "success",
           detail: `${data.message}`,
-          life: 2000,
+          life: 3000,
         });
-        setDeleteProductDialog(false);
-        setDeleteProductDialog(false);
+        setDeleteOrderDialog(false);
+        setDeleteOrderDialog(false);
         refetch();
       }
     } catch (error) {
@@ -41,26 +42,26 @@ const DeleteProduct = ({ rowData, refetch }) => {
     }
   };
 
-  const ctgDialogFooter = (
+  const blogDialogFooter = (
     <>
       <Button
         label="Cancel"
         icon="pi pi-times"
         text
-        onClick={() => setDeleteProductDialog(false)}
+        onClick={() => setDeleteOrderDialog(false)}
       />
       <Button
         label="Delete"
         icon="pi pi-check"
         text
-        onClick={deleteHandleProduct}
+        onClick={deleteHandleOrder}
       />
     </>
   );
 
-  const confirmDeleteCtg = (sbCtg) => {
-    setSelectProduct(sbCtg);
-    setDeleteProductDialog(true);
+  const confirmDeleteBlog = (order) => {
+    setSelectOrder(order);
+    setDeleteOrderDialog(true);
   };
 
   return (
@@ -68,24 +69,21 @@ const DeleteProduct = ({ rowData, refetch }) => {
       <Toast ref={toast} />
 
       <Dialog
-        visible={deleteProductDialog}
+        visible={deleteOrderDialog}
         style={{ width: "450px" }}
         header="Confirm"
         modal
-        footer={ctgDialogFooter}
-        onHide={() => setDeleteProductDialog(false)}
+        footer={blogDialogFooter}
+        onHide={() => setDeleteOrderDialog(false)}
       >
-        <div className="flex align-items-center justify-content-center">
-          <Avatar image={selectProduct?.image} size="xlarge" shape="circle" />
-        </div>
         <div className="flex align-items-center justify-content-center">
           <i
             className="pi pi-exclamation-triangle mr-3"
             style={{ fontSize: "2rem" }}
           />
-          {selectProduct && (
+          {selectOrder && (
             <span>
-              Are you sure you want to delete <b>{selectProduct?.title}</b>?
+              Are you sure you want to delete <b>{selectOrder?.title}</b>?
             </span>
           )}
         </div>
@@ -95,10 +93,10 @@ const DeleteProduct = ({ rowData, refetch }) => {
         icon="pi pi-trash"
         severity="warning"
         rounded
-        onClick={() => confirmDeleteCtg(rowData)}
+        onClick={() => confirmDeleteBlog(rowData)}
       />
     </>
   );
 };
 
-export default DeleteProduct;
+export default DeleteOrder;

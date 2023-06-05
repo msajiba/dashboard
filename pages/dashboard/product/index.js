@@ -27,12 +27,11 @@ const index = ({ categories }) => {
 
   const user = useSelector((state) => state.user.currentUser);
   const router = useRouter();
-  
+
   if (!user) {
     router.push("/auth/login");
     return null;
   }
-
 
   const { isLoading, error, data, refetch } = useQuery(
     "products",
@@ -92,11 +91,12 @@ const index = ({ categories }) => {
     );
   };
 
-  const ratingBodyTemplate = (rowData) => {
+  const stockBodyTemplate = (rowData) => {
+
     return (
       <>
-        <span className="p-column-title">Quantity</span>
-        {rowData.quantity}
+        <span className="p-column-title">Stock</span>
+        {rowData.stock}
       </>
     );
   };
@@ -105,7 +105,7 @@ const index = ({ categories }) => {
     return (
       <>
         <span className="p-column-title">Status</span>
-        {rowData.quantity > 0 ? (
+        {rowData.stock > 0 ? (
           <Button
             label="INSTOCK"
             severity="success"
@@ -129,7 +129,11 @@ const index = ({ categories }) => {
   const actionBodyTemplate = (rowData) => {
     return (
       <>
-        <EditProduct categories={categories} rowData={rowData} refetch={refetch} />
+        <EditProduct
+          categories={categories}
+          rowData={rowData}
+          refetch={refetch}
+        />
         <DeleteProduct rowData={rowData} refetch={refetch} />
       </>
     );
@@ -209,9 +213,9 @@ const index = ({ categories }) => {
               />
 
               <Column
-                field="quantity"
-                header="Quantity"
-                body={ratingBodyTemplate}
+                field="stock"
+                header="Stock"
+                body={stockBodyTemplate}
                 sortable
                 headerStyle={{ minWidth: "10rem" }}
               />
