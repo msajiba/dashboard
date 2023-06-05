@@ -138,25 +138,28 @@ const NewBlog = ({ refetch }) => {
         footer={blogDialogFooter}
         onHide={() => setBlogDialog(false)}
       >
-        <div className="field">
-          <input
-            type="file"
-            accept="image/*"
-            maxFileSize={1000000}
-            onChange={(e) => setFile(e.target.files[0])}
-            className={classNames({
-              "p-invalid": submitted && !file,
-            })}
-          />
-          {submitted && !file && (
-            <small
-              style={{ fontSize: "1rem", color: "red" }}
-              className="p-invalid"
-            >
-              File is required.
-            </small>
-          )}
+        <div className="flex align-items-center justify-content-center mb-5">
+          <div className="field ">
+            <input
+              type="file"
+              accept="image/*"
+              maxFileSize={1000000}
+              onChange={(e) => setFile(e.target.files[0])}
+              className={classNames({
+                "p-invalid": submitted && !file,
+              })}
+            />
+            {submitted && !file && (
+              <small
+                style={{ fontSize: "1rem", color: "red" }}
+                className="p-invalid"
+              >
+                File is required.
+              </small>
+            )}
+          </div>
         </div>
+
         <div className="field col">
           <label htmlFor="title">Title</label>
           <InputText
@@ -221,14 +224,8 @@ const NewBlog = ({ refetch }) => {
               </small>
             )}
           </div>
-        </div>
 
-        <div className="formgrid grid">
-          
-          <div
-            className="field col"
-            style={{ marginBottom: "50px", position: "sticky" }}
-          >
+          <div className="field col">
             <label className="mb-10">Category</label>
             <div className="formgrid grid">
               <div>
@@ -279,6 +276,7 @@ const NewBlog = ({ refetch }) => {
             </small>
           )}
         </div>
+        
       </Dialog>
     </>
   );

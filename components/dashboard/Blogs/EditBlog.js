@@ -9,6 +9,7 @@ import { classNames } from "primereact/utils";
 import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
+import { Avatar } from "primereact/avatar";
 
 const EditBlog = ({ rowData, refetch }) => {
   const jwt = useSelector((state) => state.user.jwt);
@@ -16,12 +17,12 @@ const EditBlog = ({ rowData, refetch }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [content, setContent] = useState("");
-  const [image, setImage] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [selectSubBlog, setSelectedSubBlog] = useState("");
   const [subBlogs, setSubBlogs] = useState("");
   const [selectedId, setSelectedID] = useState("");
   const [slug, setSlug] = useState("");
+  const [file, setFile] = useState(null);
 
   const toast = useRef(null);
 
@@ -31,9 +32,9 @@ const EditBlog = ({ rowData, refetch }) => {
     setSlug(blog.slug);
     setAuthor(blog.author);
     setContent(blog.content);
-    setImage(blog.image);
     setSelectedID(blog?._id);
     setSelectedSubBlog(blog.subBlog);
+    setFile(blog.image);
   };
 
   const { isLoading, error, data } = useQuery(
@@ -49,8 +50,16 @@ const EditBlog = ({ rowData, refetch }) => {
 
   const updateCtg = async () => {
     setSubmitted(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "ytpmzows");
 
     try {
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dymnymsph/image/upload",
+        formData
+      );
+      const image = response.data.url;
       const { data } = await axios.post(
         "http://localhost:3000/api/admin/blog/update",
         {
@@ -125,6 +134,31 @@ const EditBlog = ({ rowData, refetch }) => {
         footer={blogDialogFooter}
         onHide={() => setBlogDialog(false)}
       >
+        <div className="flex align-items-center justify-content-center mb-5">
+          <Avatar image={file} size="xlarge" shape="circle" />
+        </div>
+        <div className="flex align-items-center justify-content-center mb-5">
+          <div className="field ">
+            <input
+              type="file"
+              accept="image/*"
+              maxFileSize={1000000}
+              onChange={(e) => setFile(e.target.files[0])}
+              className={classNames({
+                "p-invalid": submitted && !file,
+              })}
+            />
+            {submitted && !file && (
+              <small
+                style={{ fontSize: "1rem", color: "red" }}
+                className="p-invalid"
+              >
+                File is required.
+              </small>
+            )}
+          </div>
+        </div>
+
         <div className="field col">
           <label htmlFor="title">Title</label>
           <InputText
@@ -146,6 +180,7 @@ const EditBlog = ({ rowData, refetch }) => {
             </small>
           )}
         </div>
+
         <div className="formgrid grid">
           <div className="field col">
             <label htmlFor="slug">Slug</label>
@@ -154,6 +189,7 @@ const EditBlog = ({ rowData, refetch }) => {
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
               required
+              autoFocus
               className={classNames({
                 "p-invalid": submitted && !slug,
               })}
@@ -187,32 +223,8 @@ const EditBlog = ({ rowData, refetch }) => {
               </small>
             )}
           </div>
-        </div>
 
-        <div className="formgrid grid">
           <div className="field col">
-            <label htmlFor="name">Image</label>
-            <InputText
-              id="image"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-              className={classNames({
-                "p-invalid": submitted && !image,
-              })}
-            />
-            {submitted && !image && (
-              <small
-                style={{ fontSize: "1rem", color: "red" }}
-                className="p-invalid"
-              >
-                Image is required.
-              </small>
-            )}
-          </div>
-          <div
-            className="field col"
-            style={{ marginBottom: "50px", position: "sticky" }}
-          >
             <label className="mb-10">Category</label>
             <div className="formgrid grid">
               <div>
