@@ -12,7 +12,7 @@ import axios from "axios";
 import NewSubBlog from "../../../components/dashboard/SubBlogs/NewSubBlog";
 import ChangePassword from "../../../components/dashboard/Profile/ChangePassword";
 
-const Profile = () => {
+const Siteinfo = () => {
   const user = useSelector((state) => state.user.currentUser);
   const jwt = useSelector((state) => state.user.jwt);
   const router = useRouter();
@@ -102,7 +102,7 @@ const Profile = () => {
         <div className="col-12">
           <div className="card">
             <Toast ref={toast} />
-            <h5>Profile Information</h5>
+            <h5>Site Information</h5>
 
             <form
               onSubmit={handleUpdateProfile}
@@ -110,7 +110,7 @@ const Profile = () => {
             >
               <div className="p-fluid formgrid grid">
                 <div className="field col-12 md:col-4">
-                  <label htmlFor="userName">User Name</label>
+                  <label htmlFor="userName">Title</label>
                   <InputText
                     id="userName"
                     value={name}
@@ -196,10 +196,9 @@ const Profile = () => {
             </form>
           </div>
         </div>
-        <ChangePassword />
       </div>
     </DashboardContainer>
   );
 };
 
-export default Profile;
+export default Siteinfo;
