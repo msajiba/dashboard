@@ -4,7 +4,7 @@ import { DataTable } from "primereact/datatable";
 import { InputText } from "primereact/inputtext";
 import { Toolbar } from "primereact/toolbar";
 import React, { useEffect, useRef, useState } from "react";
-import DashboardContainer from "../../../layout/DashboardContainer";;
+import DashboardContainer from "../../../layout/DashboardContainer";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { Badge } from "primereact/badge";
@@ -23,7 +23,6 @@ const Order = () => {
   const dt = useRef(null);
 
   const router = useRouter();
-
 
   if (!user) {
     router.push("/auth/login");
@@ -46,6 +45,8 @@ const Order = () => {
     setOrders(data?.data?.order);
     refetch();
   }, [data?.data?.order]);
+
+  console.log("order=================>", orders);
 
   isLoading && <Loader />;
   error && console.log(error);

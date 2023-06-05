@@ -8,7 +8,6 @@ const ProductView = ({ item }) => {
       {item.products && (
         <Accordion activeIndex={0}>
           {item.products.map((pd, i) => {
-            console.log(pd);
             return (
               <AccordionTab key={i} header={pd.title}>
                 <div className=" flex justify-content-center">

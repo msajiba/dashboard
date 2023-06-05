@@ -118,7 +118,6 @@ const ViewOrder = ({ rowData, refetch }) => {
       deliveryStatus,
       total,
       shippingCost,
-      status,
     },
   ];
 

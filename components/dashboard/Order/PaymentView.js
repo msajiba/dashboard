@@ -1,13 +1,15 @@
 import React from "react";
 
 const PaymentView = ({ item }) => {
+  const aa = true;
   return (
     <div>
-      {item.paymentMethod && <p> PaymentMethod: {item.paymentMethod} </p>}
-      {item.transactionId && <p> transactionId: {item.transactionId} </p>}
+      {item.paymentMethod && <p> Payment Method: {item.paymentMethod} </p>}
+      {item.transactionId && <p> Transaction ID: {item.transactionId} </p>}
       {item.transactionPhoneNo && (
-        <p> transactionPhoneNo: {item.transactionPhoneNo} </p>
+        <p> Transaction Phone No: {item.transactionPhoneNo} </p>
       )}
+      {item.isPaid ===false && aa ? <p> PAID: TRUE</p> : <p> PAID: FALSE </p>}
     </div>
   );
 };
