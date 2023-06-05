@@ -23,7 +23,7 @@ const NewSubCategory = ({ categories, refetch }) => {
         "http://localhost:3000/api/admin/sub-category/store",
         {
           name,
-          parent: selectCategory._id,
+          category: selectCategory._id,
         },
         {
           headers: {

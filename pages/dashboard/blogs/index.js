@@ -45,7 +45,6 @@ const Blogs = ({ ctg }) => {
   isLoading && <Loader />;
   error && console.log(error);
 
-
   const nameBodyTemplate = (rowData) => {
     return (
       <>
@@ -68,11 +67,7 @@ const Blogs = ({ ctg }) => {
     return (
       <>
         <span className="p-column-title">Image</span>
-        <Avatar
-          image={"http://localhost:3001/demo/images/product/gaming-set.jpg"}
-          size="xlarge"
-          shape="circle"
-        />
+        <Avatar image={`${rowData.image}`} size="xlarge" shape="circle" />
       </>
     );
   };
@@ -133,8 +128,6 @@ const Blogs = ({ ctg }) => {
               header={header}
               responsiveLayout="scroll"
             >
-          
-
               <Column header="Image" body={imageBodyTemplate} />
 
               <Column

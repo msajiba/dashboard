@@ -17,10 +17,10 @@ const NewBlog = ({ refetch }) => {
   const [slug, setSlug] = useState("");
   const [author, setAuthor] = useState("");
   const [content, setContent] = useState("");
-  const [image, setImage] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [selectSubBlog, setSelectedSubBlog] = useState("");
   const [subBlogs, setSubBlogs] = useState("");
+  const [file, setFile] = useState("");
 
   const toast = useRef(null);
 
@@ -38,7 +38,17 @@ const NewBlog = ({ refetch }) => {
   const saveBlog = async () => {
     setSubmitted(true);
 
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "ytpmzows");
+
     try {
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dymnymsph/image/upload",
+        formData
+      );
+      const image = response.data.url;
+
       const { data } = await axios.post(
         "http://localhost:3000/api/admin/blog/store",
         {
@@ -66,7 +76,7 @@ const NewBlog = ({ refetch }) => {
         });
         setBlogDialog(false);
         setTitle("");
-        setSlug('');
+        setSlug("");
         setImage("");
         setContent("");
         setAuthor("");
@@ -128,6 +138,25 @@ const NewBlog = ({ refetch }) => {
         footer={blogDialogFooter}
         onHide={() => setBlogDialog(false)}
       >
+        <div className="field">
+          <input
+            type="file"
+            accept="image/*"
+            maxFileSize={1000000}
+            onChange={(e) => setFile(e.target.files[0])}
+            className={classNames({
+              "p-invalid": submitted && !file,
+            })}
+          />
+          {submitted && !file && (
+            <small
+              style={{ fontSize: "1rem", color: "red" }}
+              className="p-invalid"
+            >
+              File is required.
+            </small>
+          )}
+        </div>
         <div className="field col">
           <label htmlFor="title">Title</label>
           <InputText
@@ -195,25 +224,7 @@ const NewBlog = ({ refetch }) => {
         </div>
 
         <div className="formgrid grid">
-          <div className="field col">
-            <label htmlFor="name">Image</label>
-            <InputText
-              id="image"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-              className={classNames({
-                "p-invalid": submitted && !image,
-              })}
-            />
-            {submitted && !image && (
-              <small
-                style={{ fontSize: "1rem", color: "red" }}
-                className="p-invalid"
-              >
-                Image is required.
-              </small>
-            )}
-          </div>
+          
           <div
             className="field col"
             style={{ marginBottom: "50px", position: "sticky" }}

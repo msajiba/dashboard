@@ -14,7 +14,6 @@ import { useSelector } from "react-redux";
 const NewProduct = ({ refetch, categories }) => {
   const jwt = useSelector((state) => state.user.jwt);
   const [productDialog, setProductDialog] = useState(false);
-  const [image, setImage] = useState("");
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState(0);
   const [original_price, setOriginal_Price] = useState(0);
@@ -27,6 +26,7 @@ const NewProduct = ({ refetch, categories }) => {
   const [discountedSale, setDiscountedSale] = useState(false);
   const [selectedSub, setSelectedSub] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const [file, setFile] = useState(null);
   const toast = useRef(null);
 
   useEffect(() => {
@@ -42,7 +42,6 @@ const NewProduct = ({ refetch, categories }) => {
   }, [category]);
 
   const createProduct = {
-    image,
     title,
     price,
     originalPrice: original_price,
@@ -52,15 +51,26 @@ const NewProduct = ({ refetch, categories }) => {
     description,
     bestDeal,
     discountedSale,
-    shortDescription
+    shortDescription,
   };
 
   const saveProduct = async () => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "ytpmzows");
+
     setSubmitted(true);
     try {
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dymnymsph/image/upload",
+        formData
+      );
+      const image = response.data.url;
+      console.log("image");
+
       const { data } = await axios.post(
         "http://localhost:3000/api/admin/product/store",
-        createProduct, 
+        { ...createProduct, image },
         {
           headers: {
             "Content-Type": "application/json",
@@ -78,8 +88,7 @@ const NewProduct = ({ refetch, categories }) => {
         });
         setProductDialog(false);
         setTitle("");
-        setImage("");
-        setShortDescription('');
+        setShortDescription("");
         setPrice(0);
         setOriginal_Price(0);
         setQuantity(0);
@@ -141,23 +150,22 @@ const NewProduct = ({ refetch, categories }) => {
       >
         <div className="formgrid grid">
           <div className="field col">
-            <label htmlFor="image">Image</label>
-            <InputText
-              id="image"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
+            <input
+              type="file"
+              accept="image/*"
               required
-              autoFocus
+              maxFileSize={1000000}
+              onChange={(e) => setFile(e.target.files[0])}
               className={classNames({
-                "p-invalid": submitted && !image,
+                "p-invalid": submitted && !file,
               })}
             />
-            {submitted && !image && (
+            {submitted && !file && (
               <small
                 style={{ fontSize: "1rem", color: "red" }}
                 className="p-invalid"
               >
-                Image is required.
+                File is required.
               </small>
             )}
           </div>
@@ -366,7 +374,6 @@ const NewProduct = ({ refetch, categories }) => {
             />
           </div>
         </div>
-        
       </Dialog>
     </>
   );
