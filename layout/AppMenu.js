@@ -61,9 +61,9 @@ const AppMenu = () => {
           to: "/dashboard/siteinfo",
         },
         {
-          label: "Banner",
+          label: "Slider",
           icon: "pi pi-fw pi-briefcase",
-          to: "/dashboard/banner",
+          to: "/dashboard/slider",
         },
       ],
     },
