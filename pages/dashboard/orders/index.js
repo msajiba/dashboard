@@ -38,7 +38,7 @@ const Order = ({ ctg }) => {
           Accept: "application/json",
           token: `Bearer ${jwt}`,
         },
-      }),
+      })
   );
 
   useEffect(() => {
