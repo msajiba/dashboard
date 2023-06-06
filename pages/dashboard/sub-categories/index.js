@@ -34,7 +34,6 @@ const SubCategories = ({ categories }) => {
     async () =>
       await axios.get("http://localhost:3000/api/admin/sub-category/getAll")
   );
-  console.log("sub==>", data)
 
   isLoading && <Loader />;
   error && console.log(error);
@@ -54,7 +53,6 @@ const SubCategories = ({ categories }) => {
   };
 
   const imageBodyTemplate = (rowData) => {
-
     return (
       <>
         <span className="p-column-title">Image</span>

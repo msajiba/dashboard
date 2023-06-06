@@ -99,6 +99,7 @@ const NewSlider = ({ rowData, refetch }) => {
       <Button
         icon="pi pi-plus"
         severity="success"
+        label="Add New"
         rounded
         className="mr-2"
         onClick={() => confirmDeleteSbCtg(rowData)}

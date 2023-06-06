@@ -6,7 +6,6 @@ import { Toolbar } from "primereact/toolbar";
 import React, { useEffect, useRef, useState } from "react";
 import DashboardContainer from "../../../layout/DashboardContainer";
 import axios from "axios";
-import DeleteSbCategory from "../../../components/dashboard/SubCategory/DeleteSbCategory";
 import { useQuery } from "react-query";
 import Loader from "../../../components/Shared/Loader";
 import { Badge } from "primereact/badge";
@@ -17,7 +16,7 @@ import EditSlider from "../../../components/dashboard/Slider/EditSlider";
 import NewSlider from "../../../components/dashboard/Slider/NewSlider";
 import DeleteSlide from "../../../components/dashboard/Slider/DeleteSlider";
 
-const Slider = ({ categories }) => {
+const Slider = () => {
   const user = useSelector((state) => state.user.currentUser);
   const [sliders, setSliders] = useState(null);
   const [selectedSlider, setSelectedSlider] = useState(null);
@@ -147,15 +146,3 @@ const Slider = ({ categories }) => {
 };
 
 export default Slider;
-
-export async function getServerSideProps() {
-  const res = await axios.get(
-    "http://localhost:3000/api/admin/category/getAll"
-  );
-  const ctg = res?.data?.categories;
-  return {
-    props: {
-      categories: JSON.parse(JSON.stringify(ctg)),
-    },
-  };
-}
