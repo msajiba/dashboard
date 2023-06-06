@@ -116,7 +116,7 @@ const DashCard = () => {
           <div className="flex justify-content-between mb-3">
             <div>
               <span className="block text-500 font-medium mb-3">Customers</span>
-              <div className="text-900 font-medium text-xl">{users.length}</div>
+              <div className="text-900 font-medium text-xl">{users?.length}</div>
             </div>
             <div
               className="flex align-items-center justify-content-center bg-cyan-100 border-round"
