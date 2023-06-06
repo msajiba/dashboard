@@ -48,9 +48,15 @@ const DashCard = () => {
 
   useEffect(() => {
     getOrders();
+  }, [jwt]);
+
+  useEffect(() => {
     getProducts();
-    getUsers();
   }, []);
+
+  useEffect(() => {
+    getUsers();
+  }, [jwt]);
 
   return (
     <>
