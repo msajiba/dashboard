@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 const index = () => {
   const router = useRouter();
@@ -9,8 +10,15 @@ const index = () => {
     router.push("/dashboard");
   }, [router]);
   return (
-    <div>
-      <h3> Wellcome to Home page</h3>
+    <div
+      style={{
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <ProgressSpinner />
     </div>
   );
 };
