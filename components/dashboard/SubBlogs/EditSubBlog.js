@@ -26,7 +26,7 @@ const EditSubBlog = ({ rowData, refetch }) => {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/api/admin/sub-blog/update",
+        "https://front-end-msajiba.vercel.app/api/admin/sub-blog/update",
         {
           title,
           id: selectedId,

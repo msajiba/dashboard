@@ -14,7 +14,7 @@ const DeleteOrder = ({ rowData, refetch }) => {
   const deleteHandleOrder = async () => {
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/api/admin/order/delete",
+        "https://front-end-msajiba.vercel.app/api/admin/order/delete",
         {
           id: selectOrder._id,
         },

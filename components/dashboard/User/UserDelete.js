@@ -14,7 +14,7 @@ const DeleteUser = ({ rowData, refetch }) => {
   const deleteHandleUser = async () => {
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/api/admin/user/delete",
+        "https://front-end-msajiba.vercel.app/api/admin/user/delete",
         {
           id: selectUser._id,
         },

@@ -28,7 +28,7 @@ const Profile = () => {
 
   const getUserInfo = async () => {
     const { data } = await axios.post(
-      "http://localhost:3000/api/profile/find",
+      "https://front-end-msajiba.vercel.app/api/profile/find",
       {
         user_id_no: user._id,
       },
@@ -59,7 +59,7 @@ const Profile = () => {
 
     try {
       const updatedProfileData = await axios.post(
-        "http://localhost:3000/api/profile/update",
+        "https://front-end-msajiba.vercel.app/api/profile/update",
         {
           name: name,
           email: email,

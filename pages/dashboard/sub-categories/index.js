@@ -32,7 +32,7 @@ const SubCategories = ({ categories }) => {
   const { isLoading, error, data, refetch } = useQuery(
     "sbCtg",
     async () =>
-      await axios.get("http://localhost:3000/api/admin/sub-category/getAll")
+      await axios.get("https://front-end-msajiba.vercel.app/api/admin/sub-category/getAll")
   );
 
   isLoading && <Loader />;
@@ -193,7 +193,7 @@ export default SubCategories;
 
 export async function getServerSideProps() {
   const res = await axios.get(
-    "http://localhost:3000/api/admin/category/getAll"
+    "https://front-end-msajiba.vercel.app/api/admin/category/getAll"
   );
   const ctg = res?.data?.categories;
   return {

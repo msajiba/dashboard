@@ -14,7 +14,7 @@ const DeleteSubBlog = ({ rowData, refetch }) => {
   const deleteHandleSubBlog = async () => {
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/api/admin/sub-blog/delete",
+        "https://front-end-msajiba.vercel.app/api/admin/sub-blog/delete",
         {
           id: selectSubBlog._id,
         },

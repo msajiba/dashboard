@@ -32,7 +32,7 @@ const SubBlogs = ({ blogs }) => {
   const { isLoading, error, data, refetch } = useQuery(
     "sbCtg",
     async () =>
-      await axios.get("http://localhost:3000/api/admin/sub-blog/getAll")
+      await axios.get("https://front-end-msajiba.vercel.app/api/admin/sub-blog/getAll")
   );
 
   isLoading && <Loader />;
@@ -162,7 +162,7 @@ export default SubBlogs;
 
 // export async function getServerSideProps() {
 //   const res = await axios.get(
-//     "http://localhost:3000/api/admin/sub-category/getAll"
+//     "https://front-end-msajiba.vercel.app/api/admin/sub-category/getAll"
 //   );
 //   const blogs = res?.data?.blogs;
 //   return {

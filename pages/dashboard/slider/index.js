@@ -30,7 +30,7 @@ const Slider = () => {
 
   const { isLoading, error, data, refetch } = useQuery(
     "slider",
-    async () => await axios.get("http://localhost:3000/api/admin/slider/getAll")
+    async () => await axios.get("https://front-end-msajiba.vercel.app/api/admin/slider/getAll")
   );
 
   // isLoading && <Loader />;

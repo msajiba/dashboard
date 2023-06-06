@@ -30,7 +30,7 @@ const NewCategory = ({ refetch }) => {
       const image = response.data.url;
 
       const { data } = await axios.post(
-        "http://localhost:3000/api/admin/category/store",
+        "https://front-end-msajiba.vercel.app/api/admin/category/store",
         {
           name,
           image,

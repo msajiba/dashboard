@@ -16,7 +16,7 @@ const DeleteSlide = ({ rowData, refetch }) => {
   const deleteSlide = async () => {
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/api/admin/slider/delete",
+        "https://front-end-msajiba.vercel.app/api/admin/slider/delete",
         {
           id: selectSlide._id,
         },

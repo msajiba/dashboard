@@ -36,7 +36,7 @@ const index = ({ categories }) => {
   const { isLoading, error, data, refetch } = useQuery(
     "products",
     async () =>
-      await axios.get("http://localhost:3000/api/admin/product/getAll")
+      await axios.get("https://front-end-msajiba.vercel.app/api/admin/product/getAll")
   );
 
   isLoading && <Loader />;
@@ -244,7 +244,7 @@ export default index;
 
 export async function getServerSideProps() {
   const res = await axios.get(
-    "http://localhost:3000/api/admin/category/getAll"
+    "https://front-end-msajiba.vercel.app/api/admin/category/getAll"
   );
   const ctg = res?.data?.categories;
   return {

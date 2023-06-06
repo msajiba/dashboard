@@ -27,7 +27,7 @@ const NewBlog = ({ refetch }) => {
   const { isLoading, error, data } = useQuery(
     "subBlogs",
     async () =>
-      await axios.get("http://localhost:3000/api/admin/sub-blog/getAll")
+      await axios.get("https://front-end-msajiba.vercel.app/api/admin/sub-blog/getAll")
   );
   isLoading && <p> Loading...</p>;
 
@@ -50,7 +50,7 @@ const NewBlog = ({ refetch }) => {
       const image = response.data.url;
 
       const { data } = await axios.post(
-        "http://localhost:3000/api/admin/blog/store",
+        "https://front-end-msajiba.vercel.app/api/admin/blog/store",
         {
           title,
           slug,

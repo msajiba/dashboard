@@ -18,7 +18,7 @@ const NewSubBlog = ({ refetch }) => {
     setSubmitted(true);
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/api/admin/sub-blog/store",
+        "https://front-end-msajiba.vercel.app/api/admin/sub-blog/store",
         {
           title,
         },

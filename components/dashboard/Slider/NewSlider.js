@@ -34,7 +34,7 @@ const NewSlider = ({ rowData, refetch }) => {
       const image = response.data.url;
 
       const { data } = await axios.post(
-        "http://localhost:3000/api/admin/slider/store",
+        "https://front-end-msajiba.vercel.app/api/admin/slider/store",
         {
           description,
           image,

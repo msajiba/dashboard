@@ -24,7 +24,7 @@ const ChangePassword = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/auth/change-password",
+        "https://front-end-msajiba.vercel.app/api/auth/change-password",
         {
           currentPassword: currentPassword,
           password: password,

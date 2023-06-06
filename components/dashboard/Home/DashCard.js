@@ -11,7 +11,7 @@ const DashCard = () => {
 
   const getOrders = async () => {
     const { data } = await axios.get(
-      "http://localhost:3000/api/admin/order/getAll",
+      "https://front-end-msajiba.vercel.app/api/admin/order/getAll",
       {
         headers: {
           "Content-Type": "application/json",
@@ -25,7 +25,7 @@ const DashCard = () => {
 
   const getUsers = async () => {
     const { data } = await axios.get(
-      "http://localhost:3000/api/admin/user/getAll",
+      "https://front-end-msajiba.vercel.app/api/admin/user/getAll",
       {
         headers: {
           "Content-Type": "application/json",
@@ -39,7 +39,7 @@ const DashCard = () => {
 
   const getProducts = async () => {
     const { data } = await axios.get(
-      "http://localhost:3000/api/admin/product/getAll"
+      "https://front-end-msajiba.vercel.app/api/admin/product/getAll"
     );
     setProducts(data.products);
   };

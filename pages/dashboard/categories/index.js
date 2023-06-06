@@ -33,7 +33,7 @@ const Categories = ({ ctg }) => {
   const { isLoading, error, data, refetch } = useQuery(
     "category",
     async () =>
-      await axios.get("http://localhost:3000/api/admin/category/getAll")
+      await axios.get("https://front-end-msajiba.vercel.app/api/admin/category/getAll")
   );
 
   useEffect(() => {

@@ -15,7 +15,7 @@ const DeleteProduct = ({ rowData, refetch }) => {
   const deleteHandleProduct = async () => {
     try {
       const { data } = await axios.post(
-        `http://localhost:3000/api/admin/product/delete`,
+        `https://front-end-msajiba.vercel.app/api/admin/product/delete`,
         { id: selectProduct._id },
         {
           headers: {

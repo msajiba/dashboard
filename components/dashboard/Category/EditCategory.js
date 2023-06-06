@@ -37,7 +37,7 @@ const EditCategory = ({ rowData, refetch }) => {
       );
       const image = response.data.url;
       const { data } = await axios.post(
-        "http://localhost:3000/api/admin/category/update",
+        "https://front-end-msajiba.vercel.app/api/admin/category/update",
         {
           name,
           image,

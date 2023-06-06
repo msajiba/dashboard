@@ -49,7 +49,7 @@ const EditProduct = ({ rowData, refetch, categories }) => {
 
   useEffect(() => {
     const getSubCategory = async () => {
-      const URL = `http://localhost:3000/api/admin/category/getSubCategories?categoryId=${category._id}`;
+      const URL = `https://front-end-msajiba.vercel.app/api/admin/category/getSubCategories?categoryId=${category._id}`;
       const { data } = await axios.get(URL);
       setSelectedSub(data?.subcategories);
     };
@@ -86,7 +86,7 @@ const EditProduct = ({ rowData, refetch, categories }) => {
       const image = response?.data?.url;
 
       const { data } = await axios.post(
-        "http://localhost:3000/api/admin/product/update",
+        "https://front-end-msajiba.vercel.app/api/admin/product/update",
         { ...updateProduct, image },
         {
           headers: {

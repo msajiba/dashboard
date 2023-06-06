@@ -31,7 +31,7 @@ const LoginPage = () => {
     try {
       setIsLoading(true);
       const { data } = await axios.post(
-        "http://localhost:3000/api/auth/signin",
+        "https://front-end-msajiba.vercel.app/api/auth/signin",
         { emailId, password }
       );
       dispatch(loginSuccess(data.user));
@@ -39,7 +39,7 @@ const LoginPage = () => {
       dispatch(providerSuccess("email-password"));
 
       await axios.post(
-        "http://localhost:3000/api/profile/store",
+        "https://front-end-msajiba.vercel.app/api/profile/store",
         {
           email: data.user.email,
           user_id_no: data.user._id,

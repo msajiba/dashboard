@@ -15,7 +15,7 @@ const DeleteCategory = ({ rowData, refetch }) => {
   const deleteHandleCtg = async () => {
     try {
       const { data } = await axios.post(
-        "http://localhost:3000/api/admin/category/delete",
+        "https://front-end-msajiba.vercel.app/api/admin/category/delete",
         {
           id: selectCtg._id,
         },

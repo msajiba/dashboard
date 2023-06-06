@@ -32,7 +32,7 @@ const SubCategories = () => {
   const { isLoading, error, data, refetch } = useQuery(
     "users",
     async () =>
-      await axios.get("http://localhost:3000/api/admin/user/getAll", {
+      await axios.get("https://front-end-msajiba.vercel.app/api/admin/user/getAll", {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",

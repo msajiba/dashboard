@@ -32,7 +32,7 @@ const Order = () => {
   const { isLoading, error, data, refetch } = useQuery(
     "category",
     async () =>
-      await axios.get("http://localhost:3000/api/admin/order/getAll", {
+      await axios.get("https://front-end-msajiba.vercel.app/api/admin/order/getAll", {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",

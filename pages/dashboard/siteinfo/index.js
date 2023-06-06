@@ -29,7 +29,7 @@ const Siteinfo = () => {
 
   const getUserInfo = async () => {
     const { data } = await axios.get(
-      "http://localhost:3000/api/admin/siteinfo/find"
+      "https://front-end-msajiba.vercel.app/api/admin/siteinfo/find"
     );
 
     setAddress(data?.siteinfo?.address);
@@ -49,7 +49,7 @@ const Siteinfo = () => {
 
     try {
       const updatedSiteInfo = await axios.post(
-        "http://localhost:3000/api/admin/siteinfo/store",
+        "https://front-end-msajiba.vercel.app/api/admin/siteinfo/store",
         {
           title,
           email,
