@@ -7,7 +7,6 @@ import React, { useEffect, useRef, useState } from "react";
 import DashboardContainer from "../../../layout/DashboardContainer";
 import axios from "axios";
 import { useQuery } from "react-query";
-import Loader from "../../../components/Shared/Loader";
 import { Badge } from "primereact/badge";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
@@ -34,7 +33,7 @@ const Slider = () => {
     async () => await axios.get("http://localhost:3000/api/admin/slider/getAll")
   );
 
-  isLoading && <Loader />;
+  // isLoading && <Loader />;
   error && console.log(error);
 
   useEffect(() => {

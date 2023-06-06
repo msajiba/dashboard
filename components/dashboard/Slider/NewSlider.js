@@ -1,7 +1,8 @@
+/* eslint-disable */
 import axios from "axios";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import { InputTextarea } from "primereact/InputTextarea";
+import { InputTextarea } from 'primereact/inputtextarea';
 import { Toast } from "primereact/toast";
 import { classNames } from "primereact/utils";
 import React, { useRef, useState } from "react";

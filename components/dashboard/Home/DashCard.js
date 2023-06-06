@@ -4,10 +4,10 @@ import { useSelector } from "react-redux";
 
 const DashCard = () => {
   const jwt = useSelector((state) => state.user.jwt);
-  const [orders, setOrders] = useState("");
-  const [products, setProducts] = useState("");
-  const [users, setUsers] = useState("");
-  const [totalSale, setTotalSale] = useState("");
+  const [orders, setOrders] = useState(null);
+  const [products, setProducts] = useState(null);
+  const [users, setUsers] = useState(null);
+  const [totalSale, setTotalSale] = useState(null);
 
   const getOrders = async () => {
     const { data } = await axios.get(

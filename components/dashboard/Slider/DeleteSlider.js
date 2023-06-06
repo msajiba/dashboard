@@ -1,3 +1,4 @@
+/* eslint-disable */
 import axios from "axios";
 import { Avatar } from "primereact/avatar";
 import { Button } from "primereact/button";
