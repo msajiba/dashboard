@@ -24,7 +24,7 @@ const TopUserShow = () => {
         {
           label: "Profile",
           icon: "pi pi-spin pi-cog",
-          command: () => router.push("/dashboard/profile/"),
+          command: () => router.push("https://dashboard-msajiba.vercel.app/dashboard/profile/"),
         },
         {
           label: "Sign Out",
