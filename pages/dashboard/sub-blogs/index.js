@@ -16,7 +16,6 @@ import NewSubBlog from "../../../components/dashboard/SubBlogs/NewSubBlog";
 import DeleteSubBlog from "../../../components/dashboard/SubBlogs/DeleteSubBlog";
 
 const SubBlogs = ({ blogs }) => {
-
   const [subBlogs, setSubBlogs] = useState(null);
   const [selectedSubBlog, setSelectedSubBlog] = useState(null);
   const [globalFilter, setGlobalFilter] = useState(null);
@@ -29,13 +28,14 @@ const SubBlogs = ({ blogs }) => {
     return null;
   }
 
-  const { isLoading, error, data, refetch } = useQuery(
+  const { error, data, refetch } = useQuery(
     "sbCtg",
     async () =>
-      await axios.get("https://front-end-msajiba.vercel.app/api/admin/sub-blog/getAll")
+      await axios.get(
+        "https://front-end-msajiba.vercel.app/api/admin/sub-blog/getAll"
+      )
   );
 
-  isLoading && <Loader />;
   error && console.log(error);
 
   useEffect(() => {
@@ -61,16 +61,10 @@ const SubBlogs = ({ blogs }) => {
     );
   };
 
-
-
   const actionBodyTemplate = (rowData) => {
     return (
       <>
-        <EditSubBlog
-          rowData={rowData}
-          refetch={refetch}
-          blogs={blogs}
-        />
+        <EditSubBlog rowData={rowData} refetch={refetch} blogs={blogs} />
         {/* ===========================================DELETE_SUB_CATEGORY_HANDLER ==================================== */}
         <DeleteSubBlog rowData={rowData} refetch={refetch} />
       </>
@@ -101,59 +95,61 @@ const SubBlogs = ({ blogs }) => {
 
   return (
     <DashboardContainer>
-      <div className="grid crud-demo">
-        <div className="col-12">
-          <div className="card">
-            {/* ADD NEW SUB CATEGORY  */}
-            <Toolbar
-              className="mb-4"
-              right={
-                <NewSubBlog blogs={blogs} refetch={refetch} />
-              }
-            />
-            <DataTable
-              ref={dt}
-              value={subBlogs}
-              selection={selectedSubBlog}
-              onSelectionChange={(e) => setSelectedSubBlog(e.value)}
-              dataKey="_id"
-              paginator
-              rows={10}
-              rowsPerPageOptions={[5, 10, 25]}
-              className="datatable-responsive"
-              paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-              globalFilter={globalFilter}
-              emptyMessage="No Sub Category found."
-              header={header}
-              responsiveLayout="scroll"
-            >
-              <Column
-                field="code"
-                header="ID"
-                sortable
-                body={codeBodyTemplate}
-                headerStyle={{ minWidth: "5rem" }}
+      {subBlogs ? (
+        <div className="grid crud-demo">
+          <div className="col-12">
+            <div className="card">
+              {/* ADD NEW SUB CATEGORY  */}
+              <Toolbar
+                className="mb-4"
+                right={<NewSubBlog blogs={blogs} refetch={refetch} />}
               />
+              <DataTable
+                ref={dt}
+                value={subBlogs}
+                selection={selectedSubBlog}
+                onSelectionChange={(e) => setSelectedSubBlog(e.value)}
+                dataKey="_id"
+                paginator
+                rows={10}
+                rowsPerPageOptions={[5, 10, 25]}
+                className="datatable-responsive"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                globalFilter={globalFilter}
+                emptyMessage="No Sub Category found."
+                header={header}
+                responsiveLayout="scroll"
+              >
+                <Column
+                  field="code"
+                  header="ID"
+                  sortable
+                  body={codeBodyTemplate}
+                  headerStyle={{ minWidth: "5rem" }}
+                />
 
-              <Column
-                field="title"
-                header="Title"
-                sortable
-                body={titleBodyTemplate}
-                headerStyle={{ minWidth: "15rem" }}
-              />
+                <Column
+                  field="title"
+                  header="Title"
+                  sortable
+                  body={titleBodyTemplate}
+                  headerStyle={{ minWidth: "15rem" }}
+                />
 
-              <Column
-                field="Action"
-                header="Action"
-                body={actionBodyTemplate}
-                headerStyle={{ minWidth: "10rem" }}
-              />
-            </DataTable>
+                <Column
+                  field="Action"
+                  header="Action"
+                  body={actionBodyTemplate}
+                  headerStyle={{ minWidth: "10rem" }}
+                />
+              </DataTable>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <Loader />
+      )}
     </DashboardContainer>
   );
 };

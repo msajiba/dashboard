@@ -33,13 +33,13 @@ const index = ({ categories }) => {
     return null;
   }
 
-  const { isLoading, error, data, refetch } = useQuery(
+  const { error, data, refetch } = useQuery(
     "products",
     async () =>
-      await axios.get("https://front-end-msajiba.vercel.app/api/admin/product/getAll")
+      await axios.get(
+        "https://front-end-msajiba.vercel.app/api/admin/product/getAll"
+      )
   );
-
-  isLoading && <Loader />;
 
   useEffect(() => {
     setProducts(data?.data?.products);
@@ -92,7 +92,6 @@ const index = ({ categories }) => {
   };
 
   const stockBodyTemplate = (rowData) => {
-
     return (
       <>
         <span className="p-column-title">Stock</span>
@@ -163,79 +162,83 @@ const index = ({ categories }) => {
 
   return (
     <DashboardContainer>
-      <div className="grid crud-demo">
-        <div className="col-12">
-          <div className="card">
-            <Toast ref={toast} />
-            <Toolbar
-              className="mb-4"
-              right={<NewProduct refetch={refetch} categories={categories} />}
-            />
-            <DataTable
-              ref={dt}
-              value={products}
-              selection={selectedProducts}
-              onSelectionChange={(e) => setSelectedProducts(e.value)}
-              dataKey="id"
-              paginator
-              rows={10}
-              rowsPerPageOptions={[5, 10, 25]}
-              className="datatable-responsive"
-              paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-              globalFilter={globalFilter}
-              emptyMessage="No products found."
-              header={header}
-              responsiveLayout="scroll"
-            >
-              <Column header="Image" body={imageBodyTemplate} />
+      {products ? (
+        <div className="grid crud-demo">
+          <div className="col-12">
+            <div className="card">
+              <Toast ref={toast} />
+              <Toolbar
+                className="mb-4"
+                right={<NewProduct refetch={refetch} categories={categories} />}
+              />
+              <DataTable
+                ref={dt}
+                value={products}
+                selection={selectedProducts}
+                onSelectionChange={(e) => setSelectedProducts(e.value)}
+                dataKey="id"
+                paginator
+                rows={10}
+                rowsPerPageOptions={[5, 10, 25]}
+                className="datatable-responsive"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                globalFilter={globalFilter}
+                emptyMessage="No products found."
+                header={header}
+                responsiveLayout="scroll"
+              >
+                <Column header="Image" body={imageBodyTemplate} />
 
-              <Column
-                field="title"
-                header="Name"
-                sortable
-                body={nameBodyTemplate}
-                headerStyle={{ minWidth: "10rem" }}
-              />
+                <Column
+                  field="title"
+                  header="Name"
+                  sortable
+                  body={nameBodyTemplate}
+                  headerStyle={{ minWidth: "10rem" }}
+                />
 
-              <Column
-                field="price"
-                header="Price"
-                body={priceBodyTemplate}
-                sortable
-              />
+                <Column
+                  field="price"
+                  header="Price"
+                  body={priceBodyTemplate}
+                  sortable
+                />
 
-              <Column
-                field="Category"
-                header="Category"
-                body={categoryBodyTemplate}
-                headerStyle={{ minWidth: "5rem" }}
-              />
+                <Column
+                  field="Category"
+                  header="Category"
+                  body={categoryBodyTemplate}
+                  headerStyle={{ minWidth: "5rem" }}
+                />
 
-              <Column
-                field="stock"
-                header="Stock"
-                body={stockBodyTemplate}
-                sortable
-                headerStyle={{ minWidth: "10rem" }}
-              />
+                <Column
+                  field="stock"
+                  header="Stock"
+                  body={stockBodyTemplate}
+                  sortable
+                  headerStyle={{ minWidth: "10rem" }}
+                />
 
-              <Column
-                field="Status"
-                header="Status"
-                sortable
-                body={statusBodyTemplate}
-                headerStyle={{ minWidth: "5rem" }}
-              />
-              <Column
-                header="ACTION"
-                body={actionBodyTemplate}
-                headerStyle={{ minWidth: "10rem" }}
-              />
-            </DataTable>
+                <Column
+                  field="Status"
+                  header="Status"
+                  sortable
+                  body={statusBodyTemplate}
+                  headerStyle={{ minWidth: "5rem" }}
+                />
+                <Column
+                  header="ACTION"
+                  body={actionBodyTemplate}
+                  headerStyle={{ minWidth: "10rem" }}
+                />
+              </DataTable>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <Loader />
+      )}
     </DashboardContainer>
   );
 };

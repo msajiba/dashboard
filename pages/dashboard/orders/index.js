@@ -32,13 +32,16 @@ const Order = () => {
   const { isLoading, error, data, refetch } = useQuery(
     "category",
     async () =>
-      await axios.get("https://front-end-msajiba.vercel.app/api/admin/order/getAll", {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          token: `Bearer ${jwt}`,
-        },
-      })
+      await axios.get(
+        "https://front-end-msajiba.vercel.app/api/admin/order/getAll",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            token: `Bearer ${jwt}`,
+          },
+        }
+      )
   );
 
   useEffect(() => {
@@ -46,9 +49,6 @@ const Order = () => {
     refetch();
   }, [data?.data?.order]);
 
-  console.log("order=================>", orders);
-
-  isLoading && <Loader />;
   error && console.log(error);
 
   const codeBodyTemplate = (rowData) => {
@@ -111,59 +111,63 @@ const Order = () => {
 
   return (
     <DashboardContainer>
-      <div className="grid crud-demo">
-        <div className="col-12">
-          <div className="card">
-            <DataTable
-              ref={dt}
-              value={orders}
-              selection={selectedOrder}
-              onSelectionChange={(e) => setSelectedOrder(e.value)}
-              dataKey="id"
-              paginator
-              rows={10}
-              rowsPerPageOptions={[5, 10, 25]}
-              className="datatable-responsive"
-              paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-              globalFilter={globalFilter}
-              emptyMessage="No Category found."
-              header={header}
-              responsiveLayout="scroll"
-            >
-              <Column
-                field="code"
-                header="ID"
-                sortable
-                body={codeBodyTemplate}
-                headerStyle={{ minWidth: "5rem" }}
-              />
+      {orders ? (
+        <div className="grid crud-demo">
+          <div className="col-12">
+            <div className="card">
+              <DataTable
+                ref={dt}
+                value={orders}
+                selection={selectedOrder}
+                onSelectionChange={(e) => setSelectedOrder(e.value)}
+                dataKey="id"
+                paginator
+                rows={10}
+                rowsPerPageOptions={[5, 10, 25]}
+                className="datatable-responsive"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                globalFilter={globalFilter}
+                emptyMessage="No Category found."
+                header={header}
+                responsiveLayout="scroll"
+              >
+                <Column
+                  field="code"
+                  header="ID"
+                  sortable
+                  body={codeBodyTemplate}
+                  headerStyle={{ minWidth: "5rem" }}
+                />
 
-              <Column
-                field="name"
-                header="Name"
-                sortable
-                body={nameBodyTemplate}
-                headerStyle={{ minWidth: "15rem" }}
-              />
+                <Column
+                  field="name"
+                  header="Name"
+                  sortable
+                  body={nameBodyTemplate}
+                  headerStyle={{ minWidth: "15rem" }}
+                />
 
-              <Column
-                field="email"
-                header="Email"
-                sortable
-                body={emailBodyTemplate}
-                headerStyle={{ minWidth: "15rem" }}
-              />
+                <Column
+                  field="email"
+                  header="Email"
+                  sortable
+                  body={emailBodyTemplate}
+                  headerStyle={{ minWidth: "15rem" }}
+                />
 
-              <Column
-                header="Action"
-                body={actionBodyTemplate}
-                headerStyle={{ minWidth: "10rem" }}
-              />
-            </DataTable>
+                <Column
+                  header="Action"
+                  body={actionBodyTemplate}
+                  headerStyle={{ minWidth: "10rem" }}
+                />
+              </DataTable>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <Loader />
+      )}
     </DashboardContainer>
   );
 };

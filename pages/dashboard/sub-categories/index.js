@@ -32,7 +32,9 @@ const SubCategories = ({ categories }) => {
   const { isLoading, error, data, refetch } = useQuery(
     "sbCtg",
     async () =>
-      await axios.get("https://front-end-msajiba.vercel.app/api/admin/sub-category/getAll")
+      await axios.get(
+        "https://front-end-msajiba.vercel.app/api/admin/sub-category/getAll"
+      )
   );
 
   isLoading && <Loader />;
@@ -117,74 +119,78 @@ const SubCategories = ({ categories }) => {
 
   return (
     <DashboardContainer>
-      <div className="grid crud-demo">
-        <div className="col-12">
-          <div className="card">
-            {/* ADD NEW SUB CATEGORY  */}
-            <Toolbar
-              className="mb-4"
-              right={
-                <NewSubCategory categories={categories} refetch={refetch} />
-              }
-            />
-            <DataTable
-              ref={dt}
-              value={subCategories}
-              selection={selectedSbCtg}
-              onSelectionChange={(e) => setSelectedSbCtg(e.value)}
-              dataKey="_id"
-              paginator
-              rows={10}
-              rowsPerPageOptions={[5, 10, 25]}
-              className="datatable-responsive"
-              paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-              globalFilter={globalFilter}
-              emptyMessage="No Sub Category found."
-              header={header}
-              responsiveLayout="scroll"
-            >
-              <Column
-                field="code"
-                header="ID"
-                sortable
-                body={codeBodyTemplate}
-                headerStyle={{ minWidth: "5rem" }}
+      {subCategories ? (
+        <div className="grid crud-demo">
+          <div className="col-12">
+            <div className="card">
+              {/* ADD NEW SUB CATEGORY  */}
+              <Toolbar
+                className="mb-4"
+                right={
+                  <NewSubCategory categories={categories} refetch={refetch} />
+                }
               />
-              <Column
-                field="image"
-                header="IMAGE"
-                sortable
-                body={imageBodyTemplate}
-                headerStyle={{ minWidth: "10rem" }}
-              />
+              <DataTable
+                ref={dt}
+                value={subCategories}
+                selection={selectedSbCtg}
+                onSelectionChange={(e) => setSelectedSbCtg(e.value)}
+                dataKey="_id"
+                paginator
+                rows={10}
+                rowsPerPageOptions={[5, 10, 25]}
+                className="datatable-responsive"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                globalFilter={globalFilter}
+                emptyMessage="No Sub Category found."
+                header={header}
+                responsiveLayout="scroll"
+              >
+                <Column
+                  field="code"
+                  header="ID"
+                  sortable
+                  body={codeBodyTemplate}
+                  headerStyle={{ minWidth: "5rem" }}
+                />
+                <Column
+                  field="image"
+                  header="IMAGE"
+                  sortable
+                  body={imageBodyTemplate}
+                  headerStyle={{ minWidth: "10rem" }}
+                />
 
-              <Column
-                field="name"
-                header="Name"
-                sortable
-                body={nameBodyTemplate}
-                headerStyle={{ minWidth: "15rem" }}
-              />
+                <Column
+                  field="name"
+                  header="Name"
+                  sortable
+                  body={nameBodyTemplate}
+                  headerStyle={{ minWidth: "15rem" }}
+                />
 
-              <Column
-                field="category"
-                header="Category"
-                sortable
-                body={categoryBodyTemplate}
-                headerStyle={{ minWidth: "10rem" }}
-              />
+                <Column
+                  field="category"
+                  header="Category"
+                  sortable
+                  body={categoryBodyTemplate}
+                  headerStyle={{ minWidth: "10rem" }}
+                />
 
-              <Column
-                field="Action"
-                header="Action"
-                body={actionBodyTemplate}
-                headerStyle={{ minWidth: "10rem" }}
-              />
-            </DataTable>
+                <Column
+                  field="Action"
+                  header="Action"
+                  body={actionBodyTemplate}
+                  headerStyle={{ minWidth: "10rem" }}
+                />
+              </DataTable>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <Loader />
+      )}
     </DashboardContainer>
   );
 };

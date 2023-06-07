@@ -1,17 +1,18 @@
 import React from "react";
-import { BeatLoader } from "react-spinners";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 const Loader = () => {
   return (
     <div
       style={{
+        height: "100vh",
         display: "flex",
         justifyContent: "center",
-        alignContent: "center",
+        alignItems: "center",
         height: "100vh",
       }}
     >
-      <BeatLoader color="#36d7b7" />
+      <ProgressSpinner style={{width: '50px', height: '50px'}} />
     </div>
   );
 };
