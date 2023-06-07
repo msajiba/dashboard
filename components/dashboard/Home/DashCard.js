@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 
 const DashCard = () => {
@@ -44,7 +44,16 @@ const DashCard = () => {
     setProducts(data.products);
   };
 
-  // const result = orders.reduce(od, 0)
+  const subTotal = useMemo(() => {
+    return orders?.reduce((sum, val) => sum + parseFloat(val.total), 0);
+  }, [orders]);
+
+  const formatCurrency = (value) => {
+    return value?.toLocaleString("en-US", {
+      style: "currency",
+      currency: "BDT",
+    });
+  };
 
   useEffect(() => {
     getOrders();
@@ -93,13 +102,17 @@ const DashCard = () => {
           <div className="flex justify-content-between mb-3">
             <div>
               <span className="block text-500 font-medium mb-3">Revenue</span>
-              <div className="text-900 font-medium text-xl">$2.100</div>
+              <div className="text-900 font-medium text-xl">
+                {formatCurrency(subTotal)}
+              </div>
             </div>
             <div
               className="flex align-items-center justify-content-center bg-orange-100 border-round"
               style={{ width: "2.5rem", height: "2.5rem" }}
             >
-              <i className="pi pi-map-marker text-orange-500 text-xl" />
+              <i
+                className="pi pi-money-bill text-orange-500 text-xl"
+              />
             </div>
           </div>
           <span className="text-green-500 font-medium">%52+ </span>
@@ -116,7 +129,9 @@ const DashCard = () => {
           <div className="flex justify-content-between mb-3">
             <div>
               <span className="block text-500 font-medium mb-3">Customers</span>
-              <div className="text-900 font-medium text-xl">{users?.length}</div>
+              <div className="text-900 font-medium text-xl">
+                {users?.length}
+              </div>
             </div>
             <div
               className="flex align-items-center justify-content-center bg-cyan-100 border-round"
