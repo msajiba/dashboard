@@ -11,6 +11,7 @@ import { Button } from "primereact/button";
 import { InputTextarea } from "primereact/inputtextarea";
 
 import axios from "axios";
+import Loader from "../../../components/Shared/Loader";
 
 const Siteinfo = () => {
   const user = useSelector((state) => state.user.currentUser);
@@ -24,10 +25,12 @@ const Siteinfo = () => {
   const [address, setAddress] = useState("");
   const [description, setDescription] = useState("");
   const [file, setFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const toast = useRef(null);
 
   const getUserInfo = async () => {
+    setIsLoading(true);
     const { data } = await axios.get(
       "https://front-end-msajiba.vercel.app/api/admin/siteinfo/find"
     );
@@ -38,6 +41,7 @@ const Siteinfo = () => {
     setPhone(data?.siteinfo?.phone);
     setDescription(data?.siteinfo.description);
     setFile(data.siteinfo.logo);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -46,6 +50,8 @@ const Siteinfo = () => {
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setSubmitted(true);
 
     try {
       const updatedSiteInfo = await axios.post(
@@ -66,13 +72,14 @@ const Siteinfo = () => {
           },
         }
       );
-
-      if (updatedSiteInfo.status === 200) {
+      setIsLoading(false);
+      if (updatedSiteInfo?.status === 200) {
         toast.current.show({
           severity: "success",
           detail: "Siteinfo has been created successfully",
           life: 3000,
         });
+        setIsLoading(false);
       }
     } catch (error) {
       console.log(error);
@@ -86,114 +93,117 @@ const Siteinfo = () => {
 
   return (
     <DashboardContainer>
-      <div className="grid">
-        <div className="col-12">
-          <div className="card">
-            <Toast ref={toast} />
-            <h5>Site Information</h5>
-
-            <div className="flex align-items-center justify-content-center mb-5">
-              <Avatar image={file} size="xlarge" shape="circle" />
-            </div>
-
-            <form
-              onSubmit={handleUpdateProfile}
-              className="flex flex-column gap-2"
-            >
-              <div className="field flex justify-content-center">
-                <input
-                  type="file"
-                  accept="image/*"
-                  maxFileSize={1000000}
-                  onChange={(e) => setFile(e.target.files[0])}
-                  className={classNames({
-                    "p-invalid": submitted && !file,
-                  })}
-                />
-                {submitted && !file && (
-                  <small
-                    style={{ fontSize: "1rem", color: "red" }}
-                    className="p-invalid"
-                  >
-                    File is required.
-                  </small>
-                )}
+      <Toast ref={toast} />
+      {!isLoading ? (
+        <div className="grid">
+          <div className="col-12">
+            <div className="card">
+              <h5>Site Information</h5>
+              <div className="flex align-items-center justify-content-center mb-5">
+                <Avatar image={file} size="xlarge" shape="circle" />
               </div>
 
-              <div className="p-fluid formgrid grid">
-                <div className="field col-12 md:col-4">
-                  <label htmlFor="title">Title</label>
-                  <InputText
-                    id="title"
-                    value={title}
-                    onChange={(e) => {
-                      setTitle(e.target.value);
-                    }}
-                    type="text"
-                  />
-                </div>
-
-                <div className="field col-12 md:col-4">
-                  <label htmlFor="email">Email</label>
-                  <InputText
-                    id="email"
-                    value={email}
-                    readOnly
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                    }}
-                    type="email"
-                  />
-                </div>
-                <div className="field col-12 md:col-4">
-                  <label htmlFor="phone">Phone No</label>
-                  <InputText
-                    id="phone"
-                    value={phone}
-                    onChange={(e) => {
-                      setPhone(e.target.value);
-                    }}
-                    type="text"
-                  />
-                </div>
-                <div className="field col-12">
-                  <label htmlFor="address">Address</label>
-                  <InputText
-                    id="address"
-                    value={address}
-                    onChange={(e) => {
-                      setAddress(e.target.value);
-                    }}
-                    type="address"
-                  />
-                </div>
-
-                <div className="field col">
-                  <label htmlFor="des">Description</label>
-                  <InputTextarea
-                    id="des"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    required
+              <form
+                onSubmit={handleUpdateProfile}
+                className="flex flex-column gap-2"
+              >
+                <div className="field flex justify-content-center">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    maxFileSize={1000}
+                    onChange={(e) => setFile(e.target.files[0])}
                     className={classNames({
-                      "p-invalid": submitted && !description,
+                      "p-invalid": submitted && !file,
                     })}
                   />
-                  {submitted && !description && (
+                  {submitted && !file && (
                     <small
                       style={{ fontSize: "1rem", color: "red" }}
                       className="p-invalid"
                     >
-                      Description is required.
+                      File is required.
                     </small>
                   )}
                 </div>
-              </div>
-              <Button type="submit" label="Save"></Button>
-            </form>
+
+                <div className="p-fluid formgrid grid">
+                  <div className="field col-12 md:col-4">
+                    <label htmlFor="title">Title</label>
+                    <InputText
+                      id="title"
+                      value={title}
+                      onChange={(e) => {
+                        setTitle(e.target.value);
+                      }}
+                      type="text"
+                    />
+                  </div>
+
+                  <div className="field col-12 md:col-4">
+                    <label htmlFor="email">Email</label>
+                    <InputText
+                      id="email"
+                      value={email}
+                      readOnly
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                      }}
+                      type="email"
+                    />
+                  </div>
+                  <div className="field col-12 md:col-4">
+                    <label htmlFor="phone">Phone No</label>
+                    <InputText
+                      id="phone"
+                      value={phone}
+                      onChange={(e) => {
+                        setPhone(e.target.value);
+                      }}
+                      type="text"
+                    />
+                  </div>
+                  <div className="field col-12">
+                    <label htmlFor="address">Address</label>
+                    <InputText
+                      id="address"
+                      value={address}
+                      onChange={(e) => {
+                        setAddress(e.target.value);
+                      }}
+                      type="address"
+                    />
+                  </div>
+
+                  <div className="field col">
+                    <label htmlFor="des">Description</label>
+                    <InputTextarea
+                      id="des"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      required
+                      className={classNames({
+                        "p-invalid": submitted && !description,
+                      })}
+                    />
+                    {submitted && !description && (
+                      <small
+                        style={{ fontSize: "1rem", color: "red" }}
+                        className="p-invalid"
+                      >
+                        Description is required.
+                      </small>
+                    )}
+                  </div>
+                </div>
+                <Button type="submit" label="Save"></Button>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <Loader />
+      )}
     </DashboardContainer>
   );
 };

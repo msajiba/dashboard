@@ -42,7 +42,8 @@ const Blogs = () => {
     setBlogs(data?.data?.blogs);
     refetch();
   }, [data?.data?.blogs]);
-
+  
+  isLoading && <Loader />
   error && console.log(error);
 
   const nameBodyTemplate = (rowData) => {
@@ -117,7 +118,7 @@ const Blogs = () => {
                 value={blogs}
                 selection={selectedCtg}
                 onSelectionChange={(e) => setSelectedCtg(e.value)}
-                dataKey="id"
+                dataKey={blogs._id}
                 paginator
                 rows={10}
                 rowsPerPageOptions={[5, 10, 25]}

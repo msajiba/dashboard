@@ -36,7 +36,7 @@ const Slider = () => {
         "https://front-end-msajiba.vercel.app/api/admin/slider/getAll"
       )
   );
-
+  isLoading && <Loader />;
   error && console.log(error);
 
   useEffect(() => {
@@ -110,7 +110,7 @@ const Slider = () => {
                 value={sliders}
                 selection={selectedSlider}
                 onSelectionChange={(e) => setSelectedSlider(e.value)}
-                dataKey="_id"
+                dataKey={sliders._id}
                 paginator
                 rows={10}
                 rowsPerPageOptions={[5, 10, 25]}

@@ -38,11 +38,14 @@ const Categories = ({ ctg }) => {
       )
   );
 
+
+
   useEffect(() => {
     setCategories(data?.data?.categories);
     refetch();
   }, [data?.data?.categories]);
-
+  
+  isLoading && <Loader />
   error && console.log(error);
 
   const codeBodyTemplate = (rowData) => {
@@ -120,7 +123,7 @@ const Categories = ({ ctg }) => {
                 value={categories}
                 selection={selectedCtg}
                 onSelectionChange={(e) => setSelectedCtg(e.value)}
-                dataKey="id"
+                dataKey={categories._id}
                 paginator
                 rows={10}
                 rowsPerPageOptions={[5, 10, 25]}

@@ -9,6 +9,7 @@ const index = () => {
   useEffect(() => {
     router.push("/dashboard");
   }, [router]);
+  
   return (
     <div
       style={{

@@ -142,7 +142,7 @@ const EditBlog = ({ rowData, refetch }) => {
             <input
               type="file"
               accept="image/*"
-              maxFileSize={1000000}
+              maxFileSize={1000}
               onChange={(e) => setFile(e.target.files[0])}
               className={classNames({
                 "p-invalid": submitted && !file,

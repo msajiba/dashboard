@@ -33,7 +33,7 @@ const index = ({ categories }) => {
     return null;
   }
 
-  const { error, data, refetch } = useQuery(
+  const {isLoading, error, data, refetch } = useQuery(
     "products",
     async () =>
       await axios.get(
@@ -45,7 +45,8 @@ const index = ({ categories }) => {
     setProducts(data?.data?.products);
     refetch();
   }, [data?.data?.products]);
-
+  
+  isLoading && <Loader />;
   error && console.log(error);
 
   const formatCurrency = (value) => {
@@ -176,7 +177,7 @@ const index = ({ categories }) => {
                 value={products}
                 selection={selectedProducts}
                 onSelectionChange={(e) => setSelectedProducts(e.value)}
-                dataKey="id"
+                dataKey={products._id}
                 paginator
                 rows={10}
                 rowsPerPageOptions={[5, 10, 25]}

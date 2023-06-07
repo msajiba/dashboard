@@ -28,14 +28,14 @@ const SubBlogs = ({ blogs }) => {
     return null;
   }
 
-  const { error, data, refetch } = useQuery(
+  const { isLoading, error, data, refetch } = useQuery(
     "sbCtg",
     async () =>
       await axios.get(
         "https://front-end-msajiba.vercel.app/api/admin/sub-blog/getAll"
       )
   );
-
+  isLoading && <Loader />;
   error && console.log(error);
 
   useEffect(() => {
@@ -109,7 +109,7 @@ const SubBlogs = ({ blogs }) => {
                 value={subBlogs}
                 selection={selectedSubBlog}
                 onSelectionChange={(e) => setSelectedSubBlog(e.value)}
-                dataKey="_id"
+                dataKey={subBlogs._id}
                 paginator
                 rows={10}
                 rowsPerPageOptions={[5, 10, 25]}
