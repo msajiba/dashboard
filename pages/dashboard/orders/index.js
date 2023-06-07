@@ -48,7 +48,8 @@ const Order = () => {
     setOrders(data?.data?.order);
     refetch();
   }, [data?.data?.order]);
-
+  
+  isLoading && <Loader />;
   error && console.log(error);
 
   const codeBodyTemplate = (rowData) => {
@@ -120,7 +121,7 @@ const Order = () => {
                 value={orders}
                 selection={selectedOrder}
                 onSelectionChange={(e) => setSelectedOrder(e.value)}
-                dataKey="id"
+                dataKey={orders._id}
                 paginator
                 rows={10}
                 rowsPerPageOptions={[5, 10, 25]}

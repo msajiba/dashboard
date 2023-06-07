@@ -135,7 +135,7 @@ const SubCategories = ({ categories }) => {
                 value={subCategories}
                 selection={selectedSbCtg}
                 onSelectionChange={(e) => setSelectedSbCtg(e.value)}
-                dataKey="_id"
+                dataKey={subCategories._id}
                 paginator
                 rows={10}
                 rowsPerPageOptions={[5, 10, 25]}

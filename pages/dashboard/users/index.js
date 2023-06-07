@@ -125,7 +125,7 @@ const SubCategories = () => {
                 value={users}
                 selection={selectedUser}
                 onSelectionChange={(e) => setSelectedUser(e.value)}
-                dataKey="_id"
+                dataKey={users._id}
                 paginator
                 rows={10}
                 rowsPerPageOptions={[5, 10, 25]}

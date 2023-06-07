@@ -8,6 +8,7 @@ import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
 import axios from "axios";
 import ChangePassword from "../../../components/dashboard/Profile/ChangePassword";
+import Loader from "../../../components/Shared/Loader";
 
 const Profile = () => {
   const user = useSelector((state) => state.user.currentUser);
@@ -22,8 +23,10 @@ const Profile = () => {
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
   const toast = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getUserInfo = async () => {
+    setIsLoading(true);
     const { data } = await axios.post(
       "https://front-end-msajiba.vercel.app/api/profile/find",
       {
@@ -45,6 +48,7 @@ const Profile = () => {
     setName(data?.name);
     setEmail(data?.email);
     setPhone(data?.phone);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -53,6 +57,8 @@ const Profile = () => {
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
+
+    setIsLoading(true);
 
     try {
       const updatedProfileData = await axios.post(
@@ -75,13 +81,14 @@ const Profile = () => {
           },
         }
       );
-
+      setIsLoading(false);
       if (updatedProfileData.status === 200) {
         toast.current.show({
           severity: "success",
           detail: "User Update successfully",
           life: 3000,
         });
+        setIsLoading(false);
       }
     } catch (error) {
       console.log(error);
@@ -93,112 +100,112 @@ const Profile = () => {
     return null;
   }
 
-
   return (
     <DashboardContainer>
-      {
+      <Toast ref={toast} />
+      {!isLoading ? (
+        <div className="grid">
+          <div className="col-12">
+            <div className="card">
+              <h5>Profile Information</h5>
 
-      }
-      <div className="grid">
-        <div className="col-12">
-          <div className="card">
-            <Toast ref={toast} />
-            <h5>Profile Information</h5>
+              <form
+                onSubmit={handleUpdateProfile}
+                className="flex flex-column gap-2"
+              >
+                <div className="p-fluid formgrid grid">
+                  <div className="field col-12 md:col-4">
+                    <label htmlFor="userName">User Name</label>
+                    <InputText
+                      id="userName"
+                      value={name}
+                      onChange={(e) => {
+                        setName(e.target.value);
+                      }}
+                      type="text"
+                    />
+                  </div>
 
-            <form
-              onSubmit={handleUpdateProfile}
-              className="flex flex-column gap-2"
-            >
-              <div className="p-fluid formgrid grid">
-                <div className="field col-12 md:col-4">
-                  <label htmlFor="userName">User Name</label>
-                  <InputText
-                    id="userName"
-                    value={name}
-                    onChange={(e) => {
-                      setName(e.target.value);
-                    }}
-                    type="text"
-                  />
-                </div>
+                  <div className="field col-12 md:col-4">
+                    <label htmlFor="email">Email</label>
+                    <InputText
+                      id="email"
+                      value={email}
+                      readOnly
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                      }}
+                      type="email"
+                    />
+                  </div>
+                  <div className="field col-12 md:col-4">
+                    <label htmlFor="phone">Phone No</label>
+                    <InputText
+                      id="phone"
+                      value={phone}
+                      onChange={(e) => {
+                        setPhone(e.target.value);
+                      }}
+                      type="number"
+                    />
+                  </div>
+                  <div className="field col-12">
+                    <label htmlFor="address">Address</label>
+                    <InputText
+                      id="address"
+                      value={address}
+                      onChange={(e) => {
+                        setAddress(e.target.value);
+                      }}
+                      type="address"
+                    />
+                  </div>
 
-                <div className="field col-12 md:col-4">
-                  <label htmlFor="email">Email</label>
-                  <InputText
-                    id="email"
-                    value={email}
-                    readOnly
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                    }}
-                    type="email"
-                  />
-                </div>
-                <div className="field col-12 md:col-4">
-                  <label htmlFor="phone">Phone No</label>
-                  <InputText
-                    id="phone"
-                    value={phone}
-                    onChange={(e) => {
-                      setPhone(e.target.value);
-                    }}
-                    type="number"
-                  />
-                </div>
-                <div className="field col-12">
-                  <label htmlFor="address">Address</label>
-                  <InputText
-                    id="address"
-                    value={address}
-                    onChange={(e) => {
-                      setAddress(e.target.value);
-                    }}
-                    type="address"
-                  />
-                </div>
+                  <div className="field col-12 md:col-4">
+                    <label htmlFor="postal">Postal Code</label>
+                    <InputText
+                      id="postal"
+                      value={postalCode}
+                      onChange={(e) => {
+                        setPostalCode(e.target.value);
+                      }}
+                      type="number"
+                    />
+                  </div>
 
-                <div className="field col-12 md:col-4">
-                  <label htmlFor="postal">Postal Code</label>
-                  <InputText
-                    id="postal"
-                    value={postalCode}
-                    onChange={(e) => {
-                      setPostalCode(e.target.value);
-                    }}
-                    type="number"
-                  />
-                </div>
+                  <div className="field col-12 md:col-4">
+                    <label htmlFor="city">City</label>
+                    <InputText
+                      id="city"
+                      value={city}
+                      onChange={(e) => {
+                        setCity(e.target.value);
+                      }}
+                      type="text"
+                    />
+                  </div>
 
-                <div className="field col-12 md:col-4">
-                  <label htmlFor="city">City</label>
-                  <InputText
-                    id="city"
-                    value={city}
-                    onChange={(e) => {
-                      setCity(e.target.value);
-                    }}
-                    type="text"
-                  />
+                  <div className="field col-12 md:col-4">
+                    <label htmlFor="country">Country</label>
+                    <InputText
+                      id="country"
+                      value={country}
+                      onChange={(e) => {
+                        setCountry(e.target.value);
+                      }}
+                      type="text"
+                    />
+                  </div>
                 </div>
-
-                <div className="field col-12 md:col-4">
-                  <label htmlFor="country">Country</label>
-                  <InputText
-                    id="country"
-                    value={country}
-                    onChange={(e) => {
-                      setCountry(e.target.value);
-                    }}
-                    type="text"
-                  />
-                </div>
-              </div>
-              <Button type="submit" label="Save"></Button>
-            </form>
+                <Button type="submit" label="Save"></Button>
+              </form>
+            </div>
           </div>
+          <ChangePassword />
         </div>
-        <ChangePassword />
-      </div>
+      ) : (
+        <Loader />
+      )}
     </DashboardContainer>
   );
 };

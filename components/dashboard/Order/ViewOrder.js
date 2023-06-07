@@ -56,8 +56,6 @@ const ViewOrder = ({ rowData, refetch }) => {
       isPaid,
     } = order;
 
-    console.log("order", order);
-
     setOrderDialog(true);
 
     setAddress(address);
