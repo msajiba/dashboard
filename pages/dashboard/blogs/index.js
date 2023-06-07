@@ -8,8 +8,6 @@ import DashboardContainer from "../../../layout/DashboardContainer";
 import { Avatar } from "primereact/avatar";
 import { useQuery } from "react-query";
 import axios from "axios";
-import EditCategory from "../../../components/dashboard/Category/EditCategory";
-import DeleteCategory from "../../../components/dashboard/Category/DeleteCategory";
 import { Badge } from "primereact/badge";
 import Loader from "../../../components/Shared/Loader";
 import { useSelector } from "react-redux";
@@ -18,7 +16,7 @@ import NewBlog from "../../../components/dashboard/Blogs/NewBlog";
 import DeleteBlog from "../../../components/dashboard/Blogs/DeleteBlog";
 import EditBlog from "../../../components/dashboard/Blogs/EditBlog";
 
-const Blogs = ({ ctg }) => {
+const Blogs = () => {
   const [blogs, setBlogs] = useState(null);
   const [selectedCtg, setSelectedCtg] = useState(null);
   const [globalFilter, setGlobalFilter] = useState(null);
@@ -34,7 +32,10 @@ const Blogs = ({ ctg }) => {
 
   const { isLoading, error, data, refetch } = useQuery(
     "category",
-    async () => await axios.get("https://front-end-msajiba.vercel.app/api/admin/blog/getAll")
+    async () =>
+      await axios.get(
+        "https://front-end-msajiba.vercel.app/api/admin/blog/getAll"
+      )
   );
 
   useEffect(() => {
@@ -42,7 +43,6 @@ const Blogs = ({ ctg }) => {
     refetch();
   }, [data?.data?.blogs]);
 
-  isLoading && <Loader />;
   error && console.log(error);
 
   const nameBodyTemplate = (rowData) => {
@@ -106,55 +106,59 @@ const Blogs = ({ ctg }) => {
 
   return (
     <DashboardContainer>
-      <div className="grid crud-demo">
-        <div className="col-12">
-          <div className="card">
-            <Toolbar className="mb-4" right={<NewBlog refetch={refetch} />} />
+      {blogs ? (
+        <div className="grid crud-demo">
+          <div className="col-12">
+            <div className="card">
+              <Toolbar className="mb-4" right={<NewBlog refetch={refetch} />} />
 
-            <DataTable
-              ref={dt}
-              value={blogs}
-              selection={selectedCtg}
-              onSelectionChange={(e) => setSelectedCtg(e.value)}
-              dataKey="id"
-              paginator
-              rows={10}
-              rowsPerPageOptions={[5, 10, 25]}
-              className="datatable-responsive"
-              paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-              globalFilter={globalFilter}
-              emptyMessage="No Category found."
-              header={header}
-              responsiveLayout="scroll"
-            >
-              <Column header="Image" body={imageBodyTemplate} />
+              <DataTable
+                ref={dt}
+                value={blogs}
+                selection={selectedCtg}
+                onSelectionChange={(e) => setSelectedCtg(e.value)}
+                dataKey="id"
+                paginator
+                rows={10}
+                rowsPerPageOptions={[5, 10, 25]}
+                className="datatable-responsive"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                globalFilter={globalFilter}
+                emptyMessage="No Category found."
+                header={header}
+                responsiveLayout="scroll"
+              >
+                <Column header="Image" body={imageBodyTemplate} />
 
-              <Column
-                field="title"
-                header="title"
-                sortable
-                body={nameBodyTemplate}
-                headerStyle={{ minWidth: "30rem" }}
-              />
+                <Column
+                  field="title"
+                  header="title"
+                  sortable
+                  body={nameBodyTemplate}
+                  headerStyle={{ minWidth: "30rem" }}
+                />
 
-              <Column
-                field="title"
-                header="Sub Blog"
-                sortable
-                body={subBlogBodyTemplate}
-                headerStyle={{ minWidth: "10rem" }}
-              />
+                <Column
+                  field="title"
+                  header="Sub Blog"
+                  sortable
+                  body={subBlogBodyTemplate}
+                  headerStyle={{ minWidth: "10rem" }}
+                />
 
-              <Column
-                header="Action"
-                body={actionBodyTemplate}
-                headerStyle={{ minWidth: "10rem" }}
-              />
-            </DataTable>
+                <Column
+                  header="Action"
+                  body={actionBodyTemplate}
+                  headerStyle={{ minWidth: "10rem" }}
+                />
+              </DataTable>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <Loader />
+      )}
     </DashboardContainer>
   );
 };

@@ -14,6 +14,7 @@ import { Avatar } from "primereact/avatar";
 import EditSlider from "../../../components/dashboard/Slider/EditSlider";
 import NewSlider from "../../../components/dashboard/Slider/NewSlider";
 import DeleteSlide from "../../../components/dashboard/Slider/DeleteSlider";
+import Loader from "../../../components/Shared/Loader";
 
 const Slider = () => {
   const user = useSelector((state) => state.user.currentUser);
@@ -30,10 +31,12 @@ const Slider = () => {
 
   const { isLoading, error, data, refetch } = useQuery(
     "slider",
-    async () => await axios.get("https://front-end-msajiba.vercel.app/api/admin/slider/getAll")
+    async () =>
+      await axios.get(
+        "https://front-end-msajiba.vercel.app/api/admin/slider/getAll"
+      )
   );
 
-  // isLoading && <Loader />;
   error && console.log(error);
 
   useEffect(() => {
@@ -93,53 +96,60 @@ const Slider = () => {
 
   return (
     <DashboardContainer>
-      <div className="grid crud-demo">
-        <div className="col-12">
-          <div className="card">
-            {/* ADD NEW SUB CATEGORY  */}
-            <Toolbar className="mb-4" right={<NewSlider refetch={refetch} />} />
-            <DataTable
-              ref={dt}
-              value={sliders}
-              selection={selectedSlider}
-              onSelectionChange={(e) => setSelectedSlider(e.value)}
-              dataKey="_id"
-              paginator
-              rows={10}
-              rowsPerPageOptions={[5, 10, 25]}
-              className="datatable-responsive"
-              paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-              globalFilter={globalFilter}
-              emptyMessage="No Sub Category found."
-              header={header}
-              responsiveLayout="scroll"
-            >
-              <Column
-                field="_id"
-                header="ID"
-                sortable
-                body={codeBodyTemplate}
-                headerStyle={{ minWidth: "5rem" }}
+      {sliders ? (
+        <div className="grid crud-demo">
+          <div className="col-12">
+            <div className="card">
+              {/* ADD NEW SUB CATEGORY  */}
+              <Toolbar
+                className="mb-4"
+                right={<NewSlider refetch={refetch} />}
               />
-              <Column
-                field="image"
-                header="IMAGE"
-                sortable
-                body={imageBodyTemplate}
-                headerStyle={{ minWidth: "10rem" }}
-              />
+              <DataTable
+                ref={dt}
+                value={sliders}
+                selection={selectedSlider}
+                onSelectionChange={(e) => setSelectedSlider(e.value)}
+                dataKey="_id"
+                paginator
+                rows={10}
+                rowsPerPageOptions={[5, 10, 25]}
+                className="datatable-responsive"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                globalFilter={globalFilter}
+                emptyMessage="No Sub Category found."
+                header={header}
+                responsiveLayout="scroll"
+              >
+                <Column
+                  field="_id"
+                  header="ID"
+                  sortable
+                  body={codeBodyTemplate}
+                  headerStyle={{ minWidth: "5rem" }}
+                />
+                <Column
+                  field="image"
+                  header="IMAGE"
+                  sortable
+                  body={imageBodyTemplate}
+                  headerStyle={{ minWidth: "10rem" }}
+                />
 
-              <Column
-                field="Action"
-                header="Action"
-                body={actionBodyTemplate}
-                headerStyle={{ minWidth: "10rem" }}
-              />
-            </DataTable>
+                <Column
+                  field="Action"
+                  header="Action"
+                  body={actionBodyTemplate}
+                  headerStyle={{ minWidth: "10rem" }}
+                />
+              </DataTable>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <Loader />
+      )}
     </DashboardContainer>
   );
 };

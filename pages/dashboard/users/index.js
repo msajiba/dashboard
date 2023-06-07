@@ -32,13 +32,16 @@ const SubCategories = () => {
   const { isLoading, error, data, refetch } = useQuery(
     "users",
     async () =>
-      await axios.get("https://front-end-msajiba.vercel.app/api/admin/user/getAll", {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          token: `Bearer ${jwt}`,
-        },
-      })
+      await axios.get(
+        "https://front-end-msajiba.vercel.app/api/admin/user/getAll",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            token: `Bearer ${jwt}`,
+          },
+        }
+      )
   );
 
   isLoading && <Loader />;
@@ -113,60 +116,64 @@ const SubCategories = () => {
 
   return (
     <DashboardContainer>
-      <div className="grid crud-demo">
-        <div className="col-12">
-          <div className="card">
-            <DataTable
-              ref={dt}
-              value={users}
-              selection={selectedUser}
-              onSelectionChange={(e) => setSelectedUser(e.value)}
-              dataKey="_id"
-              paginator
-              rows={10}
-              rowsPerPageOptions={[5, 10, 25]}
-              className="datatable-responsive"
-              paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-              globalFilter={globalFilter}
-              emptyMessage="No user found..."
-              header={header}
-              responsiveLayout="scroll"
-            >
-              <Column
-                field="code"
-                header="ID"
-                sortable
-                body={codeBodyTemplate}
-                headerStyle={{ minWidth: "5rem" }}
-              />
+      {users ? (
+        <div className="grid crud-demo">
+          <div className="col-12">
+            <div className="card">
+              <DataTable
+                ref={dt}
+                value={users}
+                selection={selectedUser}
+                onSelectionChange={(e) => setSelectedUser(e.value)}
+                dataKey="_id"
+                paginator
+                rows={10}
+                rowsPerPageOptions={[5, 10, 25]}
+                className="datatable-responsive"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                globalFilter={globalFilter}
+                emptyMessage="No user found..."
+                header={header}
+                responsiveLayout="scroll"
+              >
+                <Column
+                  field="code"
+                  header="ID"
+                  sortable
+                  body={codeBodyTemplate}
+                  headerStyle={{ minWidth: "5rem" }}
+                />
 
-              <Column
-                field="email"
-                header="Email"
-                sortable
-                body={emailBodyTemplate}
-                headerStyle={{ minWidth: "20rem" }}
-              />
+                <Column
+                  field="email"
+                  header="Email"
+                  sortable
+                  body={emailBodyTemplate}
+                  headerStyle={{ minWidth: "20rem" }}
+                />
 
-              <Column
-                field="role"
-                header="Role"
-                sortable
-                body={roleBodyTemplate}
-                headerStyle={{ minWidth: "10rem" }}
-              />
+                <Column
+                  field="role"
+                  header="Role"
+                  sortable
+                  body={roleBodyTemplate}
+                  headerStyle={{ minWidth: "10rem" }}
+                />
 
-              <Column
-                field="Action"
-                header="Action"
-                body={actionBodyTemplate}
-                headerStyle={{ minWidth: "10rem" }}
-              />
-            </DataTable>
+                <Column
+                  field="Action"
+                  header="Action"
+                  body={actionBodyTemplate}
+                  headerStyle={{ minWidth: "10rem" }}
+                />
+              </DataTable>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <Loader />
+      )}
     </DashboardContainer>
   );
 };

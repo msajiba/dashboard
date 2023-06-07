@@ -33,7 +33,9 @@ const Categories = ({ ctg }) => {
   const { isLoading, error, data, refetch } = useQuery(
     "category",
     async () =>
-      await axios.get("https://front-end-msajiba.vercel.app/api/admin/category/getAll")
+      await axios.get(
+        "https://front-end-msajiba.vercel.app/api/admin/category/getAll"
+      )
   );
 
   useEffect(() => {
@@ -41,7 +43,6 @@ const Categories = ({ ctg }) => {
     refetch();
   }, [data?.data?.categories]);
 
-  isLoading && <Loader />;
   error && console.log(error);
 
   const codeBodyTemplate = (rowData) => {
@@ -105,58 +106,62 @@ const Categories = ({ ctg }) => {
 
   return (
     <DashboardContainer>
-      <div className="grid crud-demo">
-        <div className="col-12">
-          <div className="card">
-            <Toolbar
-              className="mb-4"
-              right={<NewCategory refetch={refetch} />}
-            />
-
-            <DataTable
-              ref={dt}
-              value={categories}
-              selection={selectedCtg}
-              onSelectionChange={(e) => setSelectedCtg(e.value)}
-              dataKey="id"
-              paginator
-              rows={10}
-              rowsPerPageOptions={[5, 10, 25]}
-              className="datatable-responsive"
-              paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-              currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-              globalFilter={globalFilter}
-              emptyMessage="No Category found."
-              header={header}
-              responsiveLayout="scroll"
-            >
-              <Column
-                field="code"
-                header="ID"
-                sortable
-                body={codeBodyTemplate}
-                headerStyle={{ minWidth: "5rem" }}
+      {categories ? (
+        <div className="grid crud-demo">
+          <div className="col-12">
+            <div className="card">
+              <Toolbar
+                className="mb-4"
+                right={<NewCategory refetch={refetch} />}
               />
 
-              <Column header="Image" body={imageBodyTemplate} />
+              <DataTable
+                ref={dt}
+                value={categories}
+                selection={selectedCtg}
+                onSelectionChange={(e) => setSelectedCtg(e.value)}
+                dataKey="id"
+                paginator
+                rows={10}
+                rowsPerPageOptions={[5, 10, 25]}
+                className="datatable-responsive"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                globalFilter={globalFilter}
+                emptyMessage="No Category found."
+                header={header}
+                responsiveLayout="scroll"
+              >
+                <Column
+                  field="code"
+                  header="ID"
+                  sortable
+                  body={codeBodyTemplate}
+                  headerStyle={{ minWidth: "5rem" }}
+                />
 
-              <Column
-                field="name"
-                header="Name"
-                sortable
-                body={nameBodyTemplate}
-                headerStyle={{ minWidth: "15rem" }}
-              />
+                <Column header="Image" body={imageBodyTemplate} />
 
-              <Column
-                header="Action"
-                body={actionBodyTemplate}
-                headerStyle={{ minWidth: "10rem" }}
-              />
-            </DataTable>
+                <Column
+                  field="name"
+                  header="Name"
+                  sortable
+                  body={nameBodyTemplate}
+                  headerStyle={{ minWidth: "15rem" }}
+                />
+
+                <Column
+                  header="Action"
+                  body={actionBodyTemplate}
+                  headerStyle={{ minWidth: "10rem" }}
+                />
+              </DataTable>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <Loader />
+      )}
     </DashboardContainer>
   );
 };
