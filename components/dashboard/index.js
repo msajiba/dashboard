@@ -4,11 +4,14 @@ import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { Menu } from "primereact/menu";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import Link from "next/link";
+
 import { LayoutContext } from "../../layout/context/layoutcontext";
 import { ProductService } from "../../demo/service/ProductService";
 import DashCard from "./Home/DashCard";
 import RecentSales from "./Home/RecentSales";
+
+
+
 
 const lineData = {
   labels: ["January", "February", "March", "April", "May", "June", "July"],
@@ -114,6 +117,8 @@ const Dashboard = () => {
       applyDarkTheme();
     }
   }, [layoutConfig.colorScheme]);
+
+
 
   return (
     <>

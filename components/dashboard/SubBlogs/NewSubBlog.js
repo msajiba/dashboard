@@ -7,6 +7,10 @@ import { Toast } from "primereact/toast";
 import { classNames } from "primereact/utils";
 import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { mainAPI } from "../../../uitls/api";
+
+
+const ROOT = mainAPI;
 
 const NewSubBlog = ({ refetch }) => {
   const jwt = useSelector((state) => state.user.jwt);
@@ -22,7 +26,7 @@ const NewSubBlog = ({ refetch }) => {
     try {
       setIsLoading(true);
       const { data } = await axios.post(
-        "https://front-end-msajiba.vercel.app/api/admin/sub-blog/store",
+        `${ROOT}/api/admin/sub-blog/store`,
         {
           title,
         },

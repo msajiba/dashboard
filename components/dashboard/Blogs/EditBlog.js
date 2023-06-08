@@ -11,6 +11,9 @@ import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { Avatar } from "primereact/avatar";
 import { ProgressBar } from "primereact/progressbar";
+import { mainAPI } from "../../../uitls/api";
+
+const ROOT = mainAPI;
 
 const EditBlog = ({ rowData, refetch }) => {
   const jwt = useSelector((state) => state.user.jwt);
@@ -41,10 +44,7 @@ const EditBlog = ({ rowData, refetch }) => {
 
   const { error, data } = useQuery(
     "blogs",
-    async () =>
-      await axios.get(
-        "https://front-end-msajiba.vercel.app/api/admin/sub-blog/getAll"
-      )
+    async () => await axios.get(`${ROOT}/api/admin/sub-blog/getAll`)
   );
 
   useEffect(() => {
@@ -69,7 +69,7 @@ const EditBlog = ({ rowData, refetch }) => {
       );
       const image = response.data.url;
       const { data } = await axios.post(
-        "https://front-end-msajiba.vercel.app/api/admin/blog/update",
+        `${ROOT}/api/admin/blog/update`,
         {
           id: selectedId,
           title,

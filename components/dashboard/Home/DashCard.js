@@ -1,6 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { mainAPI } from "../../../uitls/api";
+
+const ROOT = mainAPI;
 
 const DashCard = () => {
   const jwt = useSelector((state) => state.user.jwt);
@@ -11,7 +14,7 @@ const DashCard = () => {
 
   const getOrders = async () => {
     const { data } = await axios.get(
-      "https://front-end-msajiba.vercel.app/api/admin/order/getAll",
+      `${ROOT}/api/admin/order/getAll`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -25,7 +28,7 @@ const DashCard = () => {
 
   const getUsers = async () => {
     const { data } = await axios.get(
-      "https://front-end-msajiba.vercel.app/api/admin/user/getAll",
+      `${ROOT}/api/admin/user/getAll`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -38,13 +41,10 @@ const DashCard = () => {
   };
 
   const getProducts = async () => {
-    const { data } = await axios.get(
-      "https://front-end-msajiba.vercel.app/api/admin/product/getAll"
-    );
+    const { data } = await axios.get(`${ROOT}/api/admin/product/getAll`);
     setProducts(data.products);
   };
 
-  // const result = orders.reduce(od, 0)
 
   useEffect(() => {
     getOrders();
@@ -116,7 +116,9 @@ const DashCard = () => {
           <div className="flex justify-content-between mb-3">
             <div>
               <span className="block text-500 font-medium mb-3">Customers</span>
-              <div className="text-900 font-medium text-xl">{users?.length}</div>
+              <div className="text-900 font-medium text-xl">
+                {users?.length}
+              </div>
             </div>
             <div
               className="flex align-items-center justify-content-center bg-cyan-100 border-round"

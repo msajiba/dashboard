@@ -6,6 +6,10 @@ import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { mainAPI } from "../../../uitls/api";
+
+
+const ROOT = mainAPI;
 
 const DeleteSlide = ({ rowData, refetch }) => {
   const jwt = useSelector((state) => state.user.jwt);
@@ -16,7 +20,7 @@ const DeleteSlide = ({ rowData, refetch }) => {
   const deleteSlide = async () => {
     try {
       const { data } = await axios.post(
-        "https://front-end-msajiba.vercel.app/api/admin/slider/delete",
+        `${ROOT}/api/admin/slider/delete`,
         {
           id: selectSlide._id,
         },
