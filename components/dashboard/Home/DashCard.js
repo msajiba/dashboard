@@ -10,7 +10,6 @@ const DashCard = () => {
   const [orders, setOrders] = useState(null);
   const [products, setProducts] = useState(null);
   const [users, setUsers] = useState(null);
-  const [totalSale, setTotalSale] = useState(null);
 
   const getOrders = async () => {
     const { data } = await axios.get(
@@ -45,6 +44,17 @@ const DashCard = () => {
     setProducts(data.products);
   };
 
+
+  const subTotal = useMemo(() => {
+    return orders?.reduce((sum, val) => sum + parseFloat(val.total), 0);
+  }, [orders]);
+
+  const formatCurrency = (value) => {
+    return value?.toLocaleString("en-US", {
+      style: "currency",
+      currency: "BDT",
+    });
+  };
 
   useEffect(() => {
     getOrders();
@@ -93,9 +103,6 @@ const DashCard = () => {
           <div className="flex justify-content-between mb-3">
             <div>
               <span className="block text-500 font-medium mb-3">Revenue</span>
-              <div className="text-900 font-medium text-xl">
-                
-              </div>
             </div>
             <div
               className="flex align-items-center justify-content-center bg-orange-100 border-round"
