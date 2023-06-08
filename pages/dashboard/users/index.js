@@ -6,7 +6,6 @@ import { Toolbar } from "primereact/toolbar";
 import React, { useEffect, useRef, useState } from "react";
 import DashboardContainer from "../../../layout/DashboardContainer";
 import axios from "axios";
-import DeleteSbCategory from "../../../components/dashboard/SubCategory/DeleteSbCategory";
 import { useQuery } from "react-query";
 import Loader from "../../../components/Shared/Loader";
 import { Badge } from "primereact/badge";

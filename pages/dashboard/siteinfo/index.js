@@ -111,7 +111,8 @@ const Siteinfo = () => {
                   <input
                     type="file"
                     accept="image/*"
-                    maxFileSize={1000}
+                    maxFileSize={1024}
+                    style={{ border: "0.5px solid green", padding: "10px" }}
                     onChange={(e) => setFile(e.target.files[0])}
                     className={classNames({
                       "p-invalid": submitted && !file,
