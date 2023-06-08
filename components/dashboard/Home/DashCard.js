@@ -12,30 +12,24 @@ const DashCard = () => {
   const [users, setUsers] = useState(null);
 
   const getOrders = async () => {
-    const { data } = await axios.get(
-      `${ROOT}/api/admin/order/getAll`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          token: `Bearer ${jwt}`,
-        },
-      }
-    );
+    const { data } = await axios.get(`${ROOT}/api/admin/order/getAll`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        token: `Bearer ${jwt}`,
+      },
+    });
     setOrders(data.order);
   };
 
   const getUsers = async () => {
-    const { data } = await axios.get(
-      `${ROOT}/api/admin/user/getAll`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          token: `Bearer ${jwt}`,
-        },
-      }
-    );
+    const { data } = await axios.get(`${ROOT}/api/admin/user/getAll`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        token: `Bearer ${jwt}`,
+      },
+    });
     setUsers(data);
   };
 
@@ -43,7 +37,6 @@ const DashCard = () => {
     const { data } = await axios.get(`${ROOT}/api/admin/product/getAll`);
     setProducts(data.products);
   };
-
 
   const subTotal = useMemo(() => {
     return orders?.reduce((sum, val) => sum + parseFloat(val.total), 0);
@@ -96,29 +89,32 @@ const DashCard = () => {
 
       {/* =====================ORDER====================== */}
 
-      {/* =====================PRODUCT====================== */}
-
+      {/* =====================Revenue====================== */}
       <div className="col-12 lg:col-6 xl:col-3">
         <div className="card mb-0">
           <div className="flex justify-content-between mb-3">
             <div>
               <span className="block text-500 font-medium mb-3">Revenue</span>
+              <div className="text-900 font-medium text-xl">
+                <div className="text-900 font-medium text-xl">
+                  {" "}
+                  {formatCurrency(subTotal)}{" "}
+                </div>
+              </div>
             </div>
             <div
-              className="flex align-items-center justify-content-center bg-orange-100 border-round"
+              className="flex align-items-center justify-content-center bg-cyan-100 border-round"
               style={{ width: "2.5rem", height: "2.5rem" }}
             >
-              <i
-                className="pi pi-money-bill text-orange-500 text-xl"
-              />
+              <i className="pi pi-money-bill text-cyan-500 text-xl" />
             </div>
           </div>
-          <span className="text-green-500 font-medium">%52+ </span>
-          <span className="text-500">since last week</span>
+          <span className="text-green-500 font-medium">520 </span>
+          <span className="text-500">newly registered</span>
         </div>
       </div>
 
-      {/* =====================PRODUCT====================== */}
+      {/* =====================Revenue====================== */}
 
       {/* =====================USER====================== */}
 
