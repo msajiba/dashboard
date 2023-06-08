@@ -125,7 +125,7 @@ const Dashboard = () => {
       <div className="grid">
         <DashCard />
 
-        <RecentSales products={products} />
+        <RecentSales />
 
         <div className="col-12 xl:col-6">
           <div className="card">

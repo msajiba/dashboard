@@ -1,17 +1,49 @@
+/* eslint-disable @next/next/no-img-element */
+import axios from "axios";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { Menu } from "primereact/menu";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useQuery } from "react-query";
+import { mainAPI } from "../../../uitls/api";
+import { useSelector } from "react-redux";
+import Loader from "../../Shared/Loader";
 
-const RecentSales = ({ products }) => {
+const ROOT = mainAPI;
+
+const RecentSales = () => {
+  const [products, setProducts] = useState(null);
   const menu1 = useRef(null);
+  const jwt = useSelector((state) => state.user.jwt);
+
   const formatCurrency = (value) => {
     return value.toLocaleString("en-US", {
       style: "currency",
-      currency: "USD",
+      currency: "BDT",
     });
   };
+
+  const { isLoading, error, data, refetch } = useQuery(
+    "category",
+    async () =>
+      await axios.get(`${ROOT}/api/admin/product/getAll`, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          token: `Bearer ${jwt}`,
+        },
+      })
+  );
+
+  useEffect(() => {
+    setProducts(data?.data?.products.slice(0,5));
+    refetch();
+  }, [data?.data]);
+
+  isLoading && <Loader />
+
+
   return (
     <div className="col-12 xl:col-6">
       <div className="card">
@@ -27,7 +59,7 @@ const RecentSales = ({ products }) => {
             body={(data) => (
               <img
                 className="shadow-2"
-                src={`/demo/images/product/${data.image}`}
+                src={`${data.image}`}
                 alt={data.image}
                 width="50"
               />
@@ -36,6 +68,9 @@ const RecentSales = ({ products }) => {
           <Column
             field="name"
             header="Name"
+            body={(data) => (
+             <span> {data.title} </span>
+            )}
             sortable
             style={{ width: "35%" }}
           />
@@ -44,7 +79,7 @@ const RecentSales = ({ products }) => {
             header="Price"
             sortable
             style={{ width: "35%" }}
-            body={(data) => formatCurrency(data.price)}
+            body={(data) => formatCurrency(parseFloat(data.price))}
           />
           <Column
             header="View"
