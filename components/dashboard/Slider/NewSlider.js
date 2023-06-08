@@ -2,7 +2,8 @@
 import axios from "axios";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import { InputTextarea } from 'primereact/inputtextarea';
+import { InputTextarea } from "primereact/inputtextarea";
+import { ProgressBar } from "primereact/progressbar";
 import { Toast } from "primereact/toast";
 import { classNames } from "primereact/utils";
 import React, { useRef, useState } from "react";
@@ -15,12 +16,14 @@ const NewSlider = ({ rowData, refetch }) => {
   const [submitted, setSubmitted] = useState(false);
   const toast = useRef(null);
   const [file, setFile] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const confirmDeleteSbCtg = () => {
     setSliderDialog(true);
   };
 
   const storeSlider = async () => {
+    setIsLoading(true);
     setSubmitted(true);
     const formData = new FormData();
     formData.append("file", file);
@@ -55,6 +58,8 @@ const NewSlider = ({ rowData, refetch }) => {
         });
         setSliderDialog(false);
         setFile(null);
+        setDescription("");
+        setIsLoading(false);
       } else {
         toast.current.show({
           severity: "error",
@@ -63,12 +68,14 @@ const NewSlider = ({ rowData, refetch }) => {
           life: 3000,
         });
         setSliderDialog(false);
+        setIsLoading(false);
       }
     } catch (error) {
       console.log(error);
     }
 
     refetch();
+    setIsLoading(false);
   };
 
   const subCtgDialogFooter = (
@@ -121,6 +128,7 @@ const NewSlider = ({ rowData, refetch }) => {
               type="file"
               required
               accept="image/*"
+              style={{ border: "0.5px solid green", padding: "10px" }}
               maxFileSize={1000}
               onChange={(e) => setFile(e.target.files[0])}
               className={classNames({
@@ -142,9 +150,18 @@ const NewSlider = ({ rowData, refetch }) => {
           <label htmlFor="des">Description</label>
           <InputTextarea
             id="des"
+            required
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
+        </div>
+        <div style={{ marginTop: "30px" }}>
+          {isLoading && (
+            <ProgressBar
+              mode="indeterminate"
+              style={{ height: "6px", width: "300px", margin: "0px auto" }}
+            ></ProgressBar>
+          )}
         </div>
       </Dialog>
     </>

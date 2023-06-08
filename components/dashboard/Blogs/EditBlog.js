@@ -10,6 +10,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { Avatar } from "primereact/avatar";
+import { ProgressBar } from "primereact/progressbar";
 
 const EditBlog = ({ rowData, refetch }) => {
   const jwt = useSelector((state) => state.user.jwt);
@@ -23,6 +24,7 @@ const EditBlog = ({ rowData, refetch }) => {
   const [selectedId, setSelectedID] = useState("");
   const [slug, setSlug] = useState("");
   const [file, setFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const toast = useRef(null);
 
@@ -37,19 +39,25 @@ const EditBlog = ({ rowData, refetch }) => {
     setFile(blog.image);
   };
 
-  const { isLoading, error, data } = useQuery(
-    "subBlogs",
+  const { error, data } = useQuery(
+    "blogs",
     async () =>
-      await axios.get("https://front-end-msajiba.vercel.app/api/admin/sub-blog/getAll")
+      await axios.get(
+        "https://front-end-msajiba.vercel.app/api/admin/sub-blog/getAll"
+      )
   );
-  isLoading && <p> Loading...</p>;
 
   useEffect(() => {
     setSubBlogs(data?.data.subBlogs);
   }, [data?.data?.subBlogs]);
 
-  const updateCtg = async () => {
+  error && console.log(error);
+
+  const updateCtg = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
     setSubmitted(true);
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", "ytpmzows");
@@ -86,6 +94,7 @@ const EditBlog = ({ rowData, refetch }) => {
           life: 3000,
         });
         setBlogDialog(false);
+        setIsLoading(false);
       } else {
         toast.current.show({
           severity: "error",
@@ -93,25 +102,14 @@ const EditBlog = ({ rowData, refetch }) => {
           life: 3000,
         });
         setBlogDialog(false);
+        setIsLoading(false);
       }
     } catch (error) {
       console.log(error);
     }
-
+    setIsLoading(false);
     refetch();
   };
-
-  const blogDialogFooter = (
-    <>
-      <Button
-        label="Cancel"
-        icon="pi pi-times"
-        text
-        onClick={() => setBlogDialog(false)}
-      />
-      <Button label="Update" icon="pi pi-check" text onClick={updateCtg} />
-    </>
-  );
 
   return (
     <>
@@ -131,84 +129,137 @@ const EditBlog = ({ rowData, refetch }) => {
         header="Update Blog"
         modal
         className="p-fluid "
-        footer={blogDialogFooter}
         onHide={() => setBlogDialog(false)}
       >
         <div className="flex align-items-center justify-content-center mb-5">
           <Avatar image={file} size="xlarge" shape="circle" />
         </div>
-        <div className="flex align-items-center justify-content-center mb-5">
-          <div className="field ">
-            <input
-              type="file"
-              accept="image/*"
-              maxFileSize={1000}
-              onChange={(e) => setFile(e.target.files[0])}
-              className={classNames({
-                "p-invalid": submitted && !file,
-              })}
-            />
-            {submitted && !file && (
-              <small
-                style={{ fontSize: "1rem", color: "red" }}
-                className="p-invalid"
-              >
-                File is required.
-              </small>
-            )}
+
+        <form onSubmit={updateCtg}>
+          <div className="flex align-items-center justify-content-center mb-5">
+            <div className="field ">
+              <input
+                type="file"
+                accept="image/*"
+                maxFileSize={1024}
+                style={{ border: "0.5px solid green", padding: "10px" }}
+                onChange={(e) => setFile(e.target.files[0])}
+                className={classNames({
+                  "p-invalid": submitted && !file,
+                })}
+              />
+              {submitted && !file && (
+                <small
+                  style={{ fontSize: "1rem", color: "red" }}
+                  className="p-invalid"
+                >
+                  File is required.
+                </small>
+              )}
+            </div>
           </div>
-        </div>
 
-        <div className="field col">
-          <label htmlFor="title">Title</label>
-          <InputText
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            autoFocus
-            className={classNames({
-              "p-invalid": submitted && !title,
-            })}
-          />
-          {submitted && !title && (
-            <small
-              style={{ fontSize: "1rem", color: "red" }}
-              className="p-invalid"
-            >
-              Title is required.
-            </small>
-          )}
-        </div>
-
-        <div className="formgrid grid">
           <div className="field col">
-            <label htmlFor="slug">Slug</label>
+            <label htmlFor="title">Title</label>
             <InputText
-              id="slug"
-              value={slug}
-              onChange={(e) => setSlug(e.target.value)}
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               required
               autoFocus
               className={classNames({
-                "p-invalid": submitted && !slug,
+                "p-invalid": submitted && !title,
               })}
             />
-            {submitted && !slug && (
+            {submitted && !title && (
               <small
                 style={{ fontSize: "1rem", color: "red" }}
                 className="p-invalid"
               >
-                Slug is required.
+                Title is required.
               </small>
             )}
           </div>
-          <div className="field col">
-            <label htmlFor="author">Author</label>
-            <InputText
+
+          <div className="formgrid grid">
+            <div className="field col">
+              <label htmlFor="slug">Slug</label>
+              <InputText
+                id="slug"
+                value={slug}
+                onChange={(e) => setSlug(e.target.value)}
+                required
+                autoFocus
+                className={classNames({
+                  "p-invalid": submitted && !slug,
+                })}
+              />
+              {submitted && !slug && (
+                <small
+                  style={{ fontSize: "1rem", color: "red" }}
+                  className="p-invalid"
+                >
+                  Slug is required.
+                </small>
+              )}
+            </div>
+            <div className="field col">
+              <label htmlFor="author">Author</label>
+              <InputText
+                id="author"
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
+                required
+                className={classNames({
+                  "p-invalid": submitted && !author,
+                })}
+              />
+              {submitted && !author && (
+                <small
+                  style={{ fontSize: "1rem", color: "red" }}
+                  className="p-invalid"
+                >
+                  Author is required.
+                </small>
+              )}
+            </div>
+
+            <div className="field col">
+              <label className="mb-10">Category</label>
+              <div className="formgrid grid">
+                <div>
+                  <Dropdown
+                    value={selectSubBlog}
+                    onChange={(e) => setSelectedSubBlog(e.value)}
+                    options={subBlogs}
+                    optionLabel="title"
+                    placeholder="Select a Category"
+                    required
+                    className={classNames({
+                      "p-invalid": submitted && !selectSubBlog,
+                    })}
+                  />
+                  {submitted && !selectSubBlog && (
+                    <small
+                      style={{ fontSize: "1rem", color: "red" }}
+                      className="p-invalid text-danger"
+                    >
+                      Sub Blog is required.
+                    </small>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="field">
+            <label htmlFor="author">Content</label>
+
+            <Editor
               id="author"
-              value={author}
-              onChange={(e) => setAuthor(e.target.value)}
+              value={content}
+              onTextChange={(e) => setContent(e.htmlValue)}
+              style={{ height: "320px" }}
               required
               className={classNames({
                 "p-invalid": submitted && !author,
@@ -219,62 +270,20 @@ const EditBlog = ({ rowData, refetch }) => {
                 style={{ fontSize: "1rem", color: "red" }}
                 className="p-invalid"
               >
-                Author is required.
+                Content is required.
               </small>
             )}
           </div>
-
-          <div className="field col">
-            <label className="mb-10">Category</label>
-            <div className="formgrid grid">
-              <div>
-                <Dropdown
-                  value={selectSubBlog}
-                  onChange={(e) => setSelectedSubBlog(e.value)}
-                  options={subBlogs}
-                  optionLabel="title"
-                  placeholder="Select a Category"
-                  required
-                  style={{ position: "fixed" }}
-                  className={classNames({
-                    "p-invalid": submitted && !selectSubBlog,
-                  })}
-                />
-                {submitted && !selectSubBlog && (
-                  <small
-                    style={{ fontSize: "1rem", color: "red" }}
-                    className="p-invalid text-danger"
-                  >
-                    Sub Blog is required.
-                  </small>
-                )}
-              </div>
-            </div>
+          <div style={{ marginTop: "30px" }}>
+            {isLoading && (
+              <ProgressBar
+                mode="indeterminate"
+                style={{ height: "6px", width: "300px", margin: "30px auto" }}
+              ></ProgressBar>
+            )}
+            <Button type="submit" label="UPDATE BLOG" className="mt-10" />
           </div>
-        </div>
-
-        <div className="field">
-          <label htmlFor="author">Content</label>
-
-          <Editor
-            id="author"
-            value={content}
-            onTextChange={(e) => setContent(e.htmlValue)}
-            style={{ height: "320px" }}
-            required
-            className={classNames({
-              "p-invalid": submitted && !author,
-            })}
-          />
-          {submitted && !author && (
-            <small
-              style={{ fontSize: "1rem", color: "red" }}
-              className="p-invalid"
-            >
-              Content is required.
-            </small>
-          )}
-        </div>
+        </form>
       </Dialog>
     </>
   );

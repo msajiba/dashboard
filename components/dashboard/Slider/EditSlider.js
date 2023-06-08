@@ -3,7 +3,8 @@ import { Avatar } from "primereact/avatar";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
-import { InputTextarea } from 'primereact/inputtextarea';
+import { InputTextarea } from "primereact/inputtextarea";
+import { ProgressBar } from "primereact/progressbar";
 import { Toast } from "primereact/toast";
 import { classNames } from "primereact/utils";
 import React, { useRef, useState } from "react";
@@ -17,6 +18,7 @@ const EditSlider = ({ rowData, refetch }) => {
   const [submitted, setSubmitted] = useState(false);
   const toast = useRef(null);
   const [file, setFile] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const confirmDeleteSbCtg = (sbCtg) => {
     setSliderDialog(true);
@@ -27,6 +29,7 @@ const EditSlider = ({ rowData, refetch }) => {
 
   const updateSlider = async () => {
     setSubmitted(true);
+    setIsLoading(true);
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", "ytpmzows");
@@ -60,6 +63,7 @@ const EditSlider = ({ rowData, refetch }) => {
           life: 3000,
         });
         setSliderDialog(false);
+        setIsLoading(false);
       } else {
         toast.current.show({
           severity: "error",
@@ -68,12 +72,14 @@ const EditSlider = ({ rowData, refetch }) => {
           life: 3000,
         });
         setSliderDialog(false);
+        setIsLoading(false);
       }
     } catch (error) {
       console.log(error);
     }
 
     refetch();
+    setIsLoading(false);
   };
 
   const subCtgDialogFooter = (
@@ -118,7 +124,8 @@ const EditSlider = ({ rowData, refetch }) => {
             <input
               type="file"
               accept="image/*"
-              maxFileSize={1000}
+              style={{ border: "0.5px solid green", padding: "10px" }}
+              maxFileSize={1024}
               onChange={(e) => setFile(e.target.files[0])}
               className={classNames({
                 "p-invalid": submitted && !file,
@@ -142,6 +149,14 @@ const EditSlider = ({ rowData, refetch }) => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
+        </div>
+        <div style={{ marginTop: "30px" }}>
+          {isLoading && (
+            <ProgressBar
+              mode="indeterminate"
+              style={{ height: "6px", width: "300px", margin: "0px auto" }}
+            ></ProgressBar>
+          )}
         </div>
       </Dialog>
     </>

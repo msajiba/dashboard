@@ -2,6 +2,7 @@ import axios from "axios";
 import { Avatar } from "primereact/avatar";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
+import { ProgressBar } from "primereact/progressbar";
 import { Toast } from "primereact/toast";
 import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -11,8 +12,10 @@ const DeleteSbCategory = ({ rowData, refetch }) => {
   const [deleteSbCtgDialog, setDeleteSbCtgDialog] = useState(false);
   const [selectSbCtg, setSelectSbCtg] = useState(null);
   const toast = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const deleteHandleSubCtg = async () => {
+    setIsLoading(true);
     try {
       const { data } = await axios.post(
         "https://front-end-msajiba.vercel.app/api/admin/sub-category/delete",
@@ -30,7 +33,6 @@ const DeleteSbCategory = ({ rowData, refetch }) => {
 
       if (data.status === true) {
         refetch();
-
         await toast.current.show({
           severity: "success",
           detail: `${data?.message}`,
@@ -39,11 +41,13 @@ const DeleteSbCategory = ({ rowData, refetch }) => {
 
         setDeleteSbCtgDialog(false);
         setDeleteSbCtgDialog(false);
+        setIsLoading(false);
       }
     } catch (error) {
       console.log(error);
     }
     refetch();
+    setIsLoading(false);
   };
 
   const subCtgDialogFooter = (
@@ -94,6 +98,13 @@ const DeleteSbCategory = ({ rowData, refetch }) => {
             </span>
           )}
         </div>
+        {isLoading && (
+          <ProgressBar
+            mode="indeterminate"
+            className="mt-5"
+            style={{ height: "6px", width: "200px", margin: "0px auto" }}
+          ></ProgressBar>
+        )}
       </Dialog>
 
       <Button

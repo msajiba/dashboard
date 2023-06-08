@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
+import { ProgressBar } from "primereact/progressbar";
 import { Toast } from "primereact/toast";
 import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -10,8 +11,10 @@ const DeleteSubBlog = ({ rowData, refetch }) => {
   const [selectSubBlog, setSelectSubBlog] = useState(null);
   const toast = useRef(null);
   const jwt = useSelector((state) => state.user.jwt);
+  const [isLoading, setIsLoading] = useState(false);
 
   const deleteHandleSubBlog = async () => {
+    setIsLoading(true);
     try {
       const { data } = await axios.post(
         "https://front-end-msajiba.vercel.app/api/admin/sub-blog/delete",
@@ -34,11 +37,13 @@ const DeleteSubBlog = ({ rowData, refetch }) => {
           life: 3000,
         });
         setDeleteSubBlogDialog(false);
+        setIsLoading(false);
         refetch();
       }
     } catch (error) {
       console.log(error);
     }
+    setIsLoading(false);
   };
 
   const subBlogDialogFooter = (
@@ -86,6 +91,13 @@ const DeleteSubBlog = ({ rowData, refetch }) => {
             </span>
           )}
         </div>
+        {isLoading && (
+          <ProgressBar
+            mode="indeterminate"
+            className="mt-5"
+            style={{ height: "6px", width: "200px", margin: "0px auto" }}
+          ></ProgressBar>
+        )}
       </Dialog>
 
       <Button

@@ -2,6 +2,7 @@ import axios from "axios";
 import { Avatar } from "primereact/avatar";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
+import { ProgressBar } from "primereact/progressbar";
 import { Toast } from "primereact/toast";
 import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -11,8 +12,10 @@ const DeleteBlog = ({ rowData, refetch }) => {
   const [selectBlog, setSelectBlog] = useState(null);
   const toast = useRef(null);
   const jwt = useSelector((state) => state.user.jwt);
+  const [isLoading, setIsLoading] = useState(false);
 
   const deleteHandleBlog = async () => {
+    setIsLoading(true);
     try {
       const { data } = await axios.post(
         "https://front-end-msajiba.vercel.app/api/admin/blog/delete",
@@ -37,10 +40,12 @@ const DeleteBlog = ({ rowData, refetch }) => {
         setDeleteBlogDialog(false);
         setDeleteBlogDialog(false);
         refetch();
+        setIsLoading(false);
       }
     } catch (error) {
       console.log(error);
     }
+    setIsLoading(false);
   };
 
   const blogDialogFooter = (
@@ -92,6 +97,13 @@ const DeleteBlog = ({ rowData, refetch }) => {
             </span>
           )}
         </div>
+        {isLoading && (
+          <ProgressBar
+            mode="indeterminate"
+            className="mt-5"
+            style={{ height: "6px", width: "200px", margin: "0px auto" }}
+          ></ProgressBar>
+        )}
       </Dialog>
 
       <Button

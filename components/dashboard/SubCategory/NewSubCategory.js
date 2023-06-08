@@ -3,6 +3,7 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
+import { ProgressBar } from "primereact/progressbar";
 import { Toast } from "primereact/toast";
 import { classNames } from "primereact/utils";
 import React, { useRef, useState } from "react";
@@ -16,9 +17,12 @@ const NewSubCategory = ({ categories, refetch }) => {
   const [submitted, setSubmitted] = useState(false);
   const toast = useRef(null);
   const [file, setFile] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const saveSubCtg = async () => {
+  const saveSubCtg = async (e) => {
+    e.preventDefault();
     setSubmitted(true);
+    setIsLoading(true);
 
     const formData = new FormData();
     formData.append("file", file);
@@ -57,6 +61,7 @@ const NewSubCategory = ({ categories, refetch }) => {
         setName("");
         setSelectCategory("");
         setSbCtgDialog(false);
+        setIsLoading(false);
       } else {
         toast.current.show({
           severity: "error",
@@ -64,28 +69,14 @@ const NewSubCategory = ({ categories, refetch }) => {
           detail: `${data.message}`,
           life: 3000,
         });
+        setIsLoading(false);
       }
     } catch (error) {
       console.log(error);
     }
     refetch();
+    setIsLoading(false);
   };
-
-  const subCtgDialogFooter = (
-    <>
-      <Button
-        label="Cancel"
-        icon="pi pi-times"
-        text
-        onClick={() => setSbCtgDialog(false)}
-      />
-      {name === "" ? (
-        <Button label="Save" icon="pi pi-check" text disabled />
-      ) : (
-        <Button label="Save" icon="pi pi-check" text onClick={saveSubCtg} />
-      )}
-    </>
-  );
 
   return (
     <>
@@ -94,91 +85,102 @@ const NewSubCategory = ({ categories, refetch }) => {
       <Button
         label="Add New"
         icon="pi pi-plus"
-        severity="sucess"
+        severity="success"
         className="mr-2"
         onClick={() => setSbCtgDialog(true)}
       />
 
       <Dialog
         visible={sbCtgDialog}
-        style={{ width: "500px" }}
+        style={{ width: "800px" }}
         header="Add New Sub Category"
         modal
         className="p-fluid"
-        footer={subCtgDialogFooter}
         onHide={() => setSbCtgDialog(false)}
       >
-        <div className="flex align-items-center justify-content-center my-2 ">
-          <div className="field ">
-            <input
-              type="file"
-              accept="image/*"
-              maxFileSize={1000}
-              onChange={(e) => setFile(e.target.files[0])}
-              className={classNames({
-                "p-invalid": submitted && !file,
-              })}
-            />
-            {submitted && !file && (
-              <small
-                style={{ fontSize: "1rem", color: "red" }}
-                className="p-invalid"
-              >
-                File is required.
-              </small>
-            )}
-          </div>
-        </div>
-
-        <div className="field">
-          <label htmlFor="name">Name</label>
-          <InputText
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            autoFocus
-            className={classNames({
-              "p-invalid": submitted && !name,
-            })}
-          />
-          {submitted && !name && (
-            <small
-              style={{ fontSize: "1rem", color: "red" }}
-              className="p-invalid"
-            >
-              Name is required.
-            </small>
-          )}
-        </div>
-
-        <div className="field">
-          <label className="mb-3">Category</label>
-          <div className="formgrid grid">
-            <div className="fixed">
-              <Dropdown
-                value={selectCategory}
-                onChange={(e) => setSelectCategory(e.value)}
-                options={categories}
-                optionLabel="name"
-                placeholder="Select a Category"
-                required
-                style={{ position: "fixed" }}
+        <form onSubmit={saveSubCtg}>
+          <div className="flex align-items-center justify-content-center my-2 ">
+            <div className="field ">
+              <input
+                type="file"
+                accept="image/*"
+                style={{ border: "0.5px solid green", padding: "10px" }}
+                maxFileSize={1000}
+                onChange={(e) => setFile(e.target.files[0])}
                 className={classNames({
-                  "p-invalid": submitted && !name,
+                  "p-invalid": submitted && !file,
                 })}
               />
-              {submitted && !selectCategory && (
+              {submitted && !file && (
                 <small
                   style={{ fontSize: "1rem", color: "red" }}
-                  className="p-invalid text-danger"
+                  className="p-invalid"
                 >
-                  Category is required.
+                  File is required.
                 </small>
               )}
             </div>
           </div>
-        </div>
+
+          <div className="field">
+            <label htmlFor="name">Name</label>
+            <InputText
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              autoFocus
+              className={classNames({
+                "p-invalid": submitted && !name,
+              })}
+            />
+            {submitted && !name && (
+              <small
+                style={{ fontSize: "1rem", color: "red" }}
+                className="p-invalid"
+              >
+                Name is required.
+              </small>
+            )}
+          </div>
+
+          <div className="field mb-10">
+            <label className="mb-3">Category</label>
+            <div className="formgrid grid">
+              <div className="fixed">
+                <Dropdown
+                  value={selectCategory}
+                  onChange={(e) => setSelectCategory(e.value)}
+                  options={categories}
+                  optionLabel="name"
+                  placeholder="Select a Category"
+                  required
+                  style={{ position: "fixed" }}
+                  className={classNames({
+                    "p-invalid": submitted && !name,
+                  })}
+                />
+                {submitted && !selectCategory && (
+                  <small
+                    style={{ fontSize: "1rem", color: "red" }}
+                    className="p-invalid text-danger"
+                  >
+                    Category is required.
+                  </small>
+                )}
+              </div>
+            </div>
+          </div>
+          <div style={{ marginTop: "70px" }}>
+            {isLoading && (
+              <ProgressBar
+                mode="indeterminate"
+                style={{ height: "6px", width: "300px", margin: "30px auto" }}
+              ></ProgressBar>
+            )}
+            <Button type="submit" label="ADD SUB CATEGORY" className="mt-10" />
+          </div>
+        </form>
       </Dialog>
     </>
   );

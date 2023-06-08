@@ -4,6 +4,7 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
+import { ProgressBar } from "primereact/progressbar";
 import { Toast } from "primereact/toast";
 import { classNames } from "primereact/utils";
 import React, { useRef, useState } from "react";
@@ -18,6 +19,7 @@ const EditSbCategory = ({ categories, rowData, refetch }) => {
   const [submitted, setSubmitted] = useState(false);
   const toast = useRef(null);
   const [file, setFile] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const confirmDeleteSbCtg = (sbCtg) => {
     setName(sbCtg.name);
@@ -27,8 +29,10 @@ const EditSbCategory = ({ categories, rowData, refetch }) => {
     setFile(sbCtg.image);
   };
 
-  const updateSubCtg = async () => {
+  const updateSubCtg = async (e) => {
+    e.preventDefault();
     setSubmitted(true);
+    setIsLoading(true);
 
     const formData = new FormData();
     formData.append("file", file);
@@ -47,7 +51,7 @@ const EditSbCategory = ({ categories, rowData, refetch }) => {
           name,
           image,
           id: selectedID,
-          parent: selectCategory._id,
+          category: selectCategory._id,
         },
         {
           headers: {
@@ -64,6 +68,7 @@ const EditSbCategory = ({ categories, rowData, refetch }) => {
           life: 3000,
         });
         setUpSbCtgDialog(false);
+        setIsLoading(false);
       } else {
         toast.current.show({
           severity: "error",
@@ -72,25 +77,15 @@ const EditSbCategory = ({ categories, rowData, refetch }) => {
           life: 3000,
         });
         setUpSbCtgDialog(false);
+        setIsLoading(false);
       }
     } catch (error) {
       console.log(error);
     }
 
     refetch();
+    setIsLoading(false);
   };
-
-  const subCtgDialogFooter = (
-    <>
-      <Button
-        label="Cancel"
-        icon="pi pi-times"
-        text
-        onClick={() => setUpSbCtgDialog(false)}
-      />
-      <Button label="update" icon="pi pi-check" text onClick={updateSubCtg} />
-    </>
-  );
 
   return (
     <>
@@ -107,86 +102,101 @@ const EditSbCategory = ({ categories, rowData, refetch }) => {
       <Dialog
         visible={upSbCtgDialog}
         style={{ width: "500px" }}
-        header="Add New Product"
+        header="Update Sub Category"
         modal
         className="p-fluid"
-        footer={subCtgDialogFooter}
         onHide={() => setUpSbCtgDialog(false)}
       >
         <div className="flex align-items-center justify-content-center mb-5">
           <Avatar image={file} size="xlarge" shape="circle" />
         </div>
 
-        <div className="flex align-items-center justify-content-center my-2 ">
-          <div className="field ">
-            <input
-              type="file"
-              accept="image/*"
-              maxFileSize={1000}
-              onChange={(e) => setFile(e.target.files[0])}
-              className={classNames({
-                "p-invalid": submitted && !file,
-              })}
-            />
-            {submitted && !file && (
-              <small
-                style={{ fontSize: "1rem", color: "red" }}
-                className="p-invalid"
-              >
-                File is required.
-              </small>
-            )}
-          </div>
-        </div>
-
-        <div className="field">
-          <label htmlFor="name">Name</label>
-          <InputText
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            autoFocus
-            className={classNames({
-              "p-invalid": submitted && !name,
-            })}
-          />
-          {submitted && !name && (
-            <small
-              style={{ fontSize: "1rem", color: "red" }}
-              className="p-invalid"
-            >
-              Name is required.
-            </small>
-          )}
-        </div>
-
-        <div className="field">
-          <label className="mb-3">Category</label>
-          <div className="formgrid grid">
-            <div className="fixed">
-              <Dropdown
-                value={selectCategory}
-                onChange={(e) => setSelectCategory(e.target.value)}
-                options={categories}
-                optionLabel="name"
-                placeholder="Select a Category"
-                style={{ position: "fixed" }}
+        <form onSubmit={updateSubCtg}>
+          <div className="flex align-items-center justify-content-center my-2 ">
+            <div className="field ">
+              <input
+                type="file"
+                accept="image/*"
+                maxFileSize={1024}
+                style={{ border: "0.5px solid green", padding: "10px" }}
+                onChange={(e) => setFile(e.target.files[0])}
                 className={classNames({
-                  "p-invalid": submitted && !selectCategory,
+                  "p-invalid": submitted && !file,
                 })}
               />
-              {submitted && !selectCategory && (
+              {submitted && !file && (
                 <small
                   style={{ fontSize: "1rem", color: "red" }}
-                  className="p-invalid text-danger"
+                  className="p-invalid"
                 >
-                  Category is required.
+                  File is required.
                 </small>
               )}
             </div>
           </div>
-        </div>
+
+          <div className="field">
+            <label htmlFor="name">Name</label>
+            <InputText
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              autoFocus
+              className={classNames({
+                "p-invalid": submitted && !name,
+              })}
+            />
+            {submitted && !name && (
+              <small
+                style={{ fontSize: "1rem", color: "red" }}
+                className="p-invalid"
+              >
+                Name is required.
+              </small>
+            )}
+          </div>
+
+          <div className="field">
+            <label className="mb-3">Category</label>
+            <div className="formgrid grid">
+              <div className="fixed">
+                <Dropdown
+                  value={selectCategory}
+                  onChange={(e) => setSelectCategory(e.target.value)}
+                  options={categories}
+                  optionLabel="name"
+                  placeholder="Select a Category"
+                  style={{ position: "fixed" }}
+                  className={classNames({
+                    "p-invalid": submitted && !selectCategory,
+                  })}
+                />
+                {submitted && !selectCategory && (
+                  <small
+                    style={{ fontSize: "1rem", color: "red" }}
+                    className="p-invalid text-danger"
+                  >
+                    Category is required.
+                  </small>
+                )}
+              </div>
+            </div>
+          </div>
+          <div style={{ marginTop: "70px" }}>
+            {isLoading && (
+              <ProgressBar
+                mode="indeterminate"
+                style={{ height: "6px", width: "300px", margin: "30px auto" }}
+              ></ProgressBar>
+            )}
+            <Button
+              type="submit"
+              label="UPDATE SUB CATEGORY"
+              className="mt-10"
+            />
+          </div>
+        </form>
       </Dialog>
     </>
   );

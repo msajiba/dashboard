@@ -2,6 +2,7 @@ import axios from "axios";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
+import { ProgressBar } from "primereact/progressbar";
 import { Toast } from "primereact/toast";
 import { classNames } from "primereact/utils";
 import React, { useRef, useState } from "react";
@@ -13,10 +14,13 @@ const NewSubBlog = ({ refetch }) => {
   const [title, setTitle] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const toast = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const saveSubBlog = async () => {
+  const saveSubBlog = async (e) => {
+    e.preventDefault();
     setSubmitted(true);
     try {
+      setIsLoading(true);
       const { data } = await axios.post(
         "https://front-end-msajiba.vercel.app/api/admin/sub-blog/store",
         {
@@ -39,6 +43,7 @@ const NewSubBlog = ({ refetch }) => {
         });
         setSubBlogDialog(false);
         setTitle("");
+        setIsLoading(false);
       } else {
         toast.current.show({
           severity: "error",
@@ -46,28 +51,14 @@ const NewSubBlog = ({ refetch }) => {
           detail: `${data.message}`,
           life: 3000,
         });
+        setIsLoading(false);
       }
     } catch (error) {
       console.log("error ============>", error);
     }
     refetch();
+    setIsLoading(false);
   };
-
-  const subCtgDialogFooter = (
-    <>
-      <Button
-        label="Cancel"
-        icon="pi pi-times"
-        text
-        onClick={() => setSubBlogDialog(false)}
-      />
-      {title === "" ? (
-        <Button label="Save" disabled icon="pi pi-check" text onClick={saveSubBlog} />
-      ) : (
-        <Button label="Save" icon="pi pi-check" text onClick={saveSubBlog} />
-      )}
-    </>
-  );
 
   return (
     <>
@@ -87,29 +78,39 @@ const NewSubBlog = ({ refetch }) => {
         header="Add New Sub Blog"
         modal
         className="p-fluid"
-        footer={subCtgDialogFooter}
         onHide={() => setSubBlogDialog(false)}
       >
-        <div className="field">
-          <label htmlFor="title">Title</label>
-          <InputText
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            className={classNames({
-              "p-invalid": submitted && !title,
-            })}
-          />
-          {submitted && !title && (
-            <small
-              style={{ fontSize: "1rem", color: "red" }}
-              className="p-invalid"
-            >
-              Title is required.
-            </small>
-          )}
-        </div>
+        <form onSubmit={saveSubBlog}>
+          <div className="field">
+            <label htmlFor="title">Title</label>
+            <InputText
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+              className={classNames({
+                "p-invalid": submitted && !title,
+              })}
+            />
+            {submitted && !title && (
+              <small
+                style={{ fontSize: "1rem", color: "red" }}
+                className="p-invalid"
+              >
+                Title is required.
+              </small>
+            )}
+          </div>
+          <div style={{ marginTop: "30px" }}>
+            {isLoading && (
+              <ProgressBar
+                mode="indeterminate"
+                style={{ height: "6px", width: "300px", margin: "30px auto" }}
+              ></ProgressBar>
+            )}
+            <Button type="submit" label="ADD SUB BLOG" className="mt-10" />
+          </div>
+        </form>
       </Dialog>
     </>
   );

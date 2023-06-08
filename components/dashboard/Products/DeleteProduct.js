@@ -2,6 +2,7 @@ import axios from "axios";
 import { Avatar } from "primereact/avatar";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
+import { ProgressBar } from "primereact/progressbar";
 import { Toast } from "primereact/toast";
 import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -11,8 +12,10 @@ const DeleteProduct = ({ rowData, refetch }) => {
   const [deleteProductDialog, setDeleteProductDialog] = useState(false);
   const [selectProduct, setSelectProduct] = useState(null);
   const toast = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const deleteHandleProduct = async () => {
+    setIsLoading(true);
     try {
       const { data } = await axios.post(
         `https://front-end-msajiba.vercel.app/api/admin/product/delete`,
@@ -35,10 +38,12 @@ const DeleteProduct = ({ rowData, refetch }) => {
         setDeleteProductDialog(false);
         setDeleteProductDialog(false);
         refetch();
+        setIsLoading(false);
       }
     } catch (error) {
       console.log(error);
     }
+    setIsLoading(false);
   };
 
   const ctgDialogFooter = (
@@ -80,7 +85,7 @@ const DeleteProduct = ({ rowData, refetch }) => {
         </div>
         <div className="flex align-items-center justify-content-center">
           <i
-            className="pi pi-exclamation-triangle mr-3"
+            className="pi pi-exclamation-triangle mr-3 "
             style={{ fontSize: "2rem" }}
           />
           {selectProduct && (
@@ -89,6 +94,13 @@ const DeleteProduct = ({ rowData, refetch }) => {
             </span>
           )}
         </div>
+        {isLoading && (
+          <ProgressBar
+            mode="indeterminate"
+            className="mt-5"
+            style={{ height: "6px", width: "200px", margin: "0px auto" }}
+          ></ProgressBar>
+        )}
       </Dialog>
 
       <Button
