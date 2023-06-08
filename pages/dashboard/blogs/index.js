@@ -15,6 +15,10 @@ import { useRouter } from "next/router";
 import NewBlog from "../../../components/dashboard/Blogs/NewBlog";
 import DeleteBlog from "../../../components/dashboard/Blogs/DeleteBlog";
 import EditBlog from "../../../components/dashboard/Blogs/EditBlog";
+import { mainAPI } from "../../../uitls/api";
+
+
+const ROOT = mainAPI;
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState(null);
@@ -34,7 +38,7 @@ const Blogs = () => {
     "category",
     async () =>
       await axios.get(
-        "https://front-end-msajiba.vercel.app/api/admin/blog/getAll"
+        `${ROOT}/api/admin/blog/getAll`
       )
   );
 

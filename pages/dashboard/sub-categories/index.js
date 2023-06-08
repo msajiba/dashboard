@@ -15,6 +15,10 @@ import { Badge } from "primereact/badge";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { Avatar } from "primereact/avatar";
+import { mainAPI } from "../../../uitls/api";
+
+
+const ROOT = mainAPI;
 
 const SubCategories = ({ categories }) => {
   const [subCategories, setSubCategories] = useState(null);
@@ -33,7 +37,7 @@ const SubCategories = ({ categories }) => {
     "sbCtg",
     async () =>
       await axios.get(
-        "https://front-end-msajiba.vercel.app/api/admin/sub-category/getAll"
+        `${ROOT}/api/admin/sub-category/getAll`
       )
   );
 

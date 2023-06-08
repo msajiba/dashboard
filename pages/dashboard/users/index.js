@@ -13,6 +13,11 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { Button } from "primereact/button";
 import DeleteUser from "../../../components/dashboard/User/UserDelete";
+import { mainAPI } from "../../../uitls/api";
+
+
+
+const ROOT = mainAPI;
 
 const SubCategories = () => {
   const user = useSelector((state) => state.user.currentUser);
@@ -32,7 +37,7 @@ const SubCategories = () => {
     "users",
     async () =>
       await axios.get(
-        "https://front-end-msajiba.vercel.app/api/admin/user/getAll",
+        `${ROOT}/api/admin/user/getAll`,
         {
           headers: {
             "Content-Type": "application/json",

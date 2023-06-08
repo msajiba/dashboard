@@ -15,6 +15,10 @@ import NewCategory from "../../../components/dashboard/Category/NewCategory";
 import Loader from "../../../components/Shared/Loader";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { mainAPI } from "../../../uitls/api";
+
+
+const ROOT = mainAPI;
 
 const Categories = ({ ctg }) => {
   const [categories, setCategories] = useState(null);
@@ -34,7 +38,7 @@ const Categories = ({ ctg }) => {
     "category",
     async () =>
       await axios.get(
-        "https://front-end-msajiba.vercel.app/api/admin/category/getAll"
+        `${ROOT}/api/admin/category/getAll`
       )
   );
 

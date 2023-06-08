@@ -15,6 +15,10 @@ import EditSlider from "../../../components/dashboard/Slider/EditSlider";
 import NewSlider from "../../../components/dashboard/Slider/NewSlider";
 import DeleteSlide from "../../../components/dashboard/Slider/DeleteSlider";
 import Loader from "../../../components/Shared/Loader";
+import { mainAPI } from "../../../uitls/api";
+
+
+const ROOT = mainAPI;
 
 const Slider = () => {
   const user = useSelector((state) => state.user.currentUser);
@@ -33,7 +37,7 @@ const Slider = () => {
     "slider",
     async () =>
       await axios.get(
-        "https://front-end-msajiba.vercel.app/api/admin/slider/getAll"
+        `${ROOT}/api/admin/slider/getAll`
       )
   );
   isLoading && <Loader />;

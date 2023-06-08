@@ -9,9 +9,12 @@ import { classNames } from "primereact/utils";
 import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
 import { InputTextarea } from "primereact/inputtextarea";
-
 import axios from "axios";
 import Loader from "../../../components/Shared/Loader";
+import { mainAPI } from "../../../uitls/api";
+
+
+const ROOT = mainAPI;
 
 const Siteinfo = () => {
   const user = useSelector((state) => state.user.currentUser);
@@ -32,7 +35,7 @@ const Siteinfo = () => {
   const getUserInfo = async () => {
     setIsLoading(true);
     const { data } = await axios.get(
-      "https://front-end-msajiba.vercel.app/api/admin/siteinfo/find"
+      `${ROOT}/api/admin/siteinfo/find`
     );
 
     setAddress(data?.siteinfo?.address);
@@ -55,7 +58,7 @@ const Siteinfo = () => {
 
     try {
       const updatedSiteInfo = await axios.post(
-        "https://front-end-msajiba.vercel.app/api/admin/siteinfo/store",
+        `${ROOT}/api/admin/siteinfo/store`,
         {
           title,
           email,

@@ -9,6 +9,10 @@ import { Button } from "primereact/button";
 import axios from "axios";
 import ChangePassword from "../../../components/dashboard/Profile/ChangePassword";
 import Loader from "../../../components/Shared/Loader";
+import { mainAPI } from "../../../uitls/api";
+
+
+const ROOT = mainAPI;
 
 const Profile = () => {
   const user = useSelector((state) => state.user.currentUser);
@@ -28,7 +32,7 @@ const Profile = () => {
   const getUserInfo = async () => {
     setIsLoading(true);
     const { data } = await axios.post(
-      "https://front-end-msajiba.vercel.app/api/profile/find",
+      `${ROOT}/api/profile/find`,
       {
         user_id_no: user._id,
       },
@@ -62,7 +66,7 @@ const Profile = () => {
 
     try {
       const updatedProfileData = await axios.post(
-        "https://front-end-msajiba.vercel.app/api/profile/update",
+        `${ROOT}/api/profile/update`,
         {
           name: name,
           email: email,
