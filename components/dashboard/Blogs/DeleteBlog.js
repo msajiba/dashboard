@@ -6,6 +6,9 @@ import { ProgressBar } from "primereact/progressbar";
 import { Toast } from "primereact/toast";
 import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { mainAPI } from "../../../uitls/api";
+
+const ROOT = mainAPI;
 
 const DeleteBlog = ({ rowData, refetch }) => {
   const [deleteBlogDialog, setDeleteBlogDialog] = useState(false);
@@ -16,9 +19,10 @@ const DeleteBlog = ({ rowData, refetch }) => {
 
   const deleteHandleBlog = async () => {
     setIsLoading(true);
+
     try {
       const { data } = await axios.post(
-        "https://front-end-msajiba.vercel.app/api/admin/blog/delete",
+        `${ROOT}/api/admin/blog/delete`,
         {
           id: selectBlog._id,
         },
@@ -82,7 +86,6 @@ const DeleteBlog = ({ rowData, refetch }) => {
         footer={blogDialogFooter}
         onHide={() => setDeleteBlogDialog(false)}
       >
-        
         <div className="flex align-items-center justify-content-center">
           <Avatar image={selectBlog?.image} size="xlarge" shape="circle" />
         </div>

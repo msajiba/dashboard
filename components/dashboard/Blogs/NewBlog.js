@@ -10,6 +10,9 @@ import { Editor } from "primereact/editor";
 import { Dropdown } from "primereact/dropdown";
 import { useQuery } from "react-query";
 import { ProgressBar } from "primereact/progressbar";
+import { mainAPI } from "../../../uitls/api";
+
+const ROOT =mainAPI;
 
 const NewBlog = ({ refetch }) => {
   const jwt = useSelector((state) => state.user.jwt);
@@ -34,7 +37,7 @@ const NewBlog = ({ refetch }) => {
     "subBlogs",
     async () =>
       await axios.get(
-        "https://front-end-msajiba.vercel.app/api/admin/sub-blog/getAll"
+        `${ROOT}/api/admin/sub-blog/getAll`
       )
   );
   dataIsLoading && <p> Loading...</p>;
@@ -60,7 +63,7 @@ const NewBlog = ({ refetch }) => {
       const image = response.data.url;
 
       const { data } = await axios.post(
-        "https://front-end-msajiba.vercel.app/api/admin/blog/store",
+        `${ROOT}/api/admin/blog/store`,
         {
           title,
           slug,
@@ -87,7 +90,6 @@ const NewBlog = ({ refetch }) => {
         setBlogDialog(false);
         setTitle("");
         setSlug("");
-        setImage("");
         setContent(null);
         setAuthor("");
         setSubBlogs("");

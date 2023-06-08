@@ -7,6 +7,10 @@ import { Toast } from "primereact/toast";
 import { classNames } from "primereact/utils";
 import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { mainAPI } from "../../../uitls/api";
+
+
+const ROOT = mainAPI;
 
 const NewCategory = ({ refetch }) => {
   const jwt = useSelector((state) => state.user.jwt);
@@ -33,7 +37,7 @@ const NewCategory = ({ refetch }) => {
       const image = response.data.url;
 
       const { data } = await axios.post(
-        "https://front-end-msajiba.vercel.app/api/admin/category/store",
+        `${ROOT}/api/admin/category/store`,
         {
           name,
           image,

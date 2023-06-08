@@ -12,6 +12,10 @@ import { Dropdown } from "primereact/dropdown";
 import { useSelector } from "react-redux";
 import Loader from "../../Shared/Loader";
 import { ProgressBar } from "primereact/progressbar";
+import { mainAPI } from "../../../uitls/api";
+
+
+const ROOT = mainAPI;
 
 const NewProduct = ({ refetch, categories }) => {
   const jwt = useSelector((state) => state.user.jwt);
@@ -36,7 +40,7 @@ const NewProduct = ({ refetch, categories }) => {
     setSelectedSub(category?.subCategories);
 
     const getSubCategory = async () => {
-      const URL = `https://front-end-msajiba.vercel.app/api/admin/category/getSubCategories?categoryId=${category._id}`;
+      const URL = `${ROOT}/api/admin/category/getSubCategories?categoryId=${category._id}`;
       const { data } = await axios.get(URL);
       setSelectedSub(data?.subcategories);
     };
@@ -73,7 +77,7 @@ const NewProduct = ({ refetch, categories }) => {
       const image = response.data.url;
 
       const { data } = await axios.post(
-        "https://front-end-msajiba.vercel.app/api/admin/product/store",
+        `${ROOT}/api/admin/product/store`,
         { ...createProduct, image },
         {
           headers: {

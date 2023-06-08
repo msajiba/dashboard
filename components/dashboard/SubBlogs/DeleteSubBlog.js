@@ -5,6 +5,9 @@ import { ProgressBar } from "primereact/progressbar";
 import { Toast } from "primereact/toast";
 import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { mainAPI } from "../../../uitls/api";
+
+const ROOT = mainAPI;
 
 const DeleteSubBlog = ({ rowData, refetch }) => {
   const [deleteSubBlogDialog, setDeleteSubBlogDialog] = useState(false);
@@ -17,7 +20,7 @@ const DeleteSubBlog = ({ rowData, refetch }) => {
     setIsLoading(true);
     try {
       const { data } = await axios.post(
-        "https://front-end-msajiba.vercel.app/api/admin/sub-blog/delete",
+        `${ROOT}/api/admin/sub-blog/delete`,
         {
           id: selectSubBlog._id,
         },

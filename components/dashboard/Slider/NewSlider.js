@@ -8,6 +8,11 @@ import { Toast } from "primereact/toast";
 import { classNames } from "primereact/utils";
 import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { mainAPI } from "../../../uitls/api";
+
+
+
+const ROOT = mainAPI;
 
 const NewSlider = ({ rowData, refetch }) => {
   const jwt = useSelector((state) => state.user.jwt);
@@ -37,7 +42,7 @@ const NewSlider = ({ rowData, refetch }) => {
       const image = response.data.url;
 
       const { data } = await axios.post(
-        "https://front-end-msajiba.vercel.app/api/admin/slider/store",
+        `${ROOT}/api/admin/slider/store`,
         {
           description,
           image,

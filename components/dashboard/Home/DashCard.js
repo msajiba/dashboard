@@ -1,6 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+import { mainAPI } from "../../../uitls/api";
+
+const ROOT = mainAPI;
 
 const DashCard = () => {
   const jwt = useSelector((state) => state.user.jwt);
@@ -11,7 +14,7 @@ const DashCard = () => {
 
   const getOrders = async () => {
     const { data } = await axios.get(
-      "https://front-end-msajiba.vercel.app/api/admin/order/getAll",
+      `${ROOT}/api/admin/order/getAll`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -25,7 +28,7 @@ const DashCard = () => {
 
   const getUsers = async () => {
     const { data } = await axios.get(
-      "https://front-end-msajiba.vercel.app/api/admin/user/getAll",
+      `${ROOT}/api/admin/user/getAll`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -38,22 +41,10 @@ const DashCard = () => {
   };
 
   const getProducts = async () => {
-    const { data } = await axios.get(
-      "https://front-end-msajiba.vercel.app/api/admin/product/getAll"
-    );
+    const { data } = await axios.get(`${ROOT}/api/admin/product/getAll`);
     setProducts(data.products);
   };
 
-  const subTotal = useMemo(() => {
-    return orders?.reduce((sum, val) => sum + parseFloat(val.total), 0);
-  }, [orders]);
-
-  const formatCurrency = (value) => {
-    return value?.toLocaleString("en-US", {
-      style: "currency",
-      currency: "BDT",
-    });
-  };
 
   useEffect(() => {
     getOrders();
@@ -103,7 +94,7 @@ const DashCard = () => {
             <div>
               <span className="block text-500 font-medium mb-3">Revenue</span>
               <div className="text-900 font-medium text-xl">
-                {formatCurrency(subTotal)}
+                
               </div>
             </div>
             <div

@@ -7,6 +7,10 @@ import { classNames } from "primereact/utils";
 import React, { useRef, useState } from "react";
 import { Password } from "primereact/password";
 import { useSelector } from "react-redux";
+import { mainAPI } from "../../../uitls/api";
+
+
+const ROOT = mainAPI;
 
 const ChangePassword = () => {
   const jwt = useSelector((state) => state.user.jwt);
@@ -24,7 +28,7 @@ const ChangePassword = () => {
 
     try {
       const res = await axios.post(
-        "https://front-end-msajiba.vercel.app/api/auth/change-password",
+        `${ROOT}/api/auth/change-password`,
         {
           currentPassword: currentPassword,
           password: password,

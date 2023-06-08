@@ -14,6 +14,10 @@ import { useRouter } from "next/router";
 import EditSubBlog from "../../../components/dashboard/SubBlogs/EditSubBlog";
 import NewSubBlog from "../../../components/dashboard/SubBlogs/NewSubBlog";
 import DeleteSubBlog from "../../../components/dashboard/SubBlogs/DeleteSubBlog";
+import { mainAPI } from "../../../uitls/api";
+
+
+const ROOT = mainAPI;
 
 const SubBlogs = ({ blogs }) => {
   const [subBlogs, setSubBlogs] = useState(null);
@@ -32,7 +36,7 @@ const SubBlogs = ({ blogs }) => {
     "sbCtg",
     async () =>
       await axios.get(
-        "https://front-end-msajiba.vercel.app/api/admin/sub-blog/getAll"
+        `${ROOT}/api/admin/sub-blog/getAll`
       )
   );
   isLoading && <Loader />;

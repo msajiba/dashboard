@@ -12,6 +12,10 @@ import { Toast } from "primereact/toast";
 import { classNames } from "primereact/utils";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { mainAPI } from "../../../uitls/api";
+
+
+const ROOT = mainAPI;
 
 const EditProduct = ({ rowData, refetch, categories }) => {
   const jwt = useSelector((state) => state.user.jwt);
@@ -51,7 +55,7 @@ const EditProduct = ({ rowData, refetch, categories }) => {
 
   useEffect(() => {
     const getSubCategory = async () => {
-      const URL = `https://front-end-msajiba.vercel.app/api/admin/category/getSubCategories?categoryId=${category._id}`;
+      const URL = `${ROOT}/api/admin/category/getSubCategories?categoryId=${category._id}`;
       const { data } = await axios.get(URL);
       setSelectedSub(data?.subcategories);
     };
@@ -90,7 +94,7 @@ const EditProduct = ({ rowData, refetch, categories }) => {
       const image = response?.data?.url;
 
       const { data } = await axios.post(
-        "https://front-end-msajiba.vercel.app/api/admin/product/update",
+        `${ROOT}/api/admin/product/update`,
         { ...updateProduct, image },
         {
           headers: {

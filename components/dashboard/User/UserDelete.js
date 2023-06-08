@@ -4,6 +4,10 @@ import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { mainAPI } from "../../../uitls/api";
+
+
+const ROOT = mainAPI;
 
 const DeleteUser = ({ rowData, refetch }) => {
   const jwt = useSelector((state) => state.user.jwt);
@@ -14,7 +18,7 @@ const DeleteUser = ({ rowData, refetch }) => {
   const deleteHandleUser = async () => {
     try {
       const { data } = await axios.post(
-        "https://front-end-msajiba.vercel.app/api/admin/user/delete",
+        `${ROOT}/api/admin/user/delete`,
         {
           id: selectUser._id,
         },

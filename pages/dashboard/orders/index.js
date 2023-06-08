@@ -13,6 +13,11 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import DeleteOrder from "../../../components/dashboard/Order/DeleteOrder";
 import ViewOrder from "../../../components/dashboard/Order/ViewOrder";
+import { mainAPI } from "../../../uitls/api";
+
+
+
+const ROOT = mainAPI;
 
 const Order = () => {
   const jwt = useSelector((state) => state.user.jwt);
@@ -33,7 +38,7 @@ const Order = () => {
     "category",
     async () =>
       await axios.get(
-        "https://front-end-msajiba.vercel.app/api/admin/order/getAll",
+        `${ROOT}/api/admin/order/getAll`,
         {
           headers: {
             "Content-Type": "application/json",

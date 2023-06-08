@@ -4,6 +4,9 @@ import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { mainAPI } from "../../../uitls/api";
+
+const ROOT = mainAPI;
 
 const DeleteOrder = ({ rowData, refetch }) => {
   const [deleteOrderDialog, setDeleteOrderDialog] = useState(false);
@@ -14,7 +17,7 @@ const DeleteOrder = ({ rowData, refetch }) => {
   const deleteHandleOrder = async () => {
     try {
       const { data } = await axios.post(
-        "https://front-end-msajiba.vercel.app/api/admin/order/delete",
+       `${ROOT}/api/admin/order/delete`,
         {
           id: selectOrder._id,
         },

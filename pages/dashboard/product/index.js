@@ -17,6 +17,9 @@ import Loader from "../../../components/Shared/Loader";
 import { Avatar } from "primereact/avatar";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { mainAPI } from "../../../uitls/api";
+
+const ROOT = mainAPI;
 
 const index = ({ categories }) => {
   const [products, setProducts] = useState(null);
@@ -33,19 +36,16 @@ const index = ({ categories }) => {
     return null;
   }
 
-  const {isLoading, error, data, refetch } = useQuery(
+  const { isLoading, error, data, refetch } = useQuery(
     "products",
-    async () =>
-      await axios.get(
-        "https://front-end-msajiba.vercel.app/api/admin/product/getAll"
-      )
+    async () => await axios.get(`${ROOT}/api/admin/product/getAll`)
   );
 
   useEffect(() => {
     setProducts(data?.data?.products);
     refetch();
   }, [data?.data?.products]);
-  
+
   isLoading && <Loader />;
   error && console.log(error);
 

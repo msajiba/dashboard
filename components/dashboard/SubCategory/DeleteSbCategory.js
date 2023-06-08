@@ -6,6 +6,10 @@ import { ProgressBar } from "primereact/progressbar";
 import { Toast } from "primereact/toast";
 import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { mainAPI } from "../../../uitls/api";
+
+
+const ROOT = mainAPI;
 
 const DeleteSbCategory = ({ rowData, refetch }) => {
   const jwt = useSelector((state) => state.user.jwt);
@@ -18,7 +22,7 @@ const DeleteSbCategory = ({ rowData, refetch }) => {
     setIsLoading(true);
     try {
       const { data } = await axios.post(
-        "https://front-end-msajiba.vercel.app/api/admin/sub-category/delete",
+        `${ROOT}/api/admin/sub-category/delete`,
         {
           id: selectSbCtg._id,
         },

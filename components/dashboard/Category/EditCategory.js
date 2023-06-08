@@ -8,6 +8,9 @@ import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Avatar } from "primereact/avatar";
 import { ProgressBar } from "primereact/progressbar";
+import { mainAPI } from "../../../uitls/api";
+
+const ROOT = mainAPI;
 
 const EditCategory = ({ rowData, refetch }) => {
   const jwt = useSelector((state) => state.user.jwt);
@@ -41,7 +44,7 @@ const EditCategory = ({ rowData, refetch }) => {
       );
       const image = response.data.url;
       const { data } = await axios.post(
-        "https://front-end-msajiba.vercel.app/api/admin/category/update",
+        `${ROOT}/api/admin/category/update`,
         {
           name,
           image,
