@@ -145,14 +145,14 @@ const SubCategories = ({ categories }) => {
                 rowsPerPageOptions={[5, 10, 25]}
                 className="datatable-responsive"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Sub Categories"
                 globalFilter={globalFilter}
                 emptyMessage="No Sub Category found."
                 header={header}
                 responsiveLayout="scroll"
               >
                 <Column
-                  field="code"
+                  field="_id"
                   header="ID"
                   sortable
                   body={codeBodyTemplate}
@@ -161,7 +161,6 @@ const SubCategories = ({ categories }) => {
                 <Column
                   field="image"
                   header="IMAGE"
-                  sortable
                   body={imageBodyTemplate}
                   headerStyle={{ minWidth: "10rem" }}
                 />
@@ -175,7 +174,7 @@ const SubCategories = ({ categories }) => {
                 />
 
                 <Column
-                  field="category"
+                  field="category.name"
                   header="Category"
                   sortable
                   body={categoryBodyTemplate}

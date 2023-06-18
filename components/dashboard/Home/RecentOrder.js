@@ -40,12 +40,9 @@ const RecentOrder = () => {
     setOrders(data?.data?.order);
   }, [data?.data]);
 
-  console.log('')
-
-
   isLoading && <Loader />;
 
-  error && conosle.log(error);
+  error && console.log(error);
   return (
     <div className="col-12 xl:col-6">
       <div className="card">

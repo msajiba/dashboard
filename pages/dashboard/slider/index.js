@@ -17,7 +17,6 @@ import DeleteSlide from "../../../components/dashboard/Slider/DeleteSlider";
 import Loader from "../../../components/Shared/Loader";
 import { mainAPI } from "../../../uitls/api";
 
-
 const ROOT = mainAPI;
 
 const Slider = () => {
@@ -35,10 +34,7 @@ const Slider = () => {
 
   const { isLoading, error, data, refetch } = useQuery(
     "slider",
-    async () =>
-      await axios.get(
-        `${ROOT}/api/admin/slider/getAll`
-      )
+    async () => await axios.get(`${ROOT}/api/admin/slider/getAll`)
   );
   isLoading && <Loader />;
   error && console.log(error);
@@ -120,9 +116,9 @@ const Slider = () => {
                 rowsPerPageOptions={[5, 10, 25]}
                 className="datatable-responsive"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Sliders"
                 globalFilter={globalFilter}
-                emptyMessage="No Sub Category found."
+                emptyMessage="No Sliders found..."
                 header={header}
                 responsiveLayout="scroll"
               >

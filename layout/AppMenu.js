@@ -12,42 +12,42 @@ const AppMenu = () => {
         { label: "Dashboard", icon: "pi pi-fw pi-home", to: "/dashboard" },
         {
           label: "Products",
-          icon: "pi pi-fw pi-briefcase",
+          icon: "pi pi-list ",
           to: "/dashboard/product",
         },
         {
           label: "Categories",
-          icon: "pi pi-fw pi-briefcase",
+          icon: "pi pi-sitemap",
           to: "/dashboard/categories",
         },
         {
           label: "Sub Categories",
-          icon: "pi pi-fw pi-briefcase",
+          icon: "pi pi-sitemap",
           to: "/dashboard/sub-categories",
         },
         {
           label: "Blogs",
-          icon: "pi pi-fw pi-briefcase",
+          icon: "pi pi-table",
           to: "/dashboard/blogs",
         },
         {
           label: "Sub Blogs ",
-          icon: "pi pi-fw pi-briefcase",
+          icon: "pi pi-sitemap",
           to: "/dashboard/sub-blogs",
         },
         {
           label: "Orders",
-          icon: "pi pi-fw pi-briefcase",
+          icon: "pi pi-shopping-cart",
           to: "/dashboard/orders",
         },
         {
           label: "Profile",
-          icon: "pi pi-fw pi-briefcase",
+          icon: "pi pi-users",
           to: "/dashboard/profile",
         },
         {
           label: "Users",
-          icon: "pi pi-fw pi-briefcase",
+          icon: "pi pi-user",
           to: "/dashboard/users",
         },
       ],
@@ -57,12 +57,12 @@ const AppMenu = () => {
       items: [
         {
           label: "SiteInfo",
-          icon: "pi pi-fw pi-briefcase",
+          icon: "pi pi-info",
           to: "/dashboard/siteinfo",
         },
         {
           label: "Slider",
-          icon: "pi pi-fw pi-briefcase",
+          icon: "pi pi-arrow-right-arrow-left",
           to: "/dashboard/slider",
         },
       ],

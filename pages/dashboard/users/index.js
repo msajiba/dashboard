@@ -14,8 +14,7 @@ import { useRouter } from "next/router";
 import { Button } from "primereact/button";
 import DeleteUser from "../../../components/dashboard/User/UserDelete";
 import { mainAPI } from "../../../uitls/api";
-
-
+import UserShow from "../../../components/dashboard/User/UserShow";
 
 const ROOT = mainAPI;
 
@@ -34,26 +33,24 @@ const SubCategories = () => {
   }
 
   const { isLoading, error, data, refetch } = useQuery(
-    "users",
+    ["profiles", users],
     async () =>
-      await axios.get(
-        `${ROOT}/api/admin/user/getAll`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            token: `Bearer ${jwt}`,
-          },
-        }
-      )
+      await axios.get(`${ROOT}/api/profile/getAll`, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          token: `Bearer ${jwt}`,
+        },
+      })
   );
 
   isLoading && <Loader />;
+
   error && console.log(error);
 
   useEffect(() => {
-    setUsers(data?.data);
     refetch();
+    setUsers(data?.data?.order);
   }, [data?.data]);
 
   const codeBodyTemplate = (rowData) => {
@@ -73,15 +70,19 @@ const SubCategories = () => {
       </>
     );
   };
-  const roleBodyTemplate = (rowData) => {
+  const phoneBodyTemplate = (rowData) => {
     return (
       <>
-        <span className="p-column-title">Role</span>
-        {rowData.role === "admin" ? (
-          <Button label="ADMIN" severity="success" size="small" text disabled />
-        ) : (
-          rowData.role
-        )}
+        <span className="p-column-title">Phone</span>
+        {rowData?.phone}
+      </>
+    );
+  };
+  const nameBodyTemplate = (rowData) => {
+    return (
+      <>
+        <span className="p-column-title">Name</span>
+        {rowData?.name}
       </>
     );
   };
@@ -89,6 +90,7 @@ const SubCategories = () => {
   const actionBodyTemplate = (rowData) => {
     return (
       <>
+        <UserShow rowData={rowData} refetch={refetch} />
         {rowData.role !== "admin" && (
           <DeleteUser rowData={rowData} refetch={refetch} />
         )}
@@ -135,17 +137,25 @@ const SubCategories = () => {
                 rowsPerPageOptions={[5, 10, 25]}
                 className="datatable-responsive"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Users"
                 globalFilter={globalFilter}
                 emptyMessage="No user found..."
                 header={header}
                 responsiveLayout="scroll"
               >
                 <Column
-                  field="code"
+                  field="_id"
                   header="ID"
                   sortable
                   body={codeBodyTemplate}
+                  headerStyle={{ minWidth: "5rem" }}
+                />
+
+                <Column
+                  field="name"
+                  header="Name"
+                  sortable
+                  body={nameBodyTemplate}
                   headerStyle={{ minWidth: "5rem" }}
                 />
 
@@ -154,17 +164,16 @@ const SubCategories = () => {
                   header="Email"
                   sortable
                   body={emailBodyTemplate}
-                  headerStyle={{ minWidth: "20rem" }}
+                  headerStyle={{ minWidth: "8rem" }}
                 />
 
                 <Column
-                  field="role"
-                  header="Role"
+                  field="phone"
+                  header="Phone"
                   sortable
-                  body={roleBodyTemplate}
-                  headerStyle={{ minWidth: "10rem" }}
+                  body={phoneBodyTemplate}
+                  headerStyle={{ minWidth: "5rem" }}
                 />
-
                 <Column
                   field="Action"
                   header="Action"

@@ -119,14 +119,14 @@ const SubBlogs = ({ blogs }) => {
                 rowsPerPageOptions={[5, 10, 25]}
                 className="datatable-responsive"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Sub Blog"
                 globalFilter={globalFilter}
-                emptyMessage="No Sub Category found."
+                emptyMessage="No Sub Blog found."
                 header={header}
                 responsiveLayout="scroll"
               >
                 <Column
-                  field="code"
+                  field="_id"
                   header="ID"
                   sortable
                   body={codeBodyTemplate}

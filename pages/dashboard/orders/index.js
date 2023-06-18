@@ -290,14 +290,14 @@ const Order = () => {
                 rowsPerPageOptions={[5, 10, 25]}
                 className="datatable-responsive"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Orders"
                 globalFilter={globalFilter}
-                emptyMessage="No Category found."
+                emptyMessage="No Orders found."
                 header={header}
                 responsiveLayout="scroll"
               >
                 <Column
-                  field="code"
+                  field="_id"
                   header="ID"
                   sortable
                   body={codeBodyTemplate}

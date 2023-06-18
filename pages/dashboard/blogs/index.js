@@ -128,9 +128,9 @@ const Blogs = () => {
                 rowsPerPageOptions={[5, 10, 25]}
                 className="datatable-responsive"
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} Blogs"
                 globalFilter={globalFilter}
-                emptyMessage="No Category found."
+                emptyMessage="No Blog found."
                 header={header}
                 responsiveLayout="scroll"
               >
@@ -145,7 +145,7 @@ const Blogs = () => {
                 />
 
                 <Column
-                  field="title"
+                  field="subBlog.title"
                   header="Sub Blog"
                   sortable
                   body={subBlogBodyTemplate}

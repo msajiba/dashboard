@@ -18,6 +18,7 @@ import { Avatar } from "primereact/avatar";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { mainAPI } from "../../../uitls/api";
+import { formatCurrency } from "../../../components/Shared/FormatCurrency";
 
 const ROOT = mainAPI;
 
@@ -49,13 +50,6 @@ const index = ({ categories }) => {
   isLoading && <Loader />;
   error && console.log(error);
 
-  const formatCurrency = (value) => {
-    return value.toLocaleString("en-US", {
-      style: "currency",
-      currency: "BDT",
-    });
-  };
-
   const imageBodyTemplate = (rowData) => {
     return (
       <>
@@ -78,7 +72,7 @@ const index = ({ categories }) => {
     return (
       <>
         <span className="p-column-title">Price</span>
-        {formatCurrency(rowData.price)}
+        {formatCurrency(parseInt(rowData.price))}
       </>
     );
   };
@@ -203,14 +197,16 @@ const index = ({ categories }) => {
                   field="price"
                   header="Price"
                   body={priceBodyTemplate}
+                  headerStyle={{ minWidth: "10rem" }}
                   sortable
                 />
 
                 <Column
-                  field="Category"
+                  field="category.name"
                   header="Category"
+                  sortable
                   body={categoryBodyTemplate}
-                  headerStyle={{ minWidth: "5rem" }}
+                  headerStyle={{ minWidth: "8rem" }}
                 />
 
                 <Column
@@ -218,11 +214,11 @@ const index = ({ categories }) => {
                   header="Stock"
                   body={stockBodyTemplate}
                   sortable
-                  headerStyle={{ minWidth: "10rem" }}
+                  headerStyle={{ minWidth: "5rem" }}
                 />
 
                 <Column
-                  field="Status"
+                  field="stock"
                   header="Status"
                   sortable
                   body={statusBodyTemplate}
