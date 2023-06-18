@@ -8,25 +8,19 @@ import { useQuery } from "react-query";
 import { mainAPI } from "../../../uitls/api";
 import { useSelector } from "react-redux";
 import Loader from "../../Shared/Loader";
+import { formatCurrency } from "../../Shared/FormatCurrency";
 
 const ROOT = mainAPI;
 
-const RecentOrder = () => {
-  const [orders, setOrders] = useState(null);
+const RecentProduct = () => {
+  const [products, setProducts] = useState(null);
 
   const jwt = useSelector((state) => state.user.jwt);
 
-  const formatCurrency = (value) => {
-    return value.toLocaleString("en-US", {
-      style: "currency",
-      currency: "BDT",
-    });
-  };
-
   const { isLoading, error, data, refetch } = useQuery(
-    "order",
+    "category",
     async () =>
-      await axios.get(`${ROOT}/api/admin/order/latest5`, {
+      await axios.get(`${ROOT}/api/admin/product/latest5`, {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
@@ -36,39 +30,47 @@ const RecentOrder = () => {
   );
 
   useEffect(() => {
-    setOrders(data?.data?.order);
+    setProducts(data?.data?.products);
     refetch();
-  }, []);
-
+  }, [data?.data]);
 
   isLoading && <Loader />;
+  error && console.log(error);
 
-  error && conosle.log(error);
   return (
     <div className="col-12 xl:col-6">
       <div className="card">
-        <h5>Recent Orders</h5>
-        <DataTable value={orders} rows={5} paginator responsiveLayout="scroll">
+        <h5>Recent Products</h5>
+        <DataTable
+          value={products}
+          rows={5}
+          paginator
+          responsiveLayout="scroll"
+        >
           <Column
-            field="email"
-            header="Email"
-            body={(res) => <span> {res.email} </span>}
+            header="Image"
+            body={(data) => (
+              <img
+                className="shadow-2"
+                src={`${data.image}`}
+                alt={data.image}
+                width="50"
+              />
+            )}
+          />
+          <Column
+            field="title"
+            header="Name"
+            body={(data) => <span> {data.title} </span>}
             sortable
             style={{ width: "35%" }}
           />
           <Column
-            field="phone"
-            header="Phone Number"
-            body={(res) => <span> {res.phone} </span>}
+            field="price"
+            header="Price"
             sortable
             style={{ width: "35%" }}
-          />
-          <Column
-            field="total"
-            header="Total Amount"
-            sortable
-            style={{ width: "35%" }}
-            body={(data) => formatCurrency(parseFloat(data.total))}
+            body={(data) => formatCurrency(parseFloat(data.price))}
           />
           <Column
             header="View"
@@ -81,8 +83,9 @@ const RecentOrder = () => {
           />
         </DataTable>
       </div>
+
     </div>
   );
 };
 
-export default RecentOrder;
+export default RecentProduct;

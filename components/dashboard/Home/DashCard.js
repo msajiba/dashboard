@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { mainAPI } from "../../../uitls/api";
+import { formatCurrency } from "../../Shared/FormatCurrency";
 
 const ROOT = mainAPI;
 
@@ -42,13 +43,6 @@ const DashCard = () => {
     return orders?.reduce((sum, val) => sum + parseFloat(val.total), 0);
   }, [orders]);
 
-  const formatCurrency = (value) => {
-    return value?.toLocaleString("en-US", {
-      style: "currency",
-      currency: "BDT",
-    });
-  };
-
   useEffect(() => {
     getOrders();
   }, [jwt]);
@@ -71,8 +65,8 @@ const DashCard = () => {
             <div>
               <span className="block text-500 font-medium mb-3">Orders</span>
               <div className="text-900 font-medium text-xl">
-                {" "}
-                {orders?.length}{" "}
+                
+                {orders?.length}
               </div>
             </div>
             <div
@@ -82,8 +76,8 @@ const DashCard = () => {
               <i className="pi pi-shopping-cart text-blue-500 text-xl" />
             </div>
           </div>
-          <span className="text-green-500 font-medium">24 new </span>
-          <span className="text-500">since last visit</span>
+          <span className="text-500">Total payment</span>
+          <span className="text-green-500 font-medium"> {formatCurrency(parseInt(subTotal))} </span>
         </div>
       </div>
 
@@ -97,8 +91,7 @@ const DashCard = () => {
               <span className="block text-500 font-medium mb-3">Revenue</span>
               <div className="text-900 font-medium text-xl">
                 <div className="text-900 font-medium text-xl">
-                  {" "}
-                  {formatCurrency(subTotal)}{" "}
+                  {formatCurrency(parseInt(subTotal))}
                 </div>
               </div>
             </div>
@@ -109,8 +102,8 @@ const DashCard = () => {
               <i className="pi pi-money-bill text-cyan-500 text-xl" />
             </div>
           </div>
-          <span className="text-green-500 font-medium">520 </span>
-          <span className="text-500">newly registered</span>
+          <span className="text-green-500 font-medium">  {orders?.length} </span>
+          <span className="text-500">Total Order</span>
         </div>
       </div>
 
@@ -134,37 +127,36 @@ const DashCard = () => {
               <i className="pi pi-user text-cyan-500 text-xl" />
             </div>
           </div>
-          <span className="text-green-500 font-medium">520 </span>
+          <span className="text-green-500 font-medium"> 00 </span>
           <span className="text-500">newly registered</span>
         </div>
       </div>
 
       {/* =====================USER====================== */}
 
-      {/* =====================TOTAL SALE====================== */}
+      {/* =====================TOTAL PRODUCTS====================== */}
       <div className="col-12 lg:col-6 xl:col-3">
         <div className="card mb-0">
           <div className="flex justify-content-between mb-3">
             <div>
               <span className="block text-500 font-medium mb-3">Products</span>
               <div className="text-900 font-medium text-xl">
-                {" "}
-                {products?.length}{" "}
+                {products?.length}
               </div>
             </div>
             <div
               className="flex align-items-center justify-content-center bg-purple-100 border-round"
               style={{ width: "2.5rem", height: "2.5rem" }}
             >
-              <i className="pi pi-comment text-purple-500 text-xl" />
+              <i className="pi pi-list text-purple-500 text-xl" />
             </div>
           </div>
-          <span className="text-green-500 font-medium">85 </span>
-          <span className="text-500">responded</span>
+          <span className="text-green-500 font-medium"> {orders.length}  </span>
+          <span className="text-500">Responded Order</span>
         </div>
       </div>
 
-      {/* =====================TOTAL SALE====================== */}
+      {/* =====================TOTAL PRODUCTS====================== */}
     </>
   );
 };

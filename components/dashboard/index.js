@@ -8,11 +8,9 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { LayoutContext } from "../../layout/context/layoutcontext";
 import { ProductService } from "../../demo/service/ProductService";
 import DashCard from "./Home/DashCard";
-import RecentSales from "./Home/RecentSales";
+import RecentProduct from "./Home/RecentProduct";
 import RecentOrder from "./Home/RecentOrder";
-
-
-
+import RecentBlog from "./Home/RecentBlog";
 
 const lineData = {
   labels: ["January", "February", "March", "April", "May", "June", "July"],
@@ -119,15 +117,14 @@ const Dashboard = () => {
     }
   }, [layoutConfig.colorScheme]);
 
-
-
   return (
     <>
       <div className="grid">
         <DashCard />
 
-        <RecentSales />
+        <RecentProduct />
         <RecentOrder />
+        <RecentBlog />
 
         <div className="col-12 xl:col-6">
           <div className="card">
