@@ -24,7 +24,7 @@ const RecentOrder = () => {
   };
 
   const { isLoading, error, data, refetch } = useQuery(
-    "order",
+    ["od", orders],
     async () =>
       await axios.get(`${ROOT}/api/admin/order/latest5`, {
         headers: {
@@ -36,9 +36,11 @@ const RecentOrder = () => {
   );
 
   useEffect(() => {
-    setOrders(data?.data?.order);
     refetch();
-  }, []);
+    setOrders(data?.data?.order);
+  }, [data?.data]);
+
+  console.log('')
 
 
   isLoading && <Loader />;

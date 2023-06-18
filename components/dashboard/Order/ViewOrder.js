@@ -147,7 +147,6 @@ const ViewOrder = ({ rowData, refetch }) => {
     delivery_status: deliveryStatus,
     order_notes: orderNotes,
     isPaid,
-    user_id_no: user._id,
   };
 
   const handleOrderUpdate = async () => {

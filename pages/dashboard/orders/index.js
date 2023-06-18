@@ -57,7 +57,7 @@ const Order = () => {
     return (
       <>
         <span className="p-column-title">Code</span>
-        {rowData._id.substring(10, 15)}
+        {rowData._id.substring(0, 5)}
       </>
     );
   };

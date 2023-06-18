@@ -151,7 +151,7 @@ const DashCard = () => {
               <i className="pi pi-list text-purple-500 text-xl" />
             </div>
           </div>
-          <span className="text-green-500 font-medium"> {orders.length}  </span>
+          <span className="text-green-500 font-medium"> {orders?.length}  </span>
           <span className="text-500">Responded Order</span>
         </div>
       </div>

@@ -31,7 +31,7 @@ const RecentBlog = () => {
   useEffect(() => {
     setBlogs(data?.data?.blogs);
     refetch();
-  }, []);
+  }, [data?.data]);
 
   isLoading && <Loader />;
   error && console.log(error);
