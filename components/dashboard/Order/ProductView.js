@@ -5,6 +5,7 @@ import { OrderList } from "primereact/orderlist";
 import { ToggleButton } from "primereact/togglebutton";
 import { Dropdown } from "primereact/dropdown";
 import { Fieldset } from "primereact/fieldset";
+import { formatCurrency } from "../../Shared/FormatCurrency";
 
 export default function ProductView({ pd }) {
   const [products, setProducts] = useState(pd);
@@ -24,8 +25,8 @@ export default function ProductView({ pd }) {
             <span>{item.category}</span>
           </div>
         </div>
-        <span className="font-bold text-900"> quantity: {item.quantity} ({item.quantityPrice}) </span>
-        <span className="font-bold text-900"> Price: ${item.price}</span>
+        <span className="font-bold text-900"> quantity: {item.quantity} ({item.quantityPrice})  </span>
+        <p className="font-bold text-900 text-center"> Price: {formatCurrency(parseInt(item.price))}</p>
       </div>
     );
   };

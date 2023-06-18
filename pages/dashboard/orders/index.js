@@ -54,11 +54,10 @@ const Order = () => {
   error && console.log(error);
 
   const codeBodyTemplate = (rowData) => {
-  
     return (
       <>
         <span className="p-column-title">Code</span>
-        {rowData._id.substring(10,15)}
+        {rowData._id.substring(10, 15)}
       </>
     );
   };
@@ -130,8 +129,8 @@ const Order = () => {
         {rowData.delivery_status === "Pending" ? (
           <p
             style={{
-              color: "yellow",
-              border: "1px solid yellow",
+              color: "blue",
+              border: "1px solid red",
               textAlign: "center",
               borderRadius: "5px",
             }}
@@ -148,6 +147,95 @@ const Order = () => {
             }}
           >
             Delivered
+          </p>
+        )}
+      </>
+    );
+  };
+
+  const orderBodyTemplate = (rowData) => {
+    return (
+      <>
+        <span className="p-column-title">Email</span>
+
+        {rowData.status === "Not Processed" && (
+          <p
+            style={{
+              color: "red",
+              border: "1px solid red",
+              textAlign: "center",
+              borderRadius: "5px",
+            }}
+          >
+            Not Verified
+          </p>
+        )}
+        {rowData.status === "Processing" && (
+          <p
+            style={{
+              color: "blue",
+              border: "1px solid blue",
+              textAlign: "center",
+              borderRadius: "5px",
+            }}
+          >
+            Processing
+          </p>
+        )}
+        {rowData.status === "Completed" && (
+          <p
+            style={{
+              color: "green",
+              border: "1px solid green",
+              textAlign: "center",
+              borderRadius: "5px",
+            }}
+          >
+            Complete
+          </p>
+        )}
+        {rowData.status === "Cancelled" && (
+          <p
+            style={{
+              color: "red",
+              border: "1px solid red",
+              textAlign: "center",
+              borderRadius: "5px",
+            }}
+          >
+            Cancelled
+          </p>
+        )}
+      </>
+    );
+  };
+
+  const paymentBodyTemplate = (rowData) => {
+    return (
+      <>
+        <span className="p-column-title">Email</span>
+
+        {rowData.payment_status === "Not Verified" ? (
+          <p
+            style={{
+              color: "red",
+              border: "1px solid red",
+              textAlign: "center",
+              borderRadius: "5px",
+            }}
+          >
+            Not Verified
+          </p>
+        ) : (
+          <p
+            style={{
+              color: "green",
+              border: "1px solid green",
+              textAlign: "center",
+              borderRadius: "5px",
+            }}
+          >
+            Verified
           </p>
         )}
       </>
@@ -251,6 +339,20 @@ const Order = () => {
                   sortable
                   body={deliveryBodyTemplate}
                   headerStyle={{ minWidth: "5rem" }}
+                />
+                <Column
+                  field="payment_status"
+                  header="Payment Status"
+                  sortable
+                  body={paymentBodyTemplate}
+                  headerStyle={{ minWidth: "5rem" }}
+                />
+                <Column
+                  field="status"
+                  header="Order Status"
+                  sortable
+                  body={orderBodyTemplate}
+                  headerStyle={{ minWidth: "10rem" }}
                 />
 
                 <Column

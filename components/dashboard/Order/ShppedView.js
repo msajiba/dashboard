@@ -39,7 +39,7 @@ const ShippingView = ({ shippingInfo, handleOrderUpdate, isLoading }) => {
         <div className="flex justify-content-between align-items-center ">
           <div>
             <h5> PAID</h5>
-            <div className="flex justify-content-between align-items-center pt-0 p-1">
+            <div className="flex justify-content-between align-items-center pt-0 p-1 custom-style ">
               <SelectButton
                 value={JSON.stringify(isPaid)}
                 onChange={(e) => setIsPaid(JSON.parse(e.value))}
@@ -52,7 +52,7 @@ const ShippingView = ({ shippingInfo, handleOrderUpdate, isLoading }) => {
           <div>
             <h5> Delivered Status </h5>
 
-            <div className=" flex justify-content-between align-items-center pt-0 p-1 ">
+            <div className=" flex justify-content-between align-items-center pt-0 p-1 custom-style  ">
               <SelectButton
                 value={deliveryStatus}
                 onChange={(e) => setDeliveryStatus(e.value)}
@@ -64,7 +64,7 @@ const ShippingView = ({ shippingInfo, handleOrderUpdate, isLoading }) => {
         </div>
 
         <h5> Payment Status </h5>
-        <div className=" flex justify-content-between align-items-center pt-0 p-1 ">
+        <div className=" flex justify-content-between align-items-center pt-0 p-1 custom-style ">
           <SelectButton
             value={paymentStatus}
             onChange={(e) => setPaymentStatus(e.value)}
@@ -74,7 +74,7 @@ const ShippingView = ({ shippingInfo, handleOrderUpdate, isLoading }) => {
         </div>
 
         <h5> Order Status </h5>
-        <div className=" flex justify-content-between align-items-center pt-0 p-1 ">
+        <div className="flex justify-content-between align-items-center pt-0 p-1 custom-style ">
           <SelectButton
             value={status}
             onChange={(e) => setStatus(e.value)}

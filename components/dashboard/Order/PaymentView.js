@@ -1,6 +1,7 @@
 import React from "react";
 import { Fieldset } from "primereact/fieldset";
 import { Button } from "primereact/button";
+import { formatCurrency } from "../../Shared/FormatCurrency";
 
 const PaymentView = ({ paymentInfo }) => {
   const {
@@ -40,11 +41,10 @@ const PaymentView = ({ paymentInfo }) => {
         </p>
       )}
       <p className="mb-0">
-        Shipping Cost :<span style={{ color: "red" }}> {shippingCost}</span>{" "}
-        TAKA
+        Shipping Cost :<span style={{ color: "red" }}> {formatCurrency(parseInt(shippingCost))} </span>
       </p>
       <p className="mb-0">
-        Total Amount : <span style={{ color: "red" }}> {total}</span> TAKA
+        Total Amount : <span style={{ color: "red" }}> {formatCurrency(parseFloat(total))} </span> 
       </p>
       <p className="mb-0">
         Date: <span style={{ color: "red" }}> {date}</span>

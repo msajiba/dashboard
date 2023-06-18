@@ -151,7 +151,6 @@ const ViewOrder = ({ rowData, refetch }) => {
   };
 
   const handleOrderUpdate = async () => {
-  
     setIsLoading(true);
     try {
       const { data } = await axios.post(
@@ -178,13 +177,14 @@ const ViewOrder = ({ rowData, refetch }) => {
     } catch (error) {
       console.log(error);
     }
+    setOrderDialog(false);
   };
 
   return (
     <>
       <Toast ref={toast} />
       <Button
-        icon="pi pi-eye"
+        icon="pi pi-pencil"
         severity="success"
         rounded
         className="mr-2"
