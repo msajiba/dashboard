@@ -12,8 +12,8 @@ import BestSelling from "./BestSelling";
 
 const ROOT = mainAPI;
 
-const RecentSales = () => {
-  const [products, setProducts] = useState(null);
+const RecentOrder = () => {
+  const [orders, setOrders] = useState(null);
 
   const jwt = useSelector((state) => state.user.jwt);
 
@@ -27,7 +27,7 @@ const RecentSales = () => {
   const { isLoading, error, data, refetch } = useQuery(
     "category",
     async () =>
-      await axios.get(`${ROOT}/api/admin/product/latest5`, {
+      await axios.get(`${ROOT}/api/admin/order/latest5`, {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
@@ -37,23 +37,19 @@ const RecentSales = () => {
   );
 
   useEffect(() => {
-    setProducts(data?.data?.products);
+    setOrders(data?.data?.order);
     refetch();
   }, [data?.data]);
 
-  isLoading && <Loader />
+  console.log("orders", orders)
 
+  isLoading && <Loader />;
 
   return (
     <div className="col-12 xl:col-6">
       <div className="card">
-        <h5>Recent Sales</h5>
-        <DataTable
-          value={products}
-          rows={5}
-          paginator
-          responsiveLayout="scroll"
-        >
+        <h5>Recent Orders</h5>
+        <DataTable value={orders} rows={5} paginator responsiveLayout="scroll">
           <Column
             header="Image"
             body={(data) => (
@@ -66,11 +62,9 @@ const RecentSales = () => {
             )}
           />
           <Column
-            field="name"
-            header="Name"
-            body={(data) => (
-             <span> {data.title} </span>
-            )}
+            field="subtotal"
+            header="Subtotal"
+            body={(data) => <span> { data && data.country} </span>}
             sortable
             style={{ width: "35%" }}
           />
@@ -93,10 +87,9 @@ const RecentSales = () => {
         </DataTable>
       </div>
 
-            <BestSelling />
-
+      {/* <BestSelling /> */}
     </div>
   );
 };
 
-export default RecentSales;
+export default RecentOrder;

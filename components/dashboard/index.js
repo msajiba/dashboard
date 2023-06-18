@@ -9,6 +9,7 @@ import { LayoutContext } from "../../layout/context/layoutcontext";
 import { ProductService } from "../../demo/service/ProductService";
 import DashCard from "./Home/DashCard";
 import RecentSales from "./Home/RecentSales";
+import RecentOrder from "./Home/RecentOrder";
 
 
 
@@ -126,6 +127,7 @@ const Dashboard = () => {
         <DashCard />
 
         <RecentSales />
+        <RecentOrder />
 
         <div className="col-12 xl:col-6">
           <div className="card">
