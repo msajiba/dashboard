@@ -1,18 +1,22 @@
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import React, { useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { Timeline } from "primereact/timeline";
-import { Card } from "primereact/card";
-// import "./TimelineDemo.css";
-import { Accordion, AccordionTab } from "primereact/accordion";
 import AddressView from "./AddressView";
 import ProductView from "./ProductView";
 import PaymentView from "./PaymentView";
-import ShppedView from "./ShppedView";
+import ShippingView from "./ShppedView";
+import axios from "axios";
+import { mainAPI } from "../../../uitls/api";
+import { Toast } from "primereact/toast";
+
+const ROOT = mainAPI;
 
 const ViewOrder = ({ rowData, refetch }) => {
   const jwt = useSelector((state) => state.user.jwt);
+  const user = useSelector((state) => state.user.currentUser);
+  const toast = useRef(null);
+
   const [orderDialog, setOrderDialog] = useState(false);
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
@@ -31,33 +35,44 @@ const ViewOrder = ({ rowData, refetch }) => {
   const [isPaid, setIsPaid] = useState("");
 
   const [deliveryStatus, setDeliveryStatus] = useState("");
+  const [paymentStatus, setPaymentStatus] = useState("");
   const [total, setTotal] = useState("");
   const [shippingCost, setShippingCost] = useState("");
-  const [status, settStatus] = useState("");
+  const [status, setStatus] = useState("");
+  const [selectedId, setSelectedId] = useState("");
+  const [orderNotes, setOrderNotes] = useState("");
+  const [subtotal, setSubtotal] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const confirmViewOrder = (order) => {
     const {
+      products,
       name,
       email,
       address,
       city,
       country,
-      delivery_status,
+      shipping_cost,
       payment_method,
+      delivery_status,
       phone,
       post_code,
-      products,
-      shipping_cost,
       status,
       total,
       transaction_id,
       transaction_phone_no,
       createdAt,
       isPaid,
+      payment_status,
+      _id,
+      order_notes,
+      subtotal,
     } = order;
 
     setOrderDialog(true);
-
+    setSelectedId(_id);
+    setOrderNotes(order_notes);
+    setSubtotal(subtotal);
     setAddress(address);
     setCity(city);
     setDate(createdAt.substring(0, 10));
@@ -75,74 +90,99 @@ const ViewOrder = ({ rowData, refetch }) => {
     setIsPaid(isPaid);
 
     setTotal(total);
-    settStatus(status);
+    setStatus(status);
     setShippingCost(shipping_cost);
     setDeliveryStatus(delivery_status);
+    setPaymentStatus(payment_status);
   };
 
-  const events = [
-    {
-      status: "Product",
-      date,
-      icon: "pi pi-shopping-cart",
-      color: "#9C27B0",
-      image: "game-controller.jpg",
-      products,
-    },
-    {
-      status: "Address",
-      icon: "pi pi-check",
-      color: "#607D8B",
-      address,
-      city,
-      name,
-      email,
-      phone,
-      country,
-    },
-    {
-      status: "Payment",
-      icon: "pi pi-cog",
-      color: "#673AB7",
-      paymentMethod,
-      transactionId,
-      transactionPhoneNo,
-      isPaid,
-    },
-    {
-      status: "Shipped",
-      icon: "pi pi-shopping-cart",
-      color: "#FF9800",
-      deliveryStatus,
-      total,
-      shippingCost,
-    },
-  ];
-
-  const customizedMarker = (item) => {
-    return (
-      <span
-        className="flex w-2rem h-2rem align-items-center justify-content-center text-white border-circle z-1 shadow-1"
-        style={{ backgroundColor: item.color }}
-      >
-        <i className={item.icon}></i>
-      </span>
-    );
+  const shippingInfo = {
+    isPaid,
+    setIsPaid,
+    deliveryStatus,
+    setDeliveryStatus,
+    status,
+    setStatus,
+    paymentStatus,
+    setPaymentStatus,
   };
 
-  const customizedContent = (item) => {
-    return (
-      <Card title={item.status} subTitle={item.date}>
-        <ProductView item={item} />
-        <AddressView item={item} />
-        <PaymentView item={item} />
-        <ShppedView item={item} />
-      </Card>
-    );
+  const userInfo = {
+    name,
+    email,
+    address,
+    city,
+    country,
+    phone,
+    postCode,
+  };
+
+  const paymentInfo = {
+    paymentMethod,
+    transactionId,
+    date,
+    transactionPhoneNo,
+    shippingCost,
+    total,
+  };
+
+  const orderUpdateInfo = {
+    id: selectedId,
+    products,
+    name,
+    email,
+    phone,
+    address,
+    city,
+    post_code: postCode,
+    country,
+    shipping_cost: shippingCost,
+    payment_method: paymentMethod,
+    transaction_phone_no: transactionPhoneNo,
+    transaction_id: transactionId,
+    total,
+    status,
+    subtotal,
+    payment_status: paymentStatus,
+    delivery_status: deliveryStatus,
+    order_notes: orderNotes,
+    isPaid,
+    user_id_no: user._id,
+  };
+
+  const handleOrderUpdate = async () => {
+  
+    setIsLoading(true);
+    try {
+      const { data } = await axios.post(
+        `${ROOT}/api/admin/order/update`,
+        orderUpdateInfo,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            token: `Bearer ${jwt}`,
+          },
+        }
+      );
+
+      if (data.status === true) {
+        toast.current.show({
+          severity: "success",
+          detail: `${data.message}`,
+          life: 3000,
+        });
+        refetch();
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <>
+      <Toast ref={toast} />
       <Button
         icon="pi pi-eye"
         severity="success"
@@ -153,20 +193,29 @@ const ViewOrder = ({ rowData, refetch }) => {
 
       <Dialog
         visible={orderDialog}
-        style={{ width: "800px" }}
+        style={{ width: "1000px" }}
         header="Order Information"
         modal
         className="p-fluid"
         onHide={() => setOrderDialog(false)}
       >
-        <div className="card">
-          <Timeline
-            value={events}
-            align="alternate"
-            className="customized-timeline"
-            marker={customizedMarker}
-            content={customizedContent}
-          />
+        <div className="grid">
+          <div className="col-12 lg:col-6">
+            <PaymentView paymentInfo={paymentInfo} />
+          </div>
+          <div className="col-12 lg:col-6">
+            <AddressView userInfo={userInfo} />
+          </div>
+          <div className="col-12 lg:col-6">
+            <ProductView pd={products} />
+          </div>
+          <div className="col-12 lg:col-6">
+            <ShippingView
+              handleOrderUpdate={handleOrderUpdate}
+              shippingInfo={shippingInfo}
+              isLoading={isLoading}
+            />
+          </div>
         </div>
       </Dialog>
     </>

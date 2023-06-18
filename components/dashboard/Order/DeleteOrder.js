@@ -14,6 +14,7 @@ const DeleteOrder = ({ rowData, refetch }) => {
   const toast = useRef(null);
   const jwt = useSelector((state) => state.user.jwt);
 
+
   const deleteHandleOrder = async () => {
     try {
       const { data } = await axios.post(
@@ -86,7 +87,7 @@ const DeleteOrder = ({ rowData, refetch }) => {
           />
           {selectOrder && (
             <span>
-              Are you sure you want to delete <b>{selectOrder?.title}</b>?
+              Are you sure you want to delete <b>{selectOrder?._id}</b>?
             </span>
           )}
         </div>

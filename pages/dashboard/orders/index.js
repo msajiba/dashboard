@@ -14,8 +14,7 @@ import { useRouter } from "next/router";
 import DeleteOrder from "../../../components/dashboard/Order/DeleteOrder";
 import ViewOrder from "../../../components/dashboard/Order/ViewOrder";
 import { mainAPI } from "../../../uitls/api";
-
-
+import { Button } from "primereact/button";
 
 const ROOT = mainAPI;
 
@@ -37,31 +36,29 @@ const Order = () => {
   const { isLoading, error, data, refetch } = useQuery(
     "category",
     async () =>
-      await axios.get(
-        `${ROOT}/api/admin/order/getAll`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            token: `Bearer ${jwt}`,
-          },
-        }
-      )
+      await axios.get(`${ROOT}/api/admin/order/getAll`, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          token: `Bearer ${jwt}`,
+        },
+      })
   );
 
   useEffect(() => {
     setOrders(data?.data?.order);
     refetch();
   }, [data?.data?.order]);
-  
+
   isLoading && <Loader />;
   error && console.log(error);
 
   const codeBodyTemplate = (rowData) => {
+  
     return (
       <>
         <span className="p-column-title">Code</span>
-        {rowData._id}
+        {rowData._id.substring(10,15)}
       </>
     );
   };
@@ -80,6 +77,79 @@ const Order = () => {
       <>
         <span className="p-column-title">Email</span>
         {rowData.email}
+      </>
+    );
+  };
+
+  const phoneBodyTemplate = (rowData) => {
+    return (
+      <>
+        <span className="p-column-title">Email</span>
+        {rowData.phone}
+      </>
+    );
+  };
+
+  const paidBodyTemplate = (rowData) => {
+    return (
+      <>
+        <span className="p-column-title">Email</span>
+
+        {rowData.isPaid === true ? (
+          <p
+            style={{
+              color: "green",
+              border: "1px solid green",
+              textAlign: "center",
+              borderRadius: "5px",
+            }}
+          >
+            True
+          </p>
+        ) : (
+          <p
+            style={{
+              color: "red",
+              border: "1px solid red",
+              textAlign: "center",
+              borderRadius: "5px",
+            }}
+          >
+            False
+          </p>
+        )}
+      </>
+    );
+  };
+
+  const deliveryBodyTemplate = (rowData) => {
+    return (
+      <>
+        <span className="p-column-title">Email</span>
+
+        {rowData.delivery_status === "Pending" ? (
+          <p
+            style={{
+              color: "yellow",
+              border: "1px solid yellow",
+              textAlign: "center",
+              borderRadius: "5px",
+            }}
+          >
+            Pending
+          </p>
+        ) : (
+          <p
+            style={{
+              color: "green",
+              border: "1px solid green",
+              textAlign: "center",
+              borderRadius: "5px",
+            }}
+          >
+            Delivered
+          </p>
+        )}
       </>
     );
   };
@@ -151,7 +221,14 @@ const Order = () => {
                   header="Name"
                   sortable
                   body={nameBodyTemplate}
-                  headerStyle={{ minWidth: "15rem" }}
+                  headerStyle={{ minWidth: "10rem" }}
+                />
+                <Column
+                  field="phone"
+                  header="Phone"
+                  sortable
+                  body={phoneBodyTemplate}
+                  headerStyle={{ minWidth: "10rem" }}
                 />
 
                 <Column
@@ -159,7 +236,21 @@ const Order = () => {
                   header="Email"
                   sortable
                   body={emailBodyTemplate}
-                  headerStyle={{ minWidth: "15rem" }}
+                  headerStyle={{ minWidth: "10rem" }}
+                />
+                <Column
+                  field="isPaid"
+                  header="Paid"
+                  sortable
+                  body={paidBodyTemplate}
+                  headerStyle={{ minWidth: "5rem" }}
+                />
+                <Column
+                  field="delivery_status"
+                  header="Delivery Status"
+                  sortable
+                  body={deliveryBodyTemplate}
+                  headerStyle={{ minWidth: "5rem" }}
                 />
 
                 <Column

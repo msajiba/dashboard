@@ -13,7 +13,6 @@ import axios from "axios";
 import Loader from "../../../components/Shared/Loader";
 import { mainAPI } from "../../../uitls/api";
 
-
 const ROOT = mainAPI;
 
 const Siteinfo = () => {
@@ -23,6 +22,7 @@ const Siteinfo = () => {
   const [submitted, setSubmitted] = useState(false);
 
   const [title, setTitle] = useState("");
+  const [siteId, setSiteId] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
@@ -34,10 +34,8 @@ const Siteinfo = () => {
 
   const getUserInfo = async () => {
     setIsLoading(true);
-    const { data } = await axios.get(
-      `${ROOT}/api/admin/siteinfo/find`
-    );
-
+    const { data } = await axios.get(`${ROOT}/api/admin/siteinfo/find`);
+    setSiteId(data.siteinfo?._id);
     setAddress(data?.siteinfo?.address);
     setTitle(data?.siteinfo?.title);
     setEmail(data?.siteinfo?.email);
@@ -60,6 +58,7 @@ const Siteinfo = () => {
       const updatedSiteInfo = await axios.post(
         `${ROOT}/api/admin/siteinfo/store`,
         {
+          id: siteId,
           title,
           email,
           phone,
@@ -79,7 +78,7 @@ const Siteinfo = () => {
       if (updatedSiteInfo?.status === 200) {
         toast.current.show({
           severity: "success",
-          detail: "Siteinfo has been created successfully",
+          detail: "Site info has been created successfully",
           life: 3000,
         });
         setIsLoading(false);

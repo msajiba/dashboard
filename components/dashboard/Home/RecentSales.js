@@ -37,7 +37,7 @@ const RecentSales = () => {
   );
 
   useEffect(() => {
-    setProducts(data?.data?.products.slice(0,5));
+    setProducts(data?.data?.products?.slice(0,5));
     refetch();
   }, [data?.data]);
 
