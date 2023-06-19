@@ -13,7 +13,7 @@ import { classNames } from "primereact/utils";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { mainAPI } from "../../../uitls/api";
-
+import { Editor } from "primereact/editor";
 
 const ROOT = mainAPI;
 
@@ -26,7 +26,7 @@ const EditProduct = ({ rowData, refetch, categories }) => {
   const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
   const [stock, setStock] = useState(null);
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState(null);
   const [shortDescription, setShortDescription] = useState("");
   const [bestDeal, setBestDeal] = useState(false);
   const [discountedSale, setDiscountedSale] = useState(false);
@@ -46,7 +46,7 @@ const EditProduct = ({ rowData, refetch, categories }) => {
     setOriginal_Price(ctg.originalPrice);
     setStock(ctg.stock);
     setShortDescription(ctg.shortDescription);
-    setDescription(ctg.description);
+    setDescription(ctg?.description);
     setBestDeal(ctg.bestDeal);
     setDiscountedSale(ctg.discountedSale);
     setCategory(ctg.category);
@@ -62,6 +62,8 @@ const EditProduct = ({ rowData, refetch, categories }) => {
 
     getSubCategory();
   }, [category]);
+
+  console.log("description", description);
 
   const updateProduct = {
     id: selectedId,
@@ -119,7 +121,7 @@ const EditProduct = ({ rowData, refetch, categories }) => {
         setStock(null);
         setCategory("");
         setSubCategory("");
-        setDescription("");
+        setDescription(null);
         setBestDeal(false);
         setDiscountedSale(false);
         setIsLoading(false);
@@ -349,15 +351,18 @@ const EditProduct = ({ rowData, refetch, categories }) => {
 
           <div className="field col">
             <label htmlFor="des">Description</label>
-            <InputTextarea
+            <Editor
               id="des"
+              maxLength="3000"
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onTextChange={(e) => setDescription(e.htmlValue)}
+              style={{ height: "300px" }}
               required
               className={classNames({
                 "p-invalid": submitted && !description,
               })}
             />
+
             {submitted && !description && (
               <small
                 style={{ fontSize: "1rem", color: "red" }}

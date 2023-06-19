@@ -27,8 +27,9 @@ const NewBlog = ({ refetch }) => {
   const [file, setFile] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const toast = useRef(null);
 
+  const toast = useRef(null);
+console.log("content", content);
   const {
     isLoading: dataIsLoading,
     error,
