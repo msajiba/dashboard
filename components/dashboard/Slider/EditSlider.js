@@ -129,7 +129,7 @@ const EditSlider = ({ rowData, refetch }) => {
               type="file"
               accept="image/*"
               style={{ border: "0.5px solid green", padding: "10px" }}
-              maxFileSize={1024}
+        
               onChange={(e) => setFile(e.target.files[0])}
               className={classNames({
                 "p-invalid": submitted && !file,

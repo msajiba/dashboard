@@ -14,6 +14,7 @@ import Loader from "../../Shared/Loader";
 import { ProgressBar } from "primereact/progressbar";
 import { mainAPI } from "../../../uitls/api";
 import { Editor } from "primereact/editor";
+import Head from "next/head";
 
 const ROOT = mainAPI;
 
@@ -47,7 +48,6 @@ const NewProduct = ({ refetch, categories }) => {
 
     getSubCategory();
   }, [category]);
-
 
   const createProduct = {
     title,
@@ -107,6 +107,7 @@ const NewProduct = ({ refetch, categories }) => {
         setBestDeal(false);
         setDiscountedSale(false);
         setIsLoading(false);
+        setProductDialog(false);
       } else {
         toast.current.show({
           severity: "error",
@@ -115,13 +116,13 @@ const NewProduct = ({ refetch, categories }) => {
           life: 3000,
         });
         setIsLoading(false);
+        setProductDialog(false);
       }
     } catch (error) {
       console.log(error);
     }
     refetch();
     setIsLoading(false);
-    setProductDialog(false)
   };
 
   const subCtgDialogFooter = (
@@ -143,6 +144,11 @@ const NewProduct = ({ refetch, categories }) => {
   return (
     <>
       <Toast ref={toast} />
+
+      <Head>
+        <title> Add New Product</title>
+        <meta charSet="UTF-8" />
+      </Head>
 
       <Button
         label="Add New"
@@ -168,7 +174,6 @@ const NewProduct = ({ refetch, categories }) => {
               accept="image/*"
               style={{ border: "0.5px solid green", padding: "10px" }}
               required
-              maxFileSize={1000}
               onChange={(e) => setFile(e.target.files[0])}
               className={classNames({
                 "p-invalid": submitted && !file,
@@ -351,7 +356,6 @@ const NewProduct = ({ refetch, categories }) => {
 
             <Editor
               id="des"
-              maxLength="3000"
               value={description}
               onTextChange={(e) => setDescription(e.htmlValue)}
               style={{ height: "300px" }}
